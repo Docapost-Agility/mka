@@ -10,17 +10,14 @@ Librairie pouvant faire cohabiter divers éléments comme :
 
 
 ## Requirements
-You'll need RollUp JS
-```
- npm install --global rollup
-```
+* rollUp JS  ```npm install --global rollup```
+* yarn ```npm i -g yarn```
+* http server  ```yarn global add http-server```
 
-## Usage
-To create the dist file launch the following command inside the mouseAndKeyboardActions folder
-```
-rollup -c
+## Installation
 
-```
+* ``` yarn install ```
+* ``` yarn run build-js ```
 
 ### Right click
 
