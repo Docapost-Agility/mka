@@ -1,0 +1,12 @@
+{
+  "name": "MAKA",
+  "version": "0.0.1",
+  "description": "Library POC for Docapost Agility",
+  "main": "index.html",
+  "scripts": {
+    "build-js": "rollup -c"
+  },
+  "repository": "git@gitlab.smartpanda-network.fr:sandbox/mouseAndKeyboardActions.git",
+  "author": "Florent Leseur <florent.leseur@smartpanda.com>",
+  "license": "MIT"
+}
