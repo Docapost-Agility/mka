@@ -10,10 +10,17 @@ Librairie pouvant faire cohabiter divers éléments comme :
 
 
 ## Requirements
-
+You'll need RollUp JS
+```
+ npm install --global rollup
+```
 
 ## Usage
+To create the dist file launch the following command inside the mouseAndKeyboardActions folder
+```
+rollup -c
 
+```
 
 ### Right click
 
