@@ -11,13 +11,10 @@ Librairie pouvant faire cohabiter divers éléments comme :
 
 ## Requirements
 * rollUp JS  ```npm install --global rollup```
-* yarn ```npm i -g yarn```
-* http server  ```yarn global add http-server```
-
+* python
 ## Installation
 
-* ``` yarn install ```
-* ``` yarn run build-js ```
+* ``` python -m SimpleHTTPServer ```
 
 ### Right click
 
