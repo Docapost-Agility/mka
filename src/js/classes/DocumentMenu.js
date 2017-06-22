@@ -1,8 +1,8 @@
 export class DocumentMenu {
-    constructor(title, action, canDoAction){
+    constructor(title, cmd, disabled){
         this._title = title;
-        this._action = action;
-        this._canDoAction = canDoAction;
+        this.cmd = cmd;
+        this._disabled = disabled;
     }
 
 
@@ -14,19 +14,19 @@ export class DocumentMenu {
         this._title = value;
     }
 
-    get action() {
-        return this._action;
+    get cmd() {
+        return this._cmd;
     }
 
-    set action(value) {
-        this._action = value;
+    set cmd(value) {
+        this._cmd = value;
     }
 
-    get canDoAction() {
-        return this._canDoAction;
+    get disabled() {
+        return this._disabled;
     }
 
-    set canDoAction(value) {
-        this._canDoAction = value;
+    set disabled(value) {
+        this._disabled = value;
     }
 }

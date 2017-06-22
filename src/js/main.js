@@ -1,27 +1,47 @@
-import {DocumentMenu} from "./classes/DocumentMenu";
-import {FolderMenu} from "./classes/FolderMenu";
+import { Document } from './classes/Document';
 
 let documentMenuList = [];
 let folderMenuList = [];
 
-documentMenuList.push(new DocumentMenu("Test", test() ,function(){return true;}));
-documentMenuList.push(new DocumentMenu("Test 1", test() ,function(){return true;}));
-documentMenuList.push(new DocumentMenu("Test 2", test() ,function(){return true;}));
+let doc = new Document("Document name", "Florent", "Leseur", "14/02/2010", 12, 'application/pdf');
 
-folderMenuList.push(new FolderMenu("Test Folder", test() ,function(){return true;}));
+documentMenuList.push({title:"Ajouter", cmd:'test', disabled: false});
+documentMenuList.push({title:"Modifier", cmd: 'test1', disabled: false});
+documentMenuList.push({title: "----"});
+documentMenuList.push({title:"Supprimer", cmd: 'test2', disabled: false});
 
-var CLIPBOARD = "";
 
-function test(){
-    console.log("TEST");
+function addDocument(){
+    console.log("Ajout");
+}
+function editDocument(){
+    console.log("Edition");
+}
+function deleteDocument(){
+    console.log("Suppression");
 }
 
+function getAction(cmd){
+    switch (cmd) {
+        case "test":
+            addDocument();
+            break;
+        case "test1":
+            editDocument();
+            break;
+        case "test2":
+            deleteDocument();
+            break;
+        default:
+            console.log("default");
+    }
+}
 
 $(function () {
     let $folder = $("#folder");
     let $document = $("#document");
 
-    // $document.selectable();
+    $("li", $document).data(doc);
 
     // Les documents peuvent être "DRAG"
     $("li", $document).draggable({
@@ -36,7 +56,9 @@ $(function () {
         preventSelect: true,
         taphold: true,
         menu: documentMenuList,
-        select: function(event, ui) {},
+        select: function(event, ui) {
+           getAction(ui.cmd);
+        },
         beforeOpen: function(event, ui) {}
     });
 
@@ -44,6 +66,8 @@ $(function () {
     $("li", $folder).droppable({
         accept: "#document > li",
         drop: function (event, ui) {
+            console.log(event);
+            console.log(ui);
             ui.draggable.fadeOut();
         }
     });
