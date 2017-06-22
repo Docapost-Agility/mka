@@ -23,6 +23,8 @@ Librairie pouvant faire cohabiter divers éléments comme :
 * ``` python -m SimpleHTTPServer ```
 
 ### Right click
+Usage of jquery ui contextmenu extension
+Each elements w/ ```class="o-document"``` in the container with ```id="document"``` can be right clicked
 
 ### Drag & drop
 Documents and folders as ```<li>```
