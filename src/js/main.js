@@ -1,17 +1,25 @@
-import {Document} from "./classes/Document";
-import {Folder} from "./classes/Folder";
+import {DocumentMenu} from "./classes/DocumentMenu";
+import {FolderMenu} from "./classes/FolderMenu";
 
-let myFirstDocument = new Document("lolo", "Florent", "Leseur", 1411460479000, 14007, "image/png");
-let mySecondDocument = new Document("Florent", "Florent", "Leseur", 1411460479000, 14008, "image/png");
-let myThirdDocument = new Document("Rover", "Florent", "Leseur", 1411460479000, 14009, "image/png");
+let documentMenuList = [];
+let folderMenuList = [];
 
-let myFirstFolder = new Folder("folder", "Florent", "Leseur", 12, [myFirstDocument, mySecondDocument, myThirdDocument]);
+documentMenuList.push(new DocumentMenu("Test", test() ,function(){return true;}));
+documentMenuList.push(new DocumentMenu("Test 1", test() ,function(){return true;}));
+documentMenuList.push(new DocumentMenu("Test 2", test() ,function(){return true;}));
+
+folderMenuList.push(new FolderMenu("Test Folder", test() ,function(){return true;}));
+
+var CLIPBOARD = "";
+
+function test(){
+    console.log("TEST");
+}
 
 
 $(function () {
     let $folder = $("#folder");
     let $document = $("#document");
-    let selected = $([]), offset = {top: 0, left: 0};
 
     // $document.selectable();
 
@@ -19,6 +27,17 @@ $(function () {
     $("li", $document).draggable({
         revert: "invalid",
         cursor: "move"
+    });
+
+    $document.contextmenu({
+        delegate: ".o-document",
+        autoFocus: true,
+        preventContextMenuForPopup: true,
+        preventSelect: true,
+        taphold: true,
+        menu: documentMenuList,
+        select: function(event, ui) {},
+        beforeOpen: function(event, ui) {}
     });
 
     // On peut "DROP" dans les dossiers

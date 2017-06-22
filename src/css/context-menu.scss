@@ -1,0 +1,24 @@
+.ui-contextmenu{
+  background-color: #fff;
+  color: #222;
+  max-width:250px;
+  min-width:100px;
+  border: 1px solid #aaaaaa;
+  box-shadow: none;
+  padding: 0;
+  outline: none;
+
+  .ui-menu-item {
+    font-size: 12px;
+    display: block;
+
+    .ui-menu-item-wrapper{
+      padding: 5px;
+
+      &.ui-state-active{
+        cursor: pointer;
+        background-color: #dadada;
+      }
+    }
+  }
+}
