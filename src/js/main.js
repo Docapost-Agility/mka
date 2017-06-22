@@ -3,6 +3,7 @@ let mka = document.getElementById("mka");
 
 if (!mka) throw new Error('mka id not found');
 
+// on désactive la selection de text
 mka.style.userSelect = "none";
 
 let zone = {
@@ -12,14 +13,13 @@ let zone = {
     upY: null,
 };
 
-let selectItem = () => {
+let selectItem = (ctrlKey) => {
     let mkaElts = document.getElementsByClassName("mka-elt");
 
     let selectedItems = [];
 
     // on parcours chaque elt pour savoir s'ils sont dans la zone selectionné 
     Array.from(mkaElts).map(elt => {
-        console.log(elt.offsetTop);
         let rect = elt.getBoundingClientRect();
         // console.log(rect);
         let zoneElt = {
@@ -33,8 +33,9 @@ let selectItem = () => {
             elt.classList.add("mka-elt-selected");
             selectedItems.push(elt);
         } else {
-            elt.classList.remove("mka-elt-selected");
-
+            if (!ctrlKey) {
+                elt.classList.remove("mka-elt-selected");
+            }
         }
     });
 
@@ -83,34 +84,90 @@ let refreshSquare = (node) => {
     node.style.height = (zone.y2 - zone.y1) + "px";
 }
 
-// Lors de la pression sur la souris on bind l'action de déplacement
-mka.onmousedown = (event) => {
-    // zone du click 
-    zone.downX = event.pageX;
-    zone.downY = event.pageY;
+let activeLasso = () => {
+    // Lors de la pression sur la souris on bind l'action de déplacement
+    mka.onmousedown = (event) => {
+        // zone du click 
+        zone.downX = event.pageX;
+        zone.downY = event.pageY;
 
-    // on clean les éléments déjà sélectionné
-    let mkaElts = document.getElementsByClassName("mka-elt");
-    Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
+        // si la touche ctrl n'est pas appuyée on efface pas
+        if (!event.ctrlKey) {
+            // on clean les éléments déjà sélectionné
+            let mkaElts = document.getElementsByClassName("mka-elt");
+            Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
+        }
 
-    let node = drawSquare();
 
-    document.body.onmousemove = (event) => {
-        zone.upX = event.pageX;
-        zone.upY = event.pageY;
+        let node = drawSquare();
 
-        orderCoordinate();
-        refreshSquare(node);
-        selectItem();
+        let startLasso = (event) => {
+            zone.upX = event.pageX;
+            zone.upY = event.pageY;
+
+            orderCoordinate();
+            refreshSquare(node);
+            selectItem(event.ctrlKey);
+        };
+        // on lance le lasso car il peut ne pas y avoir de mouve
+        startLasso(event);
+
+        document.body.onmousemove = (event) => {
+            startLasso(event);
+        };
     };
-};
 
-// lorsqu'on relache le clic
-window.onmouseup = () => {
-    // on unbind le mousemove
-    document.body.onmousemove = () => { };
-    // on supprime la selection
-    deleteSquare();
+    // lorsqu'on relache le clic
+    window.onmouseup = () => {
+        // on unbind le mousemove
+        document.body.onmousemove = () => { };
+        // on supprime la selection
+        deleteSquare();
+    }
 }
+
+document.onkeydown = (e) => {
+    let code = e.which;
+    if (code == 37 || code == 38 || code == 39 || code == 40) {
+
+        // on recupere le dernier elt selectionné dans le DOM
+        let selectedArray = document.getElementsByClassName("mka-elt-selected");
+        let last = selectedArray[selectedArray.length - 1];
+
+        // si la touche ctrl n'est pas appuyée on efface pas
+        if (!event.ctrlKey) {
+            // on clean les éléments déjà sélectionné
+            let mkaElts = document.getElementsByClassName("mka-elt");
+            Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
+        }
+
+
+        switch (e.which) {
+            case 37: // left
+                console.log("left");
+                break;
+
+            case 38: // up
+                console.log("up");
+                last.previousElementSibling.classList.add("mka-elt-selected");
+                break;
+            case 39: // right
+                console.log("right");
+                break;
+
+            case 40: // down
+                last.nextElementSibling.classList.add("mka-elt-selected");
+                break;
+
+            default: return; // exit this handler for other keys
+        }
+    }
+
+
+
+}
+
+activeLasso();
+
 
 
