@@ -15,7 +15,7 @@ myFirstFolder.documents.forEach(function (doc) {
 var d1 = document.getElementById('main');
 var html = '<ul>';
 set.forEach(function (elem) {
-    html += '<li>' + elem.logicalName + '</li>';
+    html += '<li class="mouseAndKeyboardActions">' + elem.logicalName + '</li>';
 });
 html += '</ul>';
 d1.insertAdjacentHTML('beforeend', html);

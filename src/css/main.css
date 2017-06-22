@@ -3,3 +3,23 @@
     width: 150px;
     border: 1px solid black;
 }
+
+.hide {
+    display: none;
+}
+
+#rmenu {
+    border: 1px solid black;
+    background-color: white;
+}
+
+#rmenu ul {
+    padding: 0;
+    list-style: none;
+}
+#rmenu li
+{
+    list-style: none;
+    padding-left: 5px;
+    padding-right: 5px;
+}
