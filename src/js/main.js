@@ -6,6 +6,11 @@ if (!mka) throw new Error('mka id not found');
 // on désactive la selection de text
 mka.style.userSelect = "none";
 
+// On désactive le click droit sur l'élément principal
+mka.addEventListener('contextmenu', function (event) {
+    event.preventDefault();
+})
+
 let zone = {
     downX: null,
     downY: null,
@@ -88,42 +93,51 @@ let refreshSquare = (node) => {
 let activeLasso = () => {
     // Lors de la pression sur la souris on bind l'action de déplacement
     mka.onmousedown = (event) => {
-        // zone du click 
-        zone.downX = event.pageX;
-        zone.downY = event.pageY;
+        // On démarre la sélection seulement si on utilise le bouton gauche de la souris
+        if (event.which === 1) {
+            // zone du click
+            zone.downX = event.pageX;
+            zone.downY = event.pageY;
 
-        // si la touche ctrl n'est pas appuyée on efface pas
-        if (!event.ctrlKey) {
-            // on clean les éléments déjà sélectionné
-            let mkaElts = document.getElementsByClassName("mka-elt");
-            Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
-        }
+            // si la touche ctrl n'est pas appuyée on efface pas
+            if (!event.ctrlKey) {
+                // on clean les éléments déjà sélectionné
+                let mkaElts = document.getElementsByClassName("mka-elt");
+                Array.from(mkaElts).map(elt => {
+                    elt.classList.remove("mka-elt-selected")
+                });
+            }
 
 
-        let node = drawSquare();
+            let node = drawSquare();
 
-        let startLasso = (event) => {
-            zone.upX = event.pageX;
-            zone.upY = event.pageY;
+            let startLasso = (event) => {
+                    zone.upX = event.pageX;
+                    zone.upY = event.pageY;
 
-            orderCoordinate();
-            refreshSquare(node);
-            selectItem(event.ctrlKey);
-        };
-        // on lance le lasso car il peut ne pas y avoir de mouve
-        startLasso(event);
+                    orderCoordinate();
+                    refreshSquare(node);
 
-        document.body.onmousemove = (event) => {
+                    selectItem(event.ctrlKey);
+            };
+            // on lance le lasso car il peut ne pas y avoir de mouve
             startLasso(event);
-        };
+
+            document.body.onmousemove = (event) => {
+                startLasso(event);
+            };
+        }
     };
 
     // lorsqu'on relache le clic
     window.onmouseup = () => {
-        // on unbind le mousemove
-        document.body.onmousemove = () => { };
-        // on supprime la selection
-        deleteSquare();
+        // Si on relache le bouton gauche de la souris
+        if (event.which === 1) {
+            // on unbind le mousemove
+            document.body.onmousemove = () => { };
+            // on supprime la selection
+            deleteSquare();
+        }
     }
 }
 
