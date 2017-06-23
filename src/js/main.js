@@ -6,10 +6,36 @@ if (!mka) throw new Error('mka id not found');
 // on désactive la selection de text
 mka.style.userSelect = "none";
 
+const mkarcmenuId = 'mkarcmenu'
+
 // On désactive le click droit sur l'élément principal
 mka.addEventListener('contextmenu', function (event) {
     event.preventDefault();
-})
+
+    mka.innerHTML +=
+        '<div id="' + mkarcmenuId + '">' +
+        '<ul>' +
+        '<li>White</li>' +
+        '<li>Green</li>' +
+        '<li>Yellow</li>' +
+        '<li>Orange</li>' +
+        '<li>Red</li>' +
+        '<li>Blue</li>' +
+        '</ul>' +
+        '</div>';
+
+    const mkarcmenu = document.getElementById(mkarcmenuId);
+
+    mkarcmenu.style.position = 'absolute';
+    mkarcmenu.style.left = event.pageX + 'px';
+    mkarcmenu.style.top = event.pageY + 'px';
+});
+
+document.body.onmousedown = () => {
+    if (document.getElementById(mkarcmenuId)) {
+        document.getElementById(mkarcmenuId).remove();
+    }
+};
 
 let zone = {
     downX: null,
