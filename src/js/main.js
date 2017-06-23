@@ -48,7 +48,8 @@ let drawSquare = () => {
     node.id = "selection";
     mka.appendChild(node);
     node.style.position = "absolute";
-    node.style.backgroundColor = "red";
+    node.style.backgroundColor = "rgba(255,0,0,0.5)";
+    node.style.border = "1px solid rgba(255,0,0,0.8)";
     return node;
 };
 
@@ -168,6 +169,3 @@ document.onkeydown = (e) => {
 }
 
 activeLasso();
-
-
-
