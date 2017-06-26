@@ -118,14 +118,14 @@ let refreshSquare = (node) => {
 let activeLasso = () => {
     // Lors de la pression sur la souris on bind l'action de déplacement
     mka.onmousedown = (event) => {
-        // On démarre la sélection seulement si on utilise le bouton gauche de la souris
-        if (event.which === 1) {
+        // On démarre la sélection si on utilise le bouton gauche de la souris ou le clic droit
+        if (event.which === 1 || event.which === 3) {
             // zone du click
             zone.downX = event.pageX;
             zone.downY = event.pageY;
 
-            // si la touche ctrl n'est pas appuyée on efface pas
-            if (!event.ctrlKey) {
+            // Si la touche ctrl n'est pas appuyée et que le menu du clic droit n'est pas ouvert, on efface pas
+            if (!event.ctrlKey && !document.getElementById(mkarcmenuId)) {
                 // on clean les éléments déjà sélectionné
                 let mkaElts = document.getElementsByClassName("mka-elt");
                 Array.from(mkaElts).map(elt => {
@@ -149,15 +149,17 @@ let activeLasso = () => {
             startLasso(event);
 
             document.body.onmousemove = (event) => {
-                startLasso(event);
+                // On démarre le lasso seulement si on utilise le bouton gauche de la souris
+                if(event.which === 1) {
+                    startLasso(event);
+                }
             };
         }
     };
 
-    // lorsqu'on relache le clic
     window.onmouseup = () => {
-        // Si on relache le bouton gauche de la souris
-        if (event.which === 1) {
+        // Si on relache le cllic (gauche ou droit)
+        if (event.which === 1 || event.which === 3) {
             // on unbind le mousemove
             document.body.onmousemove = () => { };
             // on supprime la selection
