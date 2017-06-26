@@ -54,7 +54,7 @@
     <div>test</div>
     <div>test</div>
     <ul id="mka" class="list-group">
-        <li class="mka-elt list-group-item">
+        <li id="firstElement" class="mka-elt list-group-item">
             <div class="card">
 
 
@@ -178,6 +178,21 @@
     <div>test</div>
     <div>test</div>
     <div>test</div>
+
+    <script type="text/javascript">
+        const firstElementMenu = [
+            { text: "Menu Item 1", //menu option text
+                disabled: true //No click event. Grayed out option.
+            },
+            {
+                text:"Menu Item 2",
+//                callback: sayHello, //function to be called on click
+                disabled: false
+            }
+        ];
+
+        document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
+    </script>
 
     <script src="src/js/main.js"></script>
 

@@ -12,23 +12,34 @@ const mkarcmenuId = 'mkarcmenu'
 mka.addEventListener('contextmenu', function (event) {
     event.preventDefault();
 
-    mka.innerHTML +=
-        '<div id="' + mkarcmenuId + '">' +
-        '<ul>' +
-        '<li>White</li>' +
-        '<li>Green</li>' +
-        '<li>Yellow</li>' +
-        '<li>Orange</li>' +
-        '<li>Red</li>' +
-        '<li>Blue</li>' +
-        '</ul>' +
-        '</div>';
+    let mkaEltSelected = document.getElementsByClassName('mka-elt-selected')
+    // Si suelement 1 élément est sélectionné et que il y a des items pour le menu
+    if(mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
 
-    const mkarcmenu = document.getElementById(mkarcmenuId);
+        mka.innerHTML +=
+            '<div id="' + mkarcmenuId + '"><ul>' +
+            '<li>White</li>' +
+            '<li>Green</li>' +
+            '<li>Yellow</li>' +
+            '<li>Orange</li>' +
+            '<li>Red</li>' +
+            '<li>Blue</li>' +
+            '</ul></div>';
 
-    mkarcmenu.style.position = 'absolute';
-    mkarcmenu.style.left = event.pageX + 'px';
-    mkarcmenu.style.top = event.pageY + 'px';
+        const menu = JSON.parse(mkaEltSelected[0].getAttribute('mka-rc-menu-items'));
+        // console.log('menu', menu);
+        menu.forEach(function (item) {
+            // console.log('item', item);
+        });
+
+        const mkarcmenu = document.getElementById(mkarcmenuId);
+
+        mkarcmenu.style.position = 'absolute';
+        mkarcmenu.style.left = event.pageX + 'px';
+        mkarcmenu.style.top = event.pageY + 'px';
+
+    }
+
 });
 
 document.body.onmousedown = () => {
