@@ -167,44 +167,46 @@ let activeLasso = () => {
 }
 
 document.onkeydown = (e) => {
-    let code = e.which;
-    if (code == 37 || code == 38 || code == 39 || code == 40) {
+    // On peut utiliser les touches du clavier seulement si le menu du click droit est fermé
+    if(!document.getElementById(mkarcmenuId)) {
 
-        // on recupere le dernier elt selectionné dans le DOM
-        let selectedArray = document.getElementsByClassName("mka-elt-selected");
-        let last = selectedArray[selectedArray.length - 1];
+        let code = e.which;
+        if (code == 37 || code == 38 || code == 39 || code == 40) {
 
-        // si la touche ctrl n'est pas appuyée on efface pas
-        if (!event.ctrlKey) {
-            // on clean les éléments déjà sélectionné
-            let mkaElts = document.getElementsByClassName("mka-elt");
-            Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
+            // on recupere le dernier elt selectionné dans le DOM
+            let selectedArray = document.getElementsByClassName("mka-elt-selected");
+            let last = selectedArray[selectedArray.length - 1];
+
+            // si la touche ctrl n'est pas appuyée on efface pas
+            if (!event.ctrlKey) {
+                // on clean les éléments déjà sélectionné
+                let mkaElts = document.getElementsByClassName("mka-elt");
+                Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
+            }
+
+
+            switch (e.which) {
+                case 37: // left
+                    console.log("left");
+                    break;
+
+                case 38: // up
+                    console.log("up");
+                    last.previousElementSibling.classList.add("mka-elt-selected");
+                    break;
+                case 39: // right
+                    console.log("right");
+                    break;
+
+                case 40: // down
+                    last.nextElementSibling.classList.add("mka-elt-selected");
+                    break;
+
+                default: return; // exit this handler for other keys
+            }
         }
 
-
-        switch (e.which) {
-            case 37: // left
-                console.log("left");
-                break;
-
-            case 38: // up
-                console.log("up");
-                last.previousElementSibling.classList.add("mka-elt-selected");
-                break;
-            case 39: // right
-                console.log("right");
-                break;
-
-            case 40: // down
-                last.nextElementSibling.classList.add("mka-elt-selected");
-                break;
-
-            default: return; // exit this handler for other keys
-        }
     }
-
-
-
 }
 
 activeLasso();
