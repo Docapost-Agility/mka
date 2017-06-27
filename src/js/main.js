@@ -53,11 +53,11 @@ let selectItem = (ctrlKey, isClick) => {
                 selectedItems.push(elt);
             }
         } else {
-             // si la touche ctrl n'est pas appuyée on efface pas
+            // si la touche ctrl n'est pas appuyée on efface pas
             if (!ctrlKey) {
                 elt.classList.remove("mka-elt-selected");
             }
-            
+
         }
     });
 
@@ -166,25 +166,32 @@ document.onkeydown = (e) => {
             Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
         }
 
+        if (!!last) {
+            switch (e.which) {
+                case 37: // left
+                    console.log("left");
+                    break;
 
-        switch (e.which) {
-            case 37: // left
-                console.log("left");
-                break;
+                case 38: // up
+                    console.log("up");
+                    let prev = last.previousElementSibling;
+                    if (!!prev) {
+                        prev.classList.add("mka-elt-selected");
+                    }
+                    break;
+                case 39: // right
+                    console.log("right");
+                    break;
 
-            case 38: // up
-                console.log("up");
-                last.previousElementSibling.classList.add("mka-elt-selected");
-                break;
-            case 39: // right
-                console.log("right");
-                break;
+                case 40: // down
+                    let next = last.nextElementSibling;
+                    if (!!next) {
+                        next.classList.add("mka-elt-selected");
+                    }
+                    break;
 
-            case 40: // down
-                last.nextElementSibling.classList.add("mka-elt-selected");
-                break;
-
-            default: return; // exit this handler for other keys
+                default: return; // exit this handler for other keys
+            }
         }
     }
 
