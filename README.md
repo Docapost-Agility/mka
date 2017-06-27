@@ -11,6 +11,7 @@ Librairie pouvant faire cohabiter divers éléments comme :
 
 ## Requirements
 * rollUp JS  ```npm install --global rollup```
+* rollUp Watch  ```npm install rollup-watch```
 * yarn ```npm i -g yarn```
 * http server  ```yarn global add http-server```
 
