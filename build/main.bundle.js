@@ -70,54 +70,208 @@
 "use strict";
 
 
+var _rightClick = __webpack_require__(1);
+
+var rightClick = _interopRequireWildcard(_rightClick);
+
+var _select = __webpack_require__(2);
+
+var select = _interopRequireWildcard(_select);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 // principal elt
 var mka = document.getElementById("mka");
-
 if (!mka) throw new Error('mka id not found');
 
-// on désactive la selection de text
-mka.style.userSelect = "none";
+var config = {
+    'focus': 'mka'
+};
+config.actions = [];
 
-var mkarcmenuId = 'mkarcmenu';
+rightClick.active(mka, config);
 
-// On désactive le click droit sur l'élément principal
-mka.addEventListener('contextmenu', function (event) {
-    event.preventDefault();
+select.active(mka, config);
 
-    var mkaEltSelected = document.getElementsByClassName('mka-elt-selected');
-    // Si suelement 1 élément est sélectionné et que il y a des items pour le menu
-    if (mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
-
-        var newMenu = '<div id="' + mkarcmenuId + '"><ul>';
-
-        var menu = JSON.parse(mkaEltSelected[0].getAttribute('mka-rc-menu-items'));
-        menu.forEach(function (item) {
-            newMenu += '<li>' + item.title + '</li>';
-        });
-
-        newMenu += '</ul></div>';
-
-        mka.innerHTML += newMenu;
-
-        var mkarcmenu = document.getElementById(mkarcmenuId);
-
-        mkarcmenu.style.position = 'absolute';
-        mkarcmenu.style.left = event.pageX + 'px';
-        mkarcmenu.style.top = event.pageY + 'px';
-    }
-});
-
-document.body.onmousedown = function () {
-    if (document.getElementById(mkarcmenuId)) {
-        document.getElementById(mkarcmenuId).remove();
-    }
+document.onkeydown = function (e) {
+    console.log(config);
+    config.actions[config.focus + '-arrow'](e);
 };
 
+document.getElementById("ok").onclick = function (e) {
+    config.focus = "rc";
+};
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var active = exports.active = function active(mka, config) {
+    config.actions["rc-arrow"] = onkeydown;
+    var mkarcmenuId = 'mkarcmenu';
+    // On désactive le click droit sur l'élément principal
+    mka.addEventListener('contextmenu', function (event) {
+        event.preventDefault();
+
+        var mkaEltSelected = document.getElementsByClassName('mka-elt-selected');
+        // Si suelement 1 élément est sélectionné et que il y a des items pour le menu
+        if (mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
+
+            var newMenu = '<div id="' + mkarcmenuId + '"><ul>';
+
+            var menu = JSON.parse(mkaEltSelected[0].getAttribute('mka-rc-menu-items'));
+            menu.forEach(function (item) {
+                newMenu += '<li>' + item.title + '</li>';
+            });
+
+            newMenu += '</ul></div>';
+
+            mka.innerHTML += newMenu;
+
+            var mkarcmenu = document.getElementById(mkarcmenuId);
+
+            mkarcmenu.style.position = 'absolute';
+            mkarcmenu.style.left = event.pageX + 'px';
+            mkarcmenu.style.top = event.pageY + 'px';
+
+            config.focus = "rc";
+        }
+    });
+
+    document.body.onmousedown = function () {
+        if (document.getElementById(mkarcmenuId)) {
+            document.getElementById(mkarcmenuId).remove();
+        }
+    };
+};
+
+var onkeydown = function onkeydown(e) {
+    console.log(e);
+};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var mka = null;
 var zone = {
     downX: null,
     downY: null,
     upX: null,
     upY: null
+};
+
+var active = exports.active = function active(mkaElt, config) {
+    mka = mkaElt;
+    // on désactive la selection de text
+    mka.style.userSelect = "none";
+    // Lors de la pression sur la souris on bind l'action de déplacement
+    mka.onmousedown = function (event) {
+        // On démarre la sélection si on utilise le bouton gauche de la souris ou le clic droit
+        if (event.which === 1 || event.which === 3) {
+            // zone du click
+            zone.downX = event.pageX;
+            zone.downY = event.pageY;
+
+            var node = drawSquare();
+
+            var startLasso = function startLasso(event, isClick) {
+                zone.upX = event.pageX;
+                zone.upY = event.pageY;
+
+                orderCoordinate();
+                refreshSquare(node);
+
+                return selectItem(event.ctrlKey, isClick);
+            };
+            // on lance le lasso car il peut ne pas y avoir de mouve
+            var isAlreadySelected = startLasso(event, true);
+
+            // Si le down a lieu sur un elt déjà focus on ne peut pas déclancher le moove
+            // On démarre le lasso seulement si on utilise le bouton gauche de la souris
+            if (!isAlreadySelected && event.which === 1) {
+                document.body.onmousemove = function (event) {
+                    startLasso(event, false);
+                };
+            }
+        }
+    };
+
+    window.onmouseup = function () {
+        // Si on relache le cllic (gauche ou droit)
+        if (event.which === 1 || event.which === 3) {
+            // on unbind le mousemove
+            document.body.onmousemove = function () {};
+            // on supprime la selection
+            deleteSquare();
+        }
+    };
+
+    config.actions['mka-arrow'] = function (e) {
+        console.log(e);
+        // On peut utiliser les touches du clavier seulement si le menu du click droit est fermé
+        // if(!document.getElementById(mkarcmenuId)) {
+
+        var code = e.which;
+        if (code == 37 || code == 38 || code == 39 || code == 40) {
+
+            // on recupere le dernier elt selectionné dans le DOM
+            var selectedArray = document.getElementsByClassName("mka-elt-selected");
+            var last = selectedArray[selectedArray.length - 1];
+
+            // si la touche ctrl n'est pas appuyée on efface pas
+            if (!event.ctrlKey) {
+                // on clean les éléments déjà sélectionné
+                var mkaElts = document.getElementsByClassName("mka-elt");
+                Array.from(mkaElts).map(function (elt) {
+                    elt.classList.remove("mka-elt-selected");
+                });
+            }
+
+            switch (e.which) {
+                case 37:
+                    // left
+                    console.log("left");
+                    break;
+
+                case 38:
+                    // up
+                    console.log("up");
+                    last.previousElementSibling.classList.add("mka-elt-selected");
+                    break;
+                case 39:
+                    // right
+                    console.log("right");
+                    break;
+
+                case 40:
+                    // down
+                    last.nextElementSibling.classList.add("mka-elt-selected");
+                    break;
+
+                default:
+                    return; // exit this handler for other keys
+            }
+        }
+
+        // }
+    };
+
+    mka.onclick = function () {
+        config.focus = "mka";
+    };
 };
 
 var selectItem = function selectItem(ctrlKey, isClick) {
@@ -206,100 +360,6 @@ var refreshSquare = function refreshSquare(node) {
     node.style.width = zone.x2 - zone.x1 + "px";
     node.style.height = zone.y2 - zone.y1 + "px";
 };
-
-var activeLasso = function activeLasso() {
-    // Lors de la pression sur la souris on bind l'action de déplacement
-    mka.onmousedown = function (event) {
-        // On démarre la sélection si on utilise le bouton gauche de la souris ou le clic droit
-        if (event.which === 1 || event.which === 3) {
-            // zone du click
-            zone.downX = event.pageX;
-            zone.downY = event.pageY;
-
-            var node = drawSquare();
-
-            var startLasso = function startLasso(event, isClick) {
-                zone.upX = event.pageX;
-                zone.upY = event.pageY;
-
-                orderCoordinate();
-                refreshSquare(node);
-
-                return selectItem(event.ctrlKey, isClick);
-            };
-            // on lance le lasso car il peut ne pas y avoir de mouve
-            var isAlreadySelected = startLasso(event, true);
-
-            // Si le down a lieu sur un elt déjà focus on ne peut pas déclancher le moove
-            // On démarre le lasso seulement si on utilise le bouton gauche de la souris
-            if (!isAlreadySelected && event.which === 1) {
-                document.body.onmousemove = function (event) {
-                    startLasso(event, false);
-                };
-            }
-        }
-    };
-
-    window.onmouseup = function () {
-        // Si on relache le cllic (gauche ou droit)
-        if (event.which === 1 || event.which === 3) {
-            // on unbind le mousemove
-            document.body.onmousemove = function () {};
-            // on supprime la selection
-            deleteSquare();
-        }
-    };
-};
-
-document.onkeydown = function (e) {
-    // On peut utiliser les touches du clavier seulement si le menu du click droit est fermé
-    if (!document.getElementById(mkarcmenuId)) {
-
-        var code = e.which;
-        if (code == 37 || code == 38 || code == 39 || code == 40) {
-
-            // on recupere le dernier elt selectionné dans le DOM
-            var selectedArray = document.getElementsByClassName("mka-elt-selected");
-            var last = selectedArray[selectedArray.length - 1];
-
-            // si la touche ctrl n'est pas appuyée on efface pas
-            if (!event.ctrlKey) {
-                // on clean les éléments déjà sélectionné
-                var mkaElts = document.getElementsByClassName("mka-elt");
-                Array.from(mkaElts).map(function (elt) {
-                    elt.classList.remove("mka-elt-selected");
-                });
-            }
-
-            switch (e.which) {
-                case 37:
-                    // left
-                    console.log("left");
-                    break;
-
-                case 38:
-                    // up
-                    console.log("up");
-                    last.previousElementSibling.classList.add("mka-elt-selected");
-                    break;
-                case 39:
-                    // right
-                    console.log("right");
-                    break;
-
-                case 40:
-                    // down
-                    last.nextElementSibling.classList.add("mka-elt-selected");
-                    break;
-
-                default:
-                    return; // exit this handler for other keys
-            }
-        }
-    }
-};
-
-activeLasso();
 
 /***/ })
 /******/ ]);
