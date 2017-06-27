@@ -34,7 +34,7 @@ mka.addEventListener('contextmenu', function (event) {
         mkarcmenu.style.top = event.pageY + 'px';
 
     }
-});
+}); 
 
 document.body.onmousedown = () => {
     if (document.getElementById(mkarcmenuId)) {
