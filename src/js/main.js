@@ -55,15 +55,16 @@ let zone = {
     upY: null,
 };
 
-let selectItem = (ctrlKey) => {
+let selectItem = (ctrlKey, isClick) => {
     let mkaElts = document.getElementsByClassName("mka-elt");
 
     let selectedItems = [];
 
-    // on parcours chaque elt pour savoir s'ils sont dans la zone selectionné 
+    let isAlreadySelected = false;
+
+    // on parcours chaque elt pour savoir s'ils sont dans la zone selectionné
     Array.from(mkaElts).map(elt => {
         let rect = elt.getBoundingClientRect();
-        // console.log(rect);
         let zoneElt = {
             x1: elt.offsetLeft,
             x2: (elt.offsetLeft + rect.width),
@@ -72,16 +73,33 @@ let selectItem = (ctrlKey) => {
         }
         // Permet de savoir si la zone de l'elt croise la zone de selection 
         if (zone.x2 >= zoneElt.x1 && zoneElt.x2 >= zone.x1 && zone.y2 >= zoneElt.y1 && zoneElt.y2 >= zone.y1) {
-            elt.classList.add("mka-elt-selected");
-            selectedItems.push(elt);
+
+            // si pour le moment il n'y a pas de eu de déplacement
+            if (isClick && elt.classList.contains("mka-elt-selected")) {
+                if (ctrlKey) {
+                    elt.classList.remove("mka-elt-selected");
+                } else {
+                    elt.classList.add("mka-elt-selected");
+                    selectedItems.push(elt);
+                }
+
+                // Le click a eu lieu sur un elt déjà sélectionné on retourn un boulean pour ne pas bind le moove
+                isAlreadySelected = true;
+            } else {
+                elt.classList.add("mka-elt-selected");
+                selectedItems.push(elt);
+            }
         } else {
+             // si la touche ctrl n'est pas appuyée on efface pas
             if (!ctrlKey) {
                 elt.classList.remove("mka-elt-selected");
             }
+
         }
     });
 
     document.getElementById("mka-count").innerHTML = selectedItems.length;
+    return isAlreadySelected;
 };
 
 // we add div
@@ -135,36 +153,27 @@ let activeLasso = () => {
             zone.downX = event.pageX;
             zone.downY = event.pageY;
 
-            // Si la touche ctrl n'est pas appuyée et que le menu du clic droit n'est pas ouvert, on efface pas
-            if (!event.ctrlKey && !document.getElementById(mkarcmenuId)) {
-                // on clean les éléments déjà sélectionné
-                let mkaElts = document.getElementsByClassName("mka-elt");
-                Array.from(mkaElts).map(elt => {
-                    elt.classList.remove("mka-elt-selected")
-                });
-            }
-
-
             let node = drawSquare();
 
-            let startLasso = (event) => {
-                    zone.upX = event.pageX;
-                    zone.upY = event.pageY;
+            let startLasso = (event, isClick) => {
+                zone.upX = event.pageX;
+                zone.upY = event.pageY;
 
-                    orderCoordinate();
-                    refreshSquare(node);
+                orderCoordinate();
+                refreshSquare(node);
 
-                    selectItem(event.ctrlKey);
+                return selectItem(event.ctrlKey, isClick);
             };
             // on lance le lasso car il peut ne pas y avoir de mouve
-            startLasso(event);
+            let isAlreadySelected = startLasso(event, true);
 
-            document.body.onmousemove = (event) => {
-                // On démarre le lasso seulement si on utilise le bouton gauche de la souris
-                if(event.which === 1) {
-                    startLasso(event);
-                }
-            };
+            // Si le down a lieu sur un elt déjà focus on ne peut pas déclancher le moove
+            // On démarre le lasso seulement si on utilise le bouton gauche de la souris
+            if (!isAlreadySelected && event.which === 1) {
+                document.body.onmousemove = (event) => {
+                    startLasso(event, false);
+                };
+            }
         }
     };
 
