@@ -74,24 +74,32 @@ export let active = (mkaElt, config) => {
             }
 
 
-            switch (e.which) {
-                case 37: // left
-                    console.log("left");
-                    break;
+            if (!!last) {
+                switch (e.which) {
+                    case 37: // left
+                        console.log("left");
+                        break;
 
-                case 38: // up
-                    console.log("up");
-                    last.previousElementSibling.classList.add("mka-elt-selected");
-                    break;
-                case 39: // right
-                    console.log("right");
-                    break;
+                    case 38: // up
+                        console.log("up");
+                        let prev = last.previousElementSibling;
+                        if (!!prev) {
+                            prev.classList.add("mka-elt-selected");
+                        }
+                        break;
+                    case 39: // right
+                        console.log("right");
+                        break;
 
-                case 40: // down
-                    last.nextElementSibling.classList.add("mka-elt-selected");
-                    break;
+                    case 40: // down
+                        let next = last.nextElementSibling;
+                        if (!!next) {
+                            next.classList.add("mka-elt-selected");
+                        }
+                        break;
 
-                default: return; // exit this handler for other keys
+                    default: return; // exit this handler for other keys
+                }
             }
         }
 
