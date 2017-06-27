@@ -6,45 +6,90 @@ let zone = {
     upY: null,
 };
 
+let hasMoved = false;
+
+// we add div
+let drawSquare = () => {
+    let node = document.createElement("div");
+    node.id = "selection";
+    mka.appendChild(node);
+    node.style.position = "absolute";
+    node.style.backgroundColor = "rgba(255,0,0,0.5)";
+    node.style.border = "1px solid rgba(255,0,0,0.8)";
+
+    return node;
+};
+let node = null;
+
+let isClickedElementSelected = (event) => {
+    let path = event.path;
+    let isElementSelected = false;
+
+    path.forEach(function (block) {
+        if (block.classList) {
+            let classList = block.classList;
+
+            classList.forEach(function (cssClass) {
+                if (cssClass === "mka-elt-selected") {
+                    isElementSelected = true;
+                }
+            });
+        }
+    });
+
+    return isElementSelected;
+}
+
+let startLasso = (event, isClick) => {
+    zone.upX = event.pageX + 0;
+    zone.upY = event.pageY + 0;
+
+    orderCoordinate();
+
+    if (!isClickedElementSelected(event) || isClick) {
+        selectItem(event.ctrlKey, isClick);
+        refreshSquare(node);
+        return false;
+    }
+    return true;
+};
 
 export let active = (mkaElt, config) => {
     mka = mkaElt;
+
     // on désactive la selection de text
     mka.style.userSelect = "none";
     // Lors de la pression sur la souris on bind l'action de déplacement
     mka.onmousedown = (event) => {
+        hasMoved = false;
         // On démarre la sélection si on utilise le bouton gauche de la souris ou le clic droit
         if (event.which === 1 || event.which === 3) {
             // zone du click
-            zone.downX = event.pageX;
-            zone.downY = event.pageY;
-
-            let node = drawSquare();
-
-            let startLasso = (event, isClick) => {
-                zone.upX = event.pageX;
-                zone.upY = event.pageY;
-
-                orderCoordinate();
-                refreshSquare(node);
-
-                return selectItem(event.ctrlKey, isClick);
-            };
-            // on lance le lasso car il peut ne pas y avoir de mouve
-            let isAlreadySelected = startLasso(event, true);
+            zone.downX = event.pageX + 0;
+            zone.downY = event.pageY + 0;
 
             // Si le down a lieu sur un elt déjà focus on ne peut pas déclancher le moove
             // On démarre le lasso seulement si on utilise le bouton gauche de la souris
-            if (!isAlreadySelected && event.which === 1) {
+            if (!isClickedElementSelected(event) && event.which === 1) {
+                node = drawSquare();
                 document.body.onmousemove = (event) => {
+                    hasMoved = true;
                     startLasso(event, false);
                 };
             }
         }
     };
 
-    window.onmouseup = () => {
-        // Si on relache le cllic (gauche ou droit)
+    window.onmouseup = (event) => {
+        if (!hasMoved) {
+            startLasso(event, true);
+        }
+        hasMoved = false;
+        let mkaElts = document.getElementsByClassName("mka-elt");
+        Array.from(mkaElts).map(elt => {
+            elt.draggable = elt.classList.contains('mka-elt-selected');
+        });
+        // Si on relache le clic (gauche ou droit)
         if (event.which === 1 || event.which === 3) {
             // on unbind le mousemove
             document.body.onmousemove = () => { };
@@ -55,7 +100,6 @@ export let active = (mkaElt, config) => {
 
 
     config.actions['mka-arrow'] = (e) => {
-        console.log(e);
         // On peut utiliser les touches du clavier seulement si le menu du click droit est fermé
         // if(!document.getElementById(mkarcmenuId)) {
 
@@ -85,6 +129,7 @@ export let active = (mkaElt, config) => {
                         let prev = last.previousElementSibling;
                         if (!!prev) {
                             prev.classList.add("mka-elt-selected");
+                            prev.draggable = true;
                         }
                         break;
                     case 39: // right
@@ -95,6 +140,7 @@ export let active = (mkaElt, config) => {
                         let next = last.nextElementSibling;
                         if (!!next) {
                             next.classList.add("mka-elt-selected");
+                            next.draggable = true;
                         }
                         break;
 
@@ -159,19 +205,12 @@ let selectItem = (ctrlKey, isClick) => {
     return isAlreadySelected;
 };
 
-// we add div
-let drawSquare = () => {
-    let node = document.createElement("div");
-    node.id = "selection";
-    mka.appendChild(node);
-    node.style.position = "absolute";
-    node.style.backgroundColor = "red";
-    return node;
-};
-
 let deleteSquare = () => {
+    console.log("delete");
     let node = document.getElementById("selection");
-    mka.removeChild(node);
+    if (!!node) {
+        mka.removeChild(node);
+    }
 }
 
 let orderCoordinate = () => {
