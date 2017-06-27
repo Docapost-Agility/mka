@@ -14,23 +14,18 @@ mka.addEventListener('contextmenu', function (event) {
 
     let mkaEltSelected = document.getElementsByClassName('mka-elt-selected')
     // Si suelement 1 élément est sélectionné et que il y a des items pour le menu
-    if(mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
+    if (mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
 
-        mka.innerHTML +=
-            '<div id="' + mkarcmenuId + '"><ul>' +
-            '<li>White</li>' +
-            '<li>Green</li>' +
-            '<li>Yellow</li>' +
-            '<li>Orange</li>' +
-            '<li>Red</li>' +
-            '<li>Blue</li>' +
-            '</ul></div>';
+        let newMenu = '<div id="' + mkarcmenuId + '"><ul>';
 
         const menu = JSON.parse(mkaEltSelected[0].getAttribute('mka-rc-menu-items'));
-        // console.log('menu', menu);
         menu.forEach(function (item) {
-            // console.log('item', item);
+            newMenu += '<li>' + item.title + '</li>';
         });
+
+        newMenu += '</ul></div>';
+
+        mka.innerHTML += newMenu;
 
         const mkarcmenu = document.getElementById(mkarcmenuId);
 
@@ -39,7 +34,6 @@ mka.addEventListener('contextmenu', function (event) {
         mkarcmenu.style.top = event.pageY + 'px';
 
     }
-
 });
 
 document.body.onmousedown = () => {
