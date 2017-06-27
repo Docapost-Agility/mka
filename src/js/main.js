@@ -14,10 +14,5 @@ import * as select from './select';
 select.active(mka, config);
 
 document.onkeydown = (e) => {
-    console.log(config);
     config.actions[config.focus + '-arrow'](e);
-}
-
-document.getElementById("ok").onclick = (e)=> {
-    config.focus = "rc";
 }
