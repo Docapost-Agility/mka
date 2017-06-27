@@ -8,16 +8,15 @@ Librairie pouvant faire cohabiter divers éléments comme :
 * Le fait de pouvoir Drag'n'Drop
 * Le fait de pouvoir gérer la sélection multiple
 
-
-## Requirements
-* rollUp JS  ```npm install --global rollup```
-* yarn ```npm i -g yarn```
-* http server  ```yarn global add http-server```
-
 ## Installation
 
-* ``` yarn install ```
-* ``` yarn run build-js ```
+- npm install babel-cli babel-core --save-dev
+- npm install babel-preset-es2015 --save-dev
+- npm install babel-loader webpack --save-dev
+
+## Launch
+
+- npm run webpack
 
 ### Right click
 

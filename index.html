@@ -54,7 +54,8 @@
     <div>test</div>
     <div>test</div>
     <ul id="mka" class="list-group">
-        <li class="mka-elt list-group-item">
+        iaiaiai
+        <li id="firstElement" class="mka-elt list-group-item">
             <div class="card">
 
 
@@ -178,8 +179,22 @@
     <div>test</div>
     <div>test</div>
     <div>test</div>
+    <button id="ok">ok</button>
 
-    <script src="src/js/main.js"></script>
+    <script type="text/javascript">
+        const firstElementMenu = [
+            {
+                title: "Menu Item 1"
+            },
+            {
+                title: "Menu Item 2",
+            }
+        ];
+
+        document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
+    </script>
+
+    <script src="build/main.bundle.js"></script>
 
     <style>
         .mka-elt-selected {
