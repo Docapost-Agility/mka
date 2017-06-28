@@ -34,7 +34,7 @@ export let active = (mka, config) => {
 
             newMenu += '</ul></div>';
 
-            mka.innerHTML += newMenu;
+            document.body.innerHTML += newMenu;
 
             const mkarcmenu = document.getElementById(mkarcmenuId);
 
