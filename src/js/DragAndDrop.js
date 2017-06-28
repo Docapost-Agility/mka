@@ -1,35 +1,34 @@
 export let bindDragEvents = (element) => {
-    // element.draggable = true;
+    let selection = mka.getElementsByClassName("mka-elt-selected");
 
-    // element.addEventListener('dragstart', function (e) {
-    //     console.log("ici");
-    //     // let multipleDragContainer = this.cloneNode(true);
+    element.addEventListener('dragstart', function (e) {
+        let multipleDragContainer = this.cloneNode(true);
 
-    //     // if (selection.length > 1) {
+        if (selection.length > 1) {
 
-    //     //     multipleDragContainer = getDraggedContainerStyle(multipleDragContainer);
+            multipleDragContainer = getDraggedContainerStyle(multipleDragContainer);
 
-    //     //     document.body.appendChild(multipleDragContainer);
-    //     //     e.dataTransfer.setDragImage(multipleDragContainer, 0, 0);
-    //     // }
+            document.body.appendChild(multipleDragContainer);
+            e.dataTransfer.setDragImage(multipleDragContainer, 0, 0);
+        }
 
-    //     // e.dataTransfer.setData('text/plain', ''); // Nécessaire pour Firefox
+        e.dataTransfer.setData('text/plain', ''); // Nécessaire pour Firefox
 
-    //     // element.classList.add("on-drag");
-    // });
-    // element.addEventListener('dragend', function (e) {
-    //     element.classList.remove("on-drag");
-    // });
+        element.classList.add("on-drag");
+    });
+    element.addEventListener('dragend', function (e) {
+        element.classList.remove("on-drag");
+    });
 
-    // element.addEventListener('drop', function (e) {
+    element.addEventListener('drop', function (e) {
 
-    //     console.log(element);
-    //     element.style.display = "none";
-    //     console.log(element);
-    //     element.classList.remove("on-drag");
-    //     console.log(element);
-    //     e.stopPropagation(); //Stoppe la propagation de l'event pour éviter la dropzone d'agir
-    // });
+        console.log(element);
+        element.style.display = "none";
+        console.log(element);
+        element.classList.remove("on-drag");
+        console.log(element);
+        e.stopPropagation(); //Stoppe la propagation de l'event pour éviter la dropzone d'agir
+    });
 }
 
 export function applyDropEvents(dropper, selection) {
@@ -71,15 +70,13 @@ function getDraggedContainerStyle(multipleDragContainer) {
 export let active = (mka) => {
 
     let elements = document.querySelectorAll('.mka-elt');
-    // let droppers = document.querySelectorAll('.mka-dropzone');
-    // let mkaSelectedElts = mka.getElementsByClassName("mka-elt-selected");
-
+    let droppers = document.querySelectorAll('.mka-dropzone');
 
     //Application du drag event pour chaque element ayant la classe mka-elt
     Array.from(elements).map(elt => {
         bindDragEvents(elt);
     });
 
-    // //Application du drop event pour chaque element ayant la classe mka-dropzone
-    // Array.from(droppers).map(elt => dndHandler.applyDropEvents(elt, mkaSelectedElts));
+    //Application du drop event pour chaque element ayant la classe mka-dropzone
+    Array.from(droppers).map(elt => dndHandler.applyDropEvents(elt, mkaSelectedElts));
 };
