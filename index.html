@@ -115,28 +115,28 @@
             <li class="mka-elt list-group-item">
                 <div class="card">
                     <div class="card-block">
-                        <h4 class="card-title">Item 1</h4>
+                        <h4 class="card-title">Item 2</h4>
                     </div>
                 </div>
             </li>
             <li class="mka-elt list-group-item">
                 <div class="card">
                     <div class="card-block">
-                        <h4 class="card-title">Item 1</h4>
+                        <h4 class="card-title">Item 3</h4>
                     </div>
                 </div>
             </li>
             <li class="mka-elt list-group-item">
                 <div class="card">
                     <div class="card-block">
-                        <h4 class="card-title">Item 1</h4>
+                        <h4 class="card-title">Item 4</h4>
                     </div>
                 </div>
             </li>
             <li class="mka-elt list-group-item">
                 <div class="card">
                     <div class="card-block">
-                        <h4 class="card-title">Item 1</h4>
+                        <h4 class="card-title">Item 5</h4>
                     </div>
                 </div>
             </li>
@@ -526,6 +526,17 @@
         ];
 
         document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
+
+        document.getElementById('mka').mkaInit({
+            "eltSelectedClass" : "jessy",
+            "dragNdrop" : false,
+            "rightClik" : true,
+            "lasso" : true 
+            // "dropFunction" : function(ids) {
+            //     console.log(ids);
+            //     console.log("drop du client");
+            // }
+        });
     </script>
 
     <style>

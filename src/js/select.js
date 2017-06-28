@@ -72,6 +72,7 @@ export let active = (mkaElt, config) => {
             // On démarre le lasso seulement si on utilise le bouton gauche de la souris
             if (!isClickedElementSelected(event) && event.which === 1) {
                 node = drawSquare();
+
                 document.body.onmousemove = (event) => {
                     hasMoved = true;
                     startLasso(event, false);
@@ -87,7 +88,9 @@ export let active = (mkaElt, config) => {
         hasMoved = false;
         let mkaElts = document.getElementsByClassName("mka-elt");
         Array.from(mkaElts).map(elt => {
-            elt.draggable = elt.classList.contains('mka-elt-selected');
+            if (config.dragNdrop) {
+                elt.draggable = elt.classList.contains('mka-elt-selected');
+            }
         });
         // Si on relache le clic (gauche ou droit)
         if (event.which === 1 || event.which === 3) {
@@ -174,6 +177,7 @@ let selectItem = (ctrlKey, isClick) => {
             y1: elt.offsetTop,
             y2: (elt.offsetTop + rect.height)
         }
+
         // Permet de savoir si la zone de l'elt croise la zone de selection 
         if (zone.x2 >= zoneElt.x1 && zoneElt.x2 >= zone.x1 && zone.y2 >= zoneElt.y1 && zoneElt.y2 >= zone.y1) {
 
