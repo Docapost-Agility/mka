@@ -10,8 +10,13 @@ config.actions = [];
 import * as rightClick from './rightClick';
 rightClick.active(mka, config);
 
+
+import * as dndHandler from './DragAndDrop';
+dndHandler.active(mka);
+
 import * as select from './select';
 select.active(mka, config);
+
 
 document.onkeydown = (e) => {
     config.actions[config.focus + '-arrow'](e);
