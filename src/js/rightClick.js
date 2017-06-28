@@ -6,14 +6,30 @@ export let active = (mka, config) => {
         event.preventDefault();
 
         let mkaEltSelected = document.getElementsByClassName('mka-elt-selected')
-        // Si suelement 1 élément est sélectionné et que il y a des items pour le menu
+        // Si seulement 1 élément est sélectionné et que il y a des items pour le menu
         if (mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
 
             let newMenu = `<div id="${mkarcmenuId}"><ul>`;
 
-            const menu = JSON.parse(mkaEltSelected[0].getAttribute('mka-rc-menu-items'));
+            let menuParse = mkaEltSelected[0].getAttribute('mka-rc-menu-items');
+
+            let menu = JSON.parse(menuParse, function (key, value) {
+                if (value
+                    && typeof value === "string"
+                    && value.substr(0, 8) == "function") {
+                    var startBody = value.indexOf('{') + 1;
+                    var endBody = value.lastIndexOf('}');
+                    var startArgs = value.indexOf('(') + 1;
+                    var endArgs = value.indexOf(')');
+
+                    return new Function(value.substring(startArgs, endArgs)
+                        , value.substring(startBody, endBody));
+                }
+                return value;
+            });
+
             menu.forEach(function (item) {
-                newMenu += '<li>' + item.title + '</li>';
+                newMenu += `<li onclick="${item.action}; anonymous();">${item.title}</li>`;
             });
 
             newMenu += '</ul></div>';

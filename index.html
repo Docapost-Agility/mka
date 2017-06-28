@@ -182,16 +182,27 @@
     <button id="ok">ok</button>
 
     <script type="text/javascript">
+        let actionFunction = function () {
+            alert('actionFunction');
+        }
+
         const firstElementMenu = [
             {
-                title: "Menu Item 1"
+                title: "Menu Item 1",
+                action: actionFunction
             },
             {
                 title: "Menu Item 2",
+                action: actionFunction
             }
         ];
 
-        document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
+        document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu, function (key, value) {
+            if (typeof value === 'function') {
+                return value.toString();
+            }
+            return value;
+        }));
     </script>
 
     <script src="build/main.bundle.js"></script>
