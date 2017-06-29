@@ -13,11 +13,10 @@ Librairie pouvant faire cohabiter divers éléments comme :
 ### requirement
 
 - node & npm
-- git
 
 ### Install
 
-- clone
+- clone or dowload 
 - npm install
 
 ### Lib utilisé
