@@ -63,9 +63,7 @@ export let active = (mkaElt, config) => {
     mka.onmousedown = (event) => {
         hasMoved = false;
         // On démarre la sélection si on utilise le bouton gauche de la souris
-        // if (event.which === 1 || event.which === 3) {
         if (event.which === 1) {
-            console.log('ici');
             // zone du click
             zone.downX = event.pageX + 0;
             zone.downY = event.pageY + 0;
