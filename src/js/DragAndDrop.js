@@ -101,6 +101,8 @@ let setWrapperStyle = (wrapper) => {
             child.style.textAlign = "center";
             child.style.width = "100%";
 
+
+
             console.log("You can use your own class");
         }
 
@@ -110,6 +112,29 @@ let setWrapperStyle = (wrapper) => {
         child.style.position = "absolute";
         child.style.top = (i * childDistance) + "px";
         child.style.left = (i * childDistance) + "px";
+
+        //Lorsqu'on parcourt le dernier élément et qu'il y a plus d'un élement
+        if(i === wrapperChildren.length -1 && wrapperChildren.length > 1){
+            //On crée une span qui contiendra le nombre d'élements selectionnés
+            let span = document.createElement("span");
+            span.innerHTML = wrapperChildren.length;
+            span.style.height = "25px";
+            span.style.width = "25px";
+            span.style.lineHeight = "25px";
+            span.style.position = "absolute";
+            span.style.right = "-10px";
+            span.style.top = "-5px";
+            span.style.zIndex = "25";
+            span.style.borderRadius = "15px";
+            span.style.textAlign = "center";
+
+            //Si on n'a pas configuré le onDragItemClass alors on applique un style par défaut
+            if(!config.onDragItemClass){
+                span.style.backgroundColor = "red";
+                span.style.color = "white";
+            }
+            child.appendChild(span);
+        }
     }
 
     return wrapper;
