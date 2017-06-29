@@ -13,6 +13,7 @@ Librairie pouvant faire cohabiter divers éléments comme :
 ### requirement
 
 - node & npm
+- git
 
 ### Install
 
