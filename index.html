@@ -14,8 +14,6 @@
 </head>
 
 <body>
-
-
     <div class="container">
         <h2>Dossier</h2>
         <div class="row folders-container">
@@ -93,11 +91,9 @@
             </div>
         </div>
 
+        <h3 style="display: none">Nombre d'element sélectionné <span id="mka-count">0</span></h3>
 
-        <h3>Nombre d'element sélectionné <span id="mka-count">0</span></h3>
-
-        <ul id="mka" class="list-group">
-            iaiaiai
+        <ul id="mka" class="list-group" style="margin-top: 40px">
             <li id="firstElement" class="mka-elt list-group-item">
                 <div class="card">
                     <div class="card-block">
@@ -491,6 +487,7 @@
 
         .on-drag {
             background-color: #cbcbcb !important;
+            opacity: 0.7;
         }
 
         .folders-container {
@@ -501,19 +498,6 @@
         }
 
     </style>
-
-    <div>test</div>
-
-    <div>test</div>
-    <div>test</div>
-    <div>test</div>
-    <div>test</div>
-    <div>test</div>
-    <div>test</div>
-    <div>test</div>
-    <div>test</div>
-    <div>test</div>
-    <button id="ok">ok</button>
 
     <script type="text/javascript">
         const firstElementMenu = [
@@ -529,7 +513,7 @@
 
         document.getElementById('mka').mkaInit({
             "eltSelectedClass" : "jessy",
-            "dragNdrop" : false,
+            "dragNdrop" : true,
             "rightClik" : true,
             "lasso" : true 
             // "dropFunction" : function(ids) {
@@ -538,12 +522,6 @@
             // }
         });
     </script>
-
-    <style>
-        .mka-elt-selected {
-            background-color: #bebebe;
-        }
-    </style>
 </body>
 
 </html>
