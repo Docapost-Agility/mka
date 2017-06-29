@@ -8,20 +8,24 @@ Librairie pouvant faire cohabiter divers éléments comme :
 * Le fait de pouvoir Drag'n'Drop
 * Le fait de pouvoir gérer la sélection multiple
 
-## Installation
+## Dev Install
 
-- npm install babel-cli babel-core --save-dev
-- npm install babel-preset-es2015 --save-dev
-- npm install babel-loader webpack --save-dev
+### requirement
+
+- node & npm
+
+### Install
+
+- clone or dowload 
+- npm install
+
+### Lib utilisé
+- babel-cli 
+- babel-core
+- babel-preset-es2015
+- babel-loader
+- webpack
 
 ## Launch
 
 - npm run webpack
-
-### Right click
-
-### Drag & drop
-
-### Ctrl + click
-
-### Multiple selection
