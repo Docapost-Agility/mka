@@ -1,5 +1,4 @@
 .idea
-dist
 build
 node_modules
 yarn.lock
