@@ -47,13 +47,11 @@ export let active = (mka, config) => {
         }
     });
 
-    document.body.onmousedown = () => {
+    window.onclick = () => {
         if (document.getElementById(mkarcmenuId)) {
             document.getElementById(mkarcmenuId).remove();
         }
     };
-
-
 }
 
 let onkeydown = (e) => {
