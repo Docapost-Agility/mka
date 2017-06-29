@@ -102,8 +102,6 @@ export let active = (mkaElt, config) => {
 
 
     config.actions['mka-arrow'] = (e) => {
-        // On peut utiliser les touches du clavier seulement si le menu du click droit est fermé
-        // if(!document.getElementById(mkarcmenuId)) {
 
         let code = e.which;
         if (code == 37 || code == 38 || code == 39 || code == 40) {
@@ -151,7 +149,6 @@ export let active = (mkaElt, config) => {
             }
         }
 
-        // }
     };
 
     mka.onclick = () => {
