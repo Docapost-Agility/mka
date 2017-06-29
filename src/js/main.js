@@ -5,6 +5,7 @@ if (!mka) throw new Error('mka id not found');
 let config = {
     "focus": "mka",
     "eltSelectedClass": null,
+    "onDragItemClass": null,
     "dragNdrop": true,
     "rightClik": true,
     "lasso": true,
@@ -23,8 +24,6 @@ import * as dndHandler from './DragAndDrop';
 import * as select from './select';
 
 HTMLElement.prototype.mkaInit = function (clientConfig) {
-    console.log("on init");
-
     Object.keys(clientConfig).map((i) => {
         config[i] = clientConfig[i];
     });

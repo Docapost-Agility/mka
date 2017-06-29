@@ -468,7 +468,7 @@
         </ul>
     </div>
 
-    <script src="build/main.bundle.js"></script>
+    <script src="build/mka.js"></script>
 
     <style>
         #mka {
@@ -497,6 +497,21 @@
             padding: 15px 0;
         }
 
+        #wrapper-drag{
+            position: relative;
+        }
+
+        .drag-class-sample{
+            /* Sample class for onDragItemClass*/
+            color: white;
+            background: #403A3E;
+            background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
+            background: linear-gradient(to right, #BE5869, #403A3E);
+            border: 1px solid #403A3E;
+            padding: 5px;
+            text-align: center;
+            width: 250px;
+        }
     </style>
 
     <script type="text/javascript">
@@ -513,9 +528,10 @@
 
         document.getElementById('mka').mkaInit({
             "eltSelectedClass" : "jessy",
+            "onDragItemClass" : "drag-class-sample",
             "dragNdrop" : true,
             "rightClik" : true,
-            "lasso" : true 
+            "lasso" : true
             // "dropFunction" : function(ids) {
             //     console.log(ids);
             //     console.log("drop du client");
