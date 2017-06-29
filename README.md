@@ -28,4 +28,5 @@ Librairie pouvant faire cohabiter divers éléments comme :
 
 ## Launch
 
-- npm run webpack
+- npm run dev
+- npm run prod
