@@ -1,15 +1,25 @@
 export let active = (mka, config) => {
     config.actions["rc-arrow"] = onkeydown;
     const mkarcmenuId = 'mkarcmenu'
+
+    let removeMkaRcMenu = () => {
+        if (document.getElementById(mkarcmenuId)) {
+            document.getElementById(mkarcmenuId).remove();
+        }
+    }
+
     // On désactive le click droit sur l'élément principal
     mka.addEventListener('contextmenu', (event) => {
         event.preventDefault();
+
+        // Si le menu est dèja open (au click droit sur la zone de sélection), on supprime le menu pour après en rajouter un nouveau
+        removeMkaRcMenu();
 
         let mkaEltSelected = document.getElementsByClassName('mka-elt-selected')
         // Si seulement 1 élément est sélectionné et que il y a des items pour le menu
         if (mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
 
-            let newMenu = `<div id="${mkarcmenuId}"><ul>`;
+            let newMenu = '<ul>';
 
             let menuParse = mkaEltSelected[0].getAttribute('mka-rc-menu-items');
 
@@ -32,9 +42,13 @@ export let active = (mka, config) => {
                 newMenu += `<li onclick="${item.action}; anonymous();">${item.title}</li>`;
             });
 
-            newMenu += '</ul></div>';
+            newMenu += '</ul>';
 
-            document.body.innerHTML += newMenu;
+            const newDiv = document.createElement('div');
+            newDiv.setAttribute('id', mkarcmenuId);
+            document.body.appendChild(newDiv);
+            // Ajout au body d'une div contenant le menu du clic droit
+            newDiv.innerHTML = newMenu;
 
             const mkarcmenu = document.getElementById(mkarcmenuId);
 
@@ -48,9 +62,7 @@ export let active = (mka, config) => {
     });
 
     window.onclick = () => {
-        if (document.getElementById(mkarcmenuId)) {
-            document.getElementById(mkarcmenuId).remove();
-        }
+        removeMkaRcMenu();
     };
 }
 
