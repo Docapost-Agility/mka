@@ -4,7 +4,8 @@
   "description": "Library POC for Docapost Agility",
   "main": "index.html",
   "scripts": {
-    "webpack": "webpack --watch --progress"
+    "dev": "webpack --env dev --watch --progress",
+    "build" : "webpack --env prod --optimize-minimize"
   },
   "repository": "git@gitlab.smartpanda-network.fr:sandbox/mouseAndKeyboardActions.git",
   "author": "Smartpanda",
