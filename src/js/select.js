@@ -95,7 +95,8 @@ export let active = (mkaElt, config) => {
         // Si on relache le clic (gauche ou droit)
         if (event.which === 1 || event.which === 3) {
             // on unbind le mousemove
-            document.body.onmousemove = () => { };
+            document.body.onmousemove = () => {
+            };
             // on supprime la selection
             deleteSquare();
         }
@@ -117,7 +118,9 @@ export let active = (mkaElt, config) => {
             if (!event.ctrlKey) {
                 // on clean les éléments déjà sélectionné
                 let mkaElts = document.getElementsByClassName("mka-elt");
-                Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
+                Array.from(mkaElts).map(elt => {
+                    elt.classList.remove("mka-elt-selected")
+                });
             }
 
 
@@ -147,7 +150,8 @@ export let active = (mkaElt, config) => {
                         }
                         break;
 
-                    default: return; // exit this handler for other keys
+                    default:
+                        return; // exit this handler for other keys
                 }
             }
         }
@@ -205,8 +209,9 @@ let selectItem = (ctrlKey, isClick) => {
         }
     });
 
-    if(document.getElementById("mka-count") != null){
-        document.getElementById("mka-count").innerHTML=selectedItems.length;
+    // si l'élément HTML mka-count existe
+    if (document.getElementById("mka-count") != null || document.getElementById("mka-count") != undefined) {
+        document.getElementById("mka-count").innerHTML = selectedItems.length;
     }
     return isAlreadySelected;
 };
