@@ -107,6 +107,7 @@ export let active = (mkaElt, config) => {
         // if(!document.getElementById(mkarcmenuId)) {
 
         let code = e.which;
+
         if (code == 37 || code == 38 || code == 39 || code == 40) {
 
             // on recupere le dernier elt selectionné dans le DOM
@@ -149,6 +150,24 @@ export let active = (mkaElt, config) => {
 
                     default: return; // exit this handler for other keys
                 }
+            }
+        }
+
+        if (event.ctrlKey){
+            //Si on appuie sur 'a' ou 'A'
+            if((code === 65 || code === 97) && config.selectAllShortcut) {
+                //Evite que le Ctrl + A sélectionne tous les blocs de la page
+                e.preventDefault();
+
+                let mkaElts = document.getElementsByClassName("mka-elt");
+                //On applique la classe selected à tous les éléments, de plus chaques éléments devient draggable
+                Array.from(mkaElts).map(elt => {
+                    elt.classList.add("mka-elt-selected");
+                    elt.draggable = true;
+                });
+
+                //On inidque le nombre d'éléments sélectionnés
+                document.getElementById("mka-count").innerHTML = mkaElts.length;
             }
         }
 
