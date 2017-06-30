@@ -64,9 +64,9 @@ export let active = (mkaElt, config) => {
     mka.style.userSelect = "none";
     // Lors de la pression sur la souris on bind l'action de déplacement
     mka.onmousedown = (event) => {
-        hasMoved = false;
         // On démarre la sélection si on utilise le bouton gauche de la souris
         if (event.which === 1) {
+            hasMoved = false;
             // zone du click
             zone.downX = event.pageX + 0;
             zone.downY = event.pageY + 0;
@@ -84,18 +84,18 @@ export let active = (mkaElt, config) => {
     };
 
     window.onmouseup = (event) => {
-        if (!hasMoved) {
-            startLasso(event, true);
-        }
-        hasMoved = false;
-        let mkaElts = document.getElementsByClassName("mka-elt");
-        Array.from(mkaElts).map(elt => {
-            if (config.dragNdrop) {
-                elt.draggable = elt.classList.contains('mka-elt-selected');
-            }
-        });
         // Si on relache le clic gauche
         if (event.which === 1) {
+            if (!hasMoved) {
+                startLasso(event, true);
+            }
+            hasMoved = false;
+            let mkaElts = document.getElementsByClassName("mka-elt");
+            Array.from(mkaElts).map(elt => {
+                if (config.dragNdrop) {
+                    elt.draggable = elt.classList.contains('mka-elt-selected');
+                }
+            });
             // on unbind le mousemove
             document.body.onmousemove = () => { };
             // on supprime la selection
