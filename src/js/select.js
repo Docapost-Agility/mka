@@ -98,7 +98,8 @@ export let active = (mkaElt, config) => {
         // Si on relache le clic (gauche ou droit)
         if (event.which === 1 || event.which === 3) {
             // on unbind le mousemove
-            document.body.onmousemove = () => { };
+            document.body.onmousemove = () => {
+            };
             // on supprime la selection
             deleteSquare();
         }
@@ -121,7 +122,9 @@ export let active = (mkaElt, config) => {
             if (!event.ctrlKey) {
                 // on clean les éléments déjà sélectionné
                 let mkaElts = document.getElementsByClassName("mka-elt");
-                Array.from(mkaElts).map(elt => { elt.classList.remove("mka-elt-selected") });
+                Array.from(mkaElts).map(elt => {
+                    elt.classList.remove("mka-elt-selected")
+                });
             }
 
 
@@ -151,15 +154,16 @@ export let active = (mkaElt, config) => {
                         }
                         break;
 
-                    default: return; // exit this handler for other keys
+                    default:
+                        return; // exit this handler for other keys
                 }
             }
         }
 
         //Si la touche 'Ctrl' est pressée
-        if (event.ctrlKey){
+        if (event.ctrlKey) {
             //Si on appuie sur 'a' ou 'A' que selectAllShortcut = true et que mka est focus
-            if((code === 65 || code === 97) && config.selectAllShortcut && isElementFocused) {
+            if ((code === 65 || code === 97) && config.selectAllShortcut && isElementFocused) {
                 //Evite que le Ctrl + A sélectionne tous les blocs de la page
                 e.preventDefault();
 
@@ -226,9 +230,13 @@ let selectItem = (ctrlKey, isClick) => {
         }
     });
 
-    countselectedItems=document.getElementById("mka").getElementsByClassName("mka-elt-selected").length;
+    countselectedItems = document.getElementById("mka").getElementsByClassName("mka-elt-selected").length;
 
-    document.getElementById("mka-count").innerHTML = countselectedItems;
+    // si l'élément HTML mka-count existe
+    if (document.getElementById("mka-count") != null || document.getElementById("mka-count") != undefined) {
+        document.getElementById("mka-count").innerHTML = countselectedItems;
+    }
+
     return isAlreadySelected;
 };
 
@@ -270,15 +278,15 @@ let refreshSquare = (node) => {
 //Fonction récursive qui retourne true ou false si l'id de l'élément ou d'un de ses parents est valide
 let setMkaElementFocus = (target) => {
     //Si la target possède la bonne id > return true
-    if(target.id === "mka"){
+    if (target.id === "mka") {
         return true;
     }
 
     //Tant qu'il y a des éléments parents on cherche l'id souhaitée
-    while(target.parentNode){
+    while (target.parentNode) {
         target = target.parentNode;
 
-        if(target.id === "mka"){
+        if (target.id === "mka") {
             return true;
         }
     }
