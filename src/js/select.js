@@ -7,6 +7,7 @@ let zone = {
 };
 
 let hasMoved = false;
+let isElementFocused = false;
 
 // we add div
 let drawSquare = () => {
@@ -45,6 +46,8 @@ let startLasso = (event, isClick) => {
     zone.upY = event.pageY + 0;
 
     orderCoordinate();
+
+    isElementFocused = setMkaElementFocus(event.target);
 
     if (!isClickedElementSelected(event) || isClick) {
         selectItem(event.ctrlKey, isClick);
@@ -153,8 +156,9 @@ export let active = (mkaElt, config) => {
             }
         }
 
+        //Si la touche 'Ctrl' est pressée
         if (event.ctrlKey){
-            //Si on appuie sur 'a' ou 'A'
+            //Si on appuie sur 'a' ou 'A' que selectAllShortcut = true
             if((code === 65 || code === 97) && config.selectAllShortcut) {
                 //Evite que le Ctrl + A sélectionne tous les blocs de la page
                 e.preventDefault();
@@ -187,7 +191,7 @@ let selectItem = (ctrlKey, isClick) => {
 
     let isAlreadySelected = false;
 
-    // on parcours chaque elt pour savoir s'ils sont dans la zone selectionné
+    // on parcourt chaque elt pour savoir s'ils sont dans la zone selectionné
     Array.from(mkaElts).map(elt => {
         let rect = elt.getBoundingClientRect();
         let zoneElt = {
@@ -261,4 +265,23 @@ let refreshSquare = (node) => {
 
     node.style.width = (zone.x2 - zone.x1) + "px";
     node.style.height = (zone.y2 - zone.y1) + "px";
+}
+
+//Fonction récursive qui retourne true ou false si l'id de l'élément ou d'un de ses parents est valide
+let setMkaElementFocus = (target) => {
+    //Si la target possède la bonne id > return true
+    if(target.id === "mka"){
+        return true;
+    }
+
+    //Tant qu'il y a des éléments parents on cherche l'id souhaitée
+    while(target.parentNode){
+        target = target.parentNode;
+
+        if(target.id === "mka"){
+            return true;
+        }
+    }
+
+    return false;
 }
