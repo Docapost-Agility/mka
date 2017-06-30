@@ -12,6 +12,10 @@ let config = {
     "dropFunction": function (ids) {
         console.log(ids);
         console.log("Default drop function, think to implement this function");
+    },
+    "deleteFunction": function (ids) {
+        console.log(ids);
+        console.log("Default delete function, think to implement this function");
     }
 }
 config.actions = [];
