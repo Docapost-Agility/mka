@@ -1,7 +1,7 @@
 import * as rightClick from './rightClick';
 import * as dndHandler from './DragAndDrop';
 import * as select from './select';
-import * as copyPast from './copyPaste';
+import * as copyPaste from './copyPaste';
 
 // principal elt
 let mka = document.getElementById("mka");
@@ -14,11 +14,16 @@ let config = {
     "dragNdrop": true,
     "rightClik": true,
     "lasso": true,
-    "dropFunction": function (ids) {
+    "dropFunction": (ids) => {
         console.log(ids);
         console.log("Default drop function, think to implement this function");
+    },
+    "pasteFunction": (items) => {
+        console.log(items);
+        console.log("Default past function, think to implement this function");
     }
 }
+
 config.actions = [];
 
 document.onkeydown = (e) => {
@@ -36,6 +41,9 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
     }
     if (config.dragNdrop) {
         dndHandler.active(mka, config);
+    }
+    if (config.copyPaste) {
+        copyPaste.active(config);
     }
     select.active(mka, config);
 };
