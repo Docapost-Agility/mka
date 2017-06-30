@@ -2,6 +2,7 @@ import * as rightClick from './rightClick';
 import * as dndHandler from './DragAndDrop';
 import * as select from './select';
 import * as copyPaste from './copyPaste';
+import * as deleteShortcut from './deleteShortcut';
 
 // principal elt
 let mka = document.getElementById("mka");
@@ -14,7 +15,9 @@ let config = {
     "dragNdrop": true,
     "rightClik": true,
     "lasso": true,
-    "selectAllShortcut": false,
+    "selectAllShortcut": true,
+    "copyPaste": true,
+    "deleteShortcut": true,
     "dropFunction": function (ids) {
         console.log(ids);
         console.log("Default drop function, think to implement this function");
@@ -23,8 +26,8 @@ let config = {
         console.log(items);
         console.log("Default past function, think to implement this function");
     },
-    "deleteFunction": function (ids) {
-        console.log(ids);
+    "deleteFunction": function (items) {
+        console.log(items);
         console.log("Default delete function, think to implement this function");
     }
 }
@@ -33,7 +36,6 @@ config.actions = [];
 
 document.onkeydown = (e) => {
     config.actions[config.focus + '-arrow'](e);
-    config.actions[config.focus + '-suppr'](e);
 }
 
 
@@ -51,5 +53,10 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
     if (config.copyPaste) {
         copyPaste.active(config);
     }
+
+    if(config.deleteShortcut) {
+        deleteShortcut.active(config);
+    }
+
     select.active(mka, config);
 };

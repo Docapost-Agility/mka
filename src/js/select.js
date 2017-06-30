@@ -275,7 +275,7 @@ let refreshSquare = (node) => {
     node.style.height = (zone.y2 - zone.y1) + "px";
 }
 
-//Fonction récursive qui retourne true ou false si l'id de l'élément ou d'un de ses parents est valide
+//Fonction qui retourne true ou false si l'id de l'élément ou d'un de ses parents est valide
 let setMkaElementFocus = (target) => {
     //Si la target possède la bonne id > return true
     if(target.id === "mka"){
