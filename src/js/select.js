@@ -7,6 +7,7 @@ let zone = {
 };
 
 let hasMoved = false;
+let isElementFocused = false;
 
 // we add div
 let drawSquare = () => {
@@ -45,6 +46,8 @@ let startLasso = (event, isClick) => {
     zone.upY = event.pageY + 0;
 
     orderCoordinate();
+
+    isElementFocused = setMkaElementFocus(event.target);
 
     if (!isClickedElementSelected(event) || isClick) {
         selectItem(event.ctrlKey, isClick);
@@ -108,6 +111,7 @@ export let active = (mkaElt, config) => {
         // if(!document.getElementById(mkarcmenuId)) {
 
         let code = e.which;
+
         if (code == 37 || code == 38 || code == 39 || code == 40) {
 
             // on recupere le dernier elt selectionné dans le DOM
@@ -156,6 +160,25 @@ export let active = (mkaElt, config) => {
             }
         }
 
+        //Si la touche 'Ctrl' est pressée
+        if (event.ctrlKey) {
+            //Si on appuie sur 'a' ou 'A' que selectAllShortcut = true et que mka est focus
+            if ((code === 65 || code === 97) && config.selectAllShortcut && isElementFocused) {
+                //Evite que le Ctrl + A sélectionne tous les blocs de la page
+                e.preventDefault();
+
+                let mkaElts = document.getElementsByClassName("mka-elt");
+                //On applique la classe selected à tous les éléments, de plus chaques éléments devient draggable
+                Array.from(mkaElts).map(elt => {
+                    elt.classList.add("mka-elt-selected");
+                    elt.draggable = true;
+                });
+
+                //On inidque le nombre d'éléments sélectionnés
+                document.getElementById("mka-count").innerHTML = mkaElts.length;
+            }
+        }
+
         // }
     };
 
@@ -168,11 +191,11 @@ export let active = (mkaElt, config) => {
 let selectItem = (ctrlKey, isClick) => {
     let mkaElts = document.getElementsByClassName("mka-elt");
 
-    let selectedItems = [];
-
     let isAlreadySelected = false;
 
-    // on parcours chaque elt pour savoir s'ils sont dans la zone selectionné
+    let countselectedItems;
+
+    // on parcourt chaque elt pour savoir s'ils sont dans la zone selectionné
     Array.from(mkaElts).map(elt => {
         let rect = elt.getBoundingClientRect();
         let zoneElt = {
@@ -191,14 +214,12 @@ let selectItem = (ctrlKey, isClick) => {
                     elt.classList.remove("mka-elt-selected");
                 } else {
                     elt.classList.add("mka-elt-selected");
-                    selectedItems.push(elt);
                 }
 
                 // Le click a eu lieu sur un elt déjà sélectionné on retourn un boulean pour ne pas bind le moove
                 isAlreadySelected = true;
             } else {
                 elt.classList.add("mka-elt-selected");
-                selectedItems.push(elt);
             }
         } else {
             // si la touche ctrl n'est pas appuyée on efface pas
@@ -209,10 +230,13 @@ let selectItem = (ctrlKey, isClick) => {
         }
     });
 
+    countselectedItems = document.getElementById("mka").getElementsByClassName("mka-elt-selected").length;
+
     // si l'élément HTML mka-count existe
     if (document.getElementById("mka-count") != null || document.getElementById("mka-count") != undefined) {
-        document.getElementById("mka-count").innerHTML = selectedItems.length;
+        document.getElementById("mka-count").innerHTML = countselectedItems;
     }
+
     return isAlreadySelected;
 };
 
@@ -249,4 +273,23 @@ let refreshSquare = (node) => {
 
     node.style.width = (zone.x2 - zone.x1) + "px";
     node.style.height = (zone.y2 - zone.y1) + "px";
+}
+
+//Fonction récursive qui retourne true ou false si l'id de l'élément ou d'un de ses parents est valide
+let setMkaElementFocus = (target) => {
+    //Si la target possède la bonne id > return true
+    if (target.id === "mka") {
+        return true;
+    }
+
+    //Tant qu'il y a des éléments parents on cherche l'id souhaitée
+    while (target.parentNode) {
+        target = target.parentNode;
+
+        if (target.id === "mka") {
+            return true;
+        }
+    }
+
+    return false;
 }
