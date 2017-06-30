@@ -64,16 +64,15 @@ export let active = (mkaElt, config) => {
     mka.style.userSelect = "none";
     // Lors de la pression sur la souris on bind l'action de déplacement
     mka.onmousedown = (event) => {
-        hasMoved = false;
-        // On démarre la sélection si on utilise le bouton gauche de la souris ou le clic droit
-        if (event.which === 1 || event.which === 3) {
+        // On démarre la sélection si on utilise le bouton gauche de la souris
+        if (event.which === 1) {
+            hasMoved = false;
             // zone du click
             zone.downX = event.pageX + 0;
             zone.downY = event.pageY + 0;
 
             // Si le down a lieu sur un elt déjà focus on ne peut pas déclancher le moove
-            // On démarre le lasso seulement si on utilise le bouton gauche de la souris
-            if (!isClickedElementSelected(event) && event.which === 1) {
+            if (!isClickedElementSelected(event)) {
                 node = drawSquare();
 
                 document.body.onmousemove = (event) => {
@@ -85,18 +84,18 @@ export let active = (mkaElt, config) => {
     };
 
     window.onmouseup = (event) => {
-        if (!hasMoved) {
-            startLasso(event, true);
-        }
-        hasMoved = false;
-        let mkaElts = document.getElementsByClassName("mka-elt");
-        Array.from(mkaElts).map(elt => {
-            if (config.dragNdrop) {
-                elt.draggable = elt.classList.contains('mka-elt-selected');
+        // Si on relache le clic gauche
+        if (event.which === 1) {
+            if (!hasMoved) {
+                startLasso(event, true);
             }
-        });
-        // Si on relache le clic (gauche ou droit)
-        if (event.which === 1 || event.which === 3) {
+            hasMoved = false;
+            let mkaElts = document.getElementsByClassName("mka-elt");
+            Array.from(mkaElts).map(elt => {
+                if (config.dragNdrop) {
+                    elt.draggable = elt.classList.contains('mka-elt-selected');
+                }
+            });
             // on unbind le mousemove
             document.body.onmousemove = () => {
             };
@@ -107,8 +106,6 @@ export let active = (mkaElt, config) => {
 
 
     config.actions['mka-arrow'] = (e) => {
-        // On peut utiliser les touches du clavier seulement si le menu du click droit est fermé
-        // if(!document.getElementById(mkarcmenuId)) {
 
         let code = e.which;
 
@@ -205,7 +202,7 @@ let selectItem = (ctrlKey, isClick) => {
             y2: (elt.offsetTop + rect.height)
         }
 
-        // Permet de savoir si la zone de l'elt croise la zone de selection 
+        // Permet de savoir si la zone de l'elt croise la zone de selection
         if (zone.x2 >= zoneElt.x1 && zoneElt.x2 >= zone.x1 && zone.y2 >= zoneElt.y1 && zoneElt.y2 >= zone.y1) {
 
             // si pour le moment il n'y a pas de eu de déplacement
@@ -268,11 +265,13 @@ let orderCoordinate = () => {
 }
 
 let refreshSquare = (node) => {
-    node.style.top = zone.y1 + "px";
-    node.style.left = zone.x1 + "px";
+    if(node !== null) {
+        node.style.top = zone.y1 + "px";
+        node.style.left = zone.x1 + "px";
 
-    node.style.width = (zone.x2 - zone.x1) + "px";
-    node.style.height = (zone.y2 - zone.y1) + "px";
+        node.style.width = (zone.x2 - zone.x1) + "px";
+        node.style.height = (zone.y2 - zone.y1) + "px";
+    }
 }
 
 //Fonction récursive qui retourne true ou false si l'id de l'élément ou d'un de ses parents est valide

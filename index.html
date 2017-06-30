@@ -528,17 +528,28 @@
 
 </style>
 
-<script type="text/javascript">
-    const firstElementMenu = [
-        {
-            title: "Menu Item 1"
-        },
-        {
-            title: "Menu Item 2",
+    <script type="text/javascript">
+        let actionFunction = function () {
+            alert('actionFunction');
         }
-    ];
 
-    document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
+        const firstElementMenu = [
+            {
+                title: "Menu Item 1",
+                action: actionFunction
+            },
+            {
+                title: "Menu Item 2",
+                action: actionFunction
+            }
+        ];
+
+        document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu, function (key, value) {
+            if (typeof value === 'function') {
+                return value.toString();
+            }
+            return value;
+        }));
 
 
     document.getElementById('mka').mkaInit({
