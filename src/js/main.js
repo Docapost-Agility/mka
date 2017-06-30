@@ -9,6 +9,7 @@ let config = {
     "dragNdrop": true,
     "rightClik": true,
     "lasso": true,
+    "selectAllShortcut": false,
     "dropFunction": function (ids) {
         console.log(ids);
         console.log("Default drop function, think to implement this function");
