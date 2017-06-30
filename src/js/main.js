@@ -1,3 +1,8 @@
+import * as rightClick from './rightClick';
+import * as dndHandler from './DragAndDrop';
+import * as select from './select';
+import * as copyPaste from './copyPaste';
+
 // principal elt
 let mka = document.getElementById("mka");
 if (!mka) throw new Error('mka id not found');
@@ -14,20 +19,23 @@ let config = {
         console.log(ids);
         console.log("Default drop function, think to implement this function");
     },
+    "pasteFunction": (items) => {
+        console.log(items);
+        console.log("Default past function, think to implement this function");
+    },
     "deleteFunction": function (ids) {
         console.log(ids);
         console.log("Default delete function, think to implement this function");
     }
 }
+
 config.actions = [];
 
 document.onkeydown = (e) => {
     config.actions[config.focus + '-arrow'](e);
     config.actions[config.focus + '-suppr'](e);
 }
-import * as rightClick from './rightClick';
-import * as dndHandler from './DragAndDrop';
-import * as select from './select';
+
 
 HTMLElement.prototype.mkaInit = function (clientConfig) {
     Object.keys(clientConfig).map((i) => {
@@ -39,6 +47,9 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
     }
     if (config.dragNdrop) {
         dndHandler.active(mka, config);
+    }
+    if (config.copyPaste) {
+        copyPaste.active(config);
     }
     select.active(mka, config);
 };
