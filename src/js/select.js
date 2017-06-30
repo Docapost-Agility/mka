@@ -164,11 +164,11 @@ export let active = (mkaElt, config) => {
 let selectItem = (ctrlKey, isClick) => {
     let mkaElts = document.getElementsByClassName("mka-elt");
 
-    let selectedItems = [];
-
     let isAlreadySelected = false;
 
-    // on parcours chaque elt pour savoir s'ils sont dans la zone selectionné
+    let countselectedItems;
+
+        // on parcours chaque elt pour savoir s'ils sont dans la zone selectionné
     Array.from(mkaElts).map(elt => {
         let rect = elt.getBoundingClientRect();
         let zoneElt = {
@@ -187,14 +187,12 @@ let selectItem = (ctrlKey, isClick) => {
                     elt.classList.remove("mka-elt-selected");
                 } else {
                     elt.classList.add("mka-elt-selected");
-                    selectedItems.push(elt);
                 }
 
                 // Le click a eu lieu sur un elt déjà sélectionné on retourn un boulean pour ne pas bind le moove
                 isAlreadySelected = true;
             } else {
                 elt.classList.add("mka-elt-selected");
-                selectedItems.push(elt);
             }
         } else {
             // si la touche ctrl n'est pas appuyée on efface pas
@@ -205,7 +203,9 @@ let selectItem = (ctrlKey, isClick) => {
         }
     });
 
-    document.getElementById("mka-count").innerHTML = selectedItems.length;
+    countselectedItems=document.getElementById("mka").getElementsByClassName("mka-elt-selected").length;
+
+    document.getElementById("mka-count").innerHTML = countselectedItems;
     return isAlreadySelected;
 };
 
