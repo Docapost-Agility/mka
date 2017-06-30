@@ -1,3 +1,8 @@
+import * as rightClick from './rightClick';
+import * as dndHandler from './DragAndDrop';
+import * as select from './select';
+import * as copyPast from './copyPaste';
+
 // principal elt
 let mka = document.getElementById("mka");
 if (!mka) throw new Error('mka id not found');
@@ -19,9 +24,7 @@ config.actions = [];
 document.onkeydown = (e) => {
     config.actions[config.focus + '-arrow'](e);
 }
-import * as rightClick from './rightClick';
-import * as dndHandler from './DragAndDrop';
-import * as select from './select';
+
 
 HTMLElement.prototype.mkaInit = function (clientConfig) {
     Object.keys(clientConfig).map((i) => {
