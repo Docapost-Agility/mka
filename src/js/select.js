@@ -205,7 +205,9 @@ let selectItem = (ctrlKey, isClick) => {
         }
     });
 
-    document.getElementById("mka-count").innerHTML = selectedItems.length;
+    if(document.getElementById("mka-count") != null){
+        document.getElementById("mka-count").innerHTML=selectedItems.length;
+    }
     return isAlreadySelected;
 };
 
