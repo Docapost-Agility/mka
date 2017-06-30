@@ -23,6 +23,7 @@ config.actions = [];
 
 document.onkeydown = (e) => {
     config.actions[config.focus + '-arrow'](e);
+    config.actions[config.focus + '-suppr'](e);
 }
 import * as rightClick from './rightClick';
 import * as dndHandler from './DragAndDrop';
