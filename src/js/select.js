@@ -104,15 +104,6 @@ export let active = (mkaElt, config) => {
         }
     }
 
-    config.actions['mka-suppr'] = (e) => {
-        let code = e.which;
-
-        if(code == 46) {
-            let selectedArray = document.getElementsByClassName("mka-elt-selected");
-            console.log(selectedArray);
-        }
-    };
-
     config.actions['mka-arrow'] = (e) => {
         // On peut utiliser les touches du clavier seulement si le menu du click droit est fermé
         // if(!document.getElementById(mkarcmenuId)) {
