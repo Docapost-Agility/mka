@@ -73,6 +73,9 @@ export function bindDropEvents(dropper) {
         Array.from(selection).map(elt => {
             elt.parentNode.removeChild(elt);
         });
+
+        //On réinitialise le compteur des éléments sélectionnés
+        document.getElementById("mka-count").innerHTML = selection.length;
     });
 }
 
