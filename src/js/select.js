@@ -158,8 +158,8 @@ export let active = (mkaElt, config) => {
 
         //Si la touche 'Ctrl' est pressée
         if (event.ctrlKey){
-            //Si on appuie sur 'a' ou 'A' que selectAllShortcut = true
-            if((code === 65 || code === 97) && config.selectAllShortcut) {
+            //Si on appuie sur 'a' ou 'A' que selectAllShortcut = true et que mka est focus
+            if((code === 65 || code === 97) && config.selectAllShortcut && isElementFocused) {
                 //Evite que le Ctrl + A sélectionne tous les blocs de la page
                 e.preventDefault();
 
