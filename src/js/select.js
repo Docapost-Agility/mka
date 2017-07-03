@@ -41,7 +41,7 @@ let isClickedElementSelected = (event) => {
     return isElementSelected;
 }
 
-let startLasso = (event, isClick) => {
+let startLasso = (event) => {
     zone.upX = event.pageX + 0;
     zone.upY = event.pageY + 0;
 
@@ -49,13 +49,72 @@ let startLasso = (event, isClick) => {
 
     isElementFocused = setMkaElementFocus(event.target);
 
-    if (!isClickedElementSelected(event) || isClick) {
-        selectItem(event.ctrlKey, isClick);
-        refreshSquare(node);
+    selectItem(event.ctrlKey, false);
+    refreshSquare(node);
+
+};
+
+let parentFunctions = {};
+let config = {};
+let isInLasso = false;
+
+export let init = (conf, publicFunctions) => {
+    config = conf;
+    parentFunctions = publicFunctions;
+
+    mka = publicFunctions.getContainer();
+    // on désactive la selection de text
+    mka.style.userSelect = "none";
+}
+
+
+export let mkaEvents = {
+    onmousedown: (event) => {
+        // On démarre la sélection si on utilise le bouton gauche de la souris
+        if (event.which === 1) {
+            if (!event.ctrlKey) {
+                parentFunctions.updateSelection([]);
+            }
+            hasMoved = false;
+            isInLasso = true;
+            // zone du click
+            zone.downX = event.pageX + 0;
+            zone.downY = event.pageY + 0;
+
+            node = drawSquare();
+            return true;
+        }
         return false;
     }
-    return true;
 };
+
+export let documentEvents = {
+    onmousemove: (event) => {
+        if (isInLasso) {
+            hasMoved = true;
+            startLasso(event);
+            return true;
+        }
+        return false;
+    }
+};
+
+export let windowEvents = {
+    onmouseup: (event) => {
+        if (event.which === 1) {
+            isInLasso = false;
+            if (!hasMoved) {
+                startLasso(event);
+            }
+            hasMoved = false;
+            // on supprime la selection
+            deleteSquare();
+            return true;
+        }
+        return false;
+    }
+};
+
 
 export let active = (mkaElt, config) => {
     mka = mkaElt;
@@ -77,7 +136,7 @@ export let active = (mkaElt, config) => {
 
                 document.body.onmousemove = (event) => {
                     hasMoved = true;
-                    startLasso(event, false);
+                    startLasso(event);
                 };
             }
         }
@@ -87,7 +146,7 @@ export let active = (mkaElt, config) => {
         // Si on relache le clic gauche
         if (event.which === 1) {
             if (!hasMoved) {
-                startLasso(event, true);
+                startLasso(event);
             }
             hasMoved = false;
             let mkaElts = document.getElementsByClassName("mka-elt");
@@ -186,11 +245,11 @@ export let active = (mkaElt, config) => {
 
 
 let selectItem = (ctrlKey, isClick) => {
-    let mkaElts = document.getElementsByClassName("mka-elt");
-
-    let isAlreadySelected = false;
+    let mkaElts = parentFunctions.getSelectablesElements();
 
     let countselectedItems;
+
+    let selection = (ctrlKey || isInLasso) ? parentFunctions.getSelection() : [];
 
     // on parcourt chaque elt pour savoir s'ils sont dans la zone selectionné
     Array.from(mkaElts).map(elt => {
@@ -213,19 +272,13 @@ let selectItem = (ctrlKey, isClick) => {
                     elt.classList.add("mka-elt-selected");
                 }
 
-                // Le click a eu lieu sur un elt déjà sélectionné on retourn un boulean pour ne pas bind le moove
-                isAlreadySelected = true;
-            } else {
-                elt.classList.add("mka-elt-selected");
+            } else if (!parentFunctions.elementIsSelected(elt)) {
+                selection.push(elt);
             }
-        } else {
-            // si la touche ctrl n'est pas appuyée on efface pas
-            if (!ctrlKey) {
-                elt.classList.remove("mka-elt-selected");
-            }
-
         }
     });
+
+    parentFunctions.updateSelection(selection);
 
     countselectedItems = document.getElementById("mka").getElementsByClassName("mka-elt-selected").length;
 
@@ -234,7 +287,6 @@ let selectItem = (ctrlKey, isClick) => {
         document.getElementById("mka-count").innerHTML = countselectedItems;
     }
 
-    return isAlreadySelected;
 };
 
 let deleteSquare = () => {
@@ -265,7 +317,7 @@ let orderCoordinate = () => {
 }
 
 let refreshSquare = (node) => {
-    if(node !== null) {
+    if (node !== null) {
         node.style.top = zone.y1 + "px";
         node.style.left = zone.x1 + "px";
 

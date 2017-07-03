@@ -1,5 +1,46 @@
-let config = null;
-const mka = document.getElementById("mka");
+let mka = document.getElementById("mka");
+
+let parentFunctions = {};
+let config = {};
+let isDragging = false;
+
+export let init = (conf, publicFunctions) => {
+    config = conf;
+    parentFunctions = publicFunctions;
+
+    mka = publicFunctions.getContainer();
+    // on désactive la selection de text
+    mka.style.userSelect = "none";
+}
+
+export let onSelectionUpdate = (selection)=>{
+    Array.from(selection).map(elt => {
+        elt.draggable = true;
+    });
+};
+
+export let mkaEvents = {
+    onmousedown: (event) => {
+        isDragging = parentFunctions.elementIsSelected(event.target);
+        return isDragging;
+    }
+};
+
+export let documentEvents = {
+    onmousemove: () => {
+        return isDragging;
+    }
+};
+
+export let windowEvents = {
+    onmouseup: () => {
+        if(isDragging) {
+            isDragging = false;
+            return true;
+        }
+        return false;
+    }
+};
 
 export let bindDragEvents = (element) => {
     // On recupere les élts sélectionnés 
