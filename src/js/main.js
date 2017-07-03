@@ -3,6 +3,7 @@ import * as dndHandler from './DragAndDrop';
 import * as select from './select';
 import * as copyPaste from './copyPaste';
 import * as deleteShortcut from './deleteShortcut';
+import * as selectAllShortcut from './selectAllShortcut';
 
 // principal elt
 let mka = document.getElementById("mka");
