@@ -2,6 +2,8 @@ import * as rightClick from './rightClick';
 import * as dndHandler from './DragAndDrop';
 import * as select from './select';
 import * as copyPaste from './copyPaste';
+import * as count from './count';
+import * as arrows from './arrows';
 import * as deleteShortcut from './deleteShortcut';
 import * as selectAllShortcut from './selectAllShortcut';
 
@@ -18,7 +20,9 @@ let config = {
     "lasso": true,
     "selectAllShortcut": true,
     "copyPaste": true,
+    "arrows": true,
     "deleteShortcut": true,
+    "count": "",
     "dropFunction": function (ids) {
         console.log(ids);
         console.log("Default drop function, think to implement this function");
@@ -35,11 +39,11 @@ let config = {
 
 config.actions = [];
 
-document.onkeydown = (e) => {
-    config.actions[config.focus + '-arrow'](e);
-}
+// document.onkeydown = (e) => {
+//     config.actions[config.focus + '-arrow'](e);
+// }
 
-let selectables = document.getElementsByClassName("mka-elt");
+let selectables = [].slice.call(document.getElementsByClassName("mka-elt"));
 let selection = [];
 let components = [];
 
@@ -48,14 +52,8 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         config[i] = clientConfig[i];
     });
 
-    let mouseEventsList = ["onmousedown", "onmousemove", "onmouseup"];
-    let mouseEventsTargets = [
-        {name: "windowEvents", value: window},
-        {name: "documentEvents", value: document.body},
-        {name: "mkaEvents", value: mka}
-    ];
-
-    let keyEventsList = ["keydown", "keypress", "keyup"];
+    // on désactive la selection de text
+    mka.style.userSelect = "none";
 
 
     if (config.rightClik) {
@@ -68,6 +66,13 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
 
     if (config.copyPaste) {
         components.push(copyPaste);
+    }
+
+    if (!!config.arrows) {
+        components.push(arrows);
+    }
+    if (!!config.count) {
+        components.push(count);
     }
 
     // if(config.deleteShortcut) {
@@ -95,6 +100,15 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         getSelectablesElements: () => {
             return selectables;
         },
+        getLastSelectedInDom: () => {
+            let last = null;
+            Array.from(selection).map(elt => {
+                if (!last || elt.offsetTop > last.offsetTop || elt.offsetTop === last.offsetTop && elt.offsetLeft > last.offsetLeft) {
+                    last = elt;
+                }
+            });
+            return last;
+        },
         getSelection: () => {
             return selection;
         },
@@ -105,6 +119,22 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             });
             Array.from(selection).map(elt => {
                 elt.classList.add("mka-elt-selected");
+            });
+            Array.from(components).map(component => {
+                component.onSelectionUpdate && component.onSelectionUpdate(selection);
+            });
+        },
+        removeElements: (elements) => {
+            Array.from(elements).map(elt => {
+                let index = selectables.indexOf(elt);
+                if(index !== -1) {
+                    selectables.splice(index,1);
+                }
+                index = selection.indexOf(elt);
+                if(index !== -1) {
+                    selection.splice(index,1);
+                }
+                elt.parentNode.removeChild(elt);
             });
             Array.from(components).map(component => {
                 component.onSelectionUpdate && component.onSelectionUpdate(selection);
@@ -126,6 +156,15 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             });
         }
     }
+
+    let mouseEventsList = ["onmousedown", "onmousemove", "onmouseup","ondblclick"];
+    let mouseEventsTargets = [
+        {name: "windowEvents", value: window},
+        {name: "documentEvents", value: document.body},
+        {name: "mkaEvents", value: mka}
+    ];
+
+    let keyEventsList = ["onkeydown", "onkeypress", "onkeyup"];
 
     Array.from(mouseEventsTargets).map(mouseEventTarget => {
         Array.from(mouseEventsList).map(mouseEventName => {

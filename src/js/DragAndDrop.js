@@ -1,19 +1,37 @@
-let mka = document.getElementById("mka");
-
+// let mka = document.getElementById("mka");
 let parentFunctions = {};
 let config = {};
-let isDragging = false;
+let defaultConfig = {
+    dropableClass: '.mka-dropzone'
+};
 
 export let init = (conf, publicFunctions) => {
     config = conf;
+    Object.keys(defaultConfig).map((i) => {
+        config[i] = config[i] || defaultConfig[i];
+    });
+
     parentFunctions = publicFunctions;
 
-    mka = publicFunctions.getContainer();
-    // on désactive la selection de text
-    mka.style.userSelect = "none";
+    let elements = parentFunctions.getSelectablesElements();
+    let droppers = document.querySelectorAll(config.dropableClass);
+
+    //Application du drag event pour chaque element ayant la classe mka-elt
+    Array.from(elements).map(elt => {
+        bindDragEvents(elt);
+    });
+
+    //Application du drop event pour chaque element ayant la classe mka-dropzone
+    Array.from(droppers).map(elt => bindDropEvents(elt));
 }
 
-export let onSelectionUpdate = (selection)=>{
+let isDragging = false;
+let draggableTarget = false;
+
+export let onSelectionUpdate = (selection) => {
+    Array.from(parentFunctions.getSelectablesElements()).map(elt => {
+        elt.draggable = false;
+    });
     Array.from(selection).map(elt => {
         elt.draggable = true;
     });
@@ -21,20 +39,22 @@ export let onSelectionUpdate = (selection)=>{
 
 export let mkaEvents = {
     onmousedown: (event) => {
-        isDragging = parentFunctions.elementIsSelected(event.target);
-        return isDragging;
+        draggableTarget = event.target && parentFunctions.elementIsSelected(event.target);
+        return false;
     }
 };
 
 export let documentEvents = {
     onmousemove: () => {
+        isDragging = draggableTarget;
         return isDragging;
     }
 };
 
 export let windowEvents = {
     onmouseup: () => {
-        if(isDragging) {
+        draggableTarget = false;
+        if (isDragging) {
             isDragging = false;
             return true;
         }
@@ -42,11 +62,12 @@ export let windowEvents = {
     }
 };
 
-export let bindDragEvents = (element) => {
-    // On recupere les élts sélectionnés 
-    let selection = mka.getElementsByClassName("mka-elt-selected");
+let bindDragEvents = (element) => {
 
     element.addEventListener('dragstart', function (e) {
+        // On recupere les élts sélectionnés
+        let selection = parentFunctions.getSelection();
+
         // on ajoute une class pour modifier le style de la selection
         Array.from(selection).map((elt) => elt.classList.add("on-drag"));
 
@@ -79,6 +100,7 @@ export let bindDragEvents = (element) => {
     });
 
     element.addEventListener('dragend', function (e) {
+        let selection = parentFunctions.getSelection();
         // On supprime la div avec l'id wrapper-drag
         document.getElementById("wrapper-drag").outerHTML = "";
 
@@ -107,16 +129,12 @@ export function bindDropEvents(dropper) {
 
         // Lorsque l'utilisateur relache la sélection sur la zone dropable 
         // on execute l'action défini par l'utilsateur
-        let selection = mka.getElementsByClassName("mka-elt-selected");
+        let selection = parentFunctions.getSelection();
         config.dropFunction([1, 2]);
         // Suppression des éléments selectionnés
-        // On recupere les élts sélectionnés 
-        Array.from(selection).map(elt => {
-            elt.parentNode.removeChild(elt);
-        });
+        // On recupere les élts sélectionnés
+        parentFunctions.removeElements(selection);
 
-        //On réinitialise le compteur des éléments sélectionnés
-        document.getElementById("mka-count").innerHTML = selection.length;
     });
 }
 
@@ -130,11 +148,11 @@ let setWrapperStyle = (wrapper) => {
     wrapper.style.opacity = "1";
 
     // Pour chaque élément du wrapper
-    for(let i = 0; i < wrapperChildren.length; i++) {
+    for (let i = 0; i < wrapperChildren.length; i++) {
         let child = wrapperChildren[i];
 
         //Si l'utilisateur a configuré le onDragItemsClass, on applique la classe en question
-        if(config.onDragItemClass){
+        if (config.onDragItemClass) {
             child.classList.add(config.onDragItemClass);
         } else {
             //Sinon on force un style par défaut si l'utilisateur n'a pas configuré le onDragItemsClass
@@ -146,8 +164,7 @@ let setWrapperStyle = (wrapper) => {
             child.style.width = "100%";
 
 
-
-            console.log("You can use your own class");
+            // console.log("You can use your own class");
         }
 
 
@@ -158,7 +175,7 @@ let setWrapperStyle = (wrapper) => {
         child.style.left = (i * childDistance) + "px";
 
         //Lorsqu'on parcourt le dernier élément et qu'il y a plus d'un élement
-        if(i === wrapperChildren.length -1 && wrapperChildren.length > 1){
+        if (i === wrapperChildren.length - 1 && wrapperChildren.length > 1) {
             //On crée une span qui contiendra le nombre d'élements selectionnés
             let span = document.createElement("span");
             span.innerHTML = wrapperChildren.length;
@@ -173,7 +190,7 @@ let setWrapperStyle = (wrapper) => {
             span.style.textAlign = "center";
 
             //Si on n'a pas configuré le onDragItemClass alors on applique un style par défaut
-            if(!config.onDragItemClass){
+            if (!config.onDragItemClass) {
                 span.style.backgroundColor = "red";
                 span.style.color = "white";
             }
@@ -183,17 +200,3 @@ let setWrapperStyle = (wrapper) => {
 
     return wrapper;
 }
-
-export let active = (mka, conf) => {
-    config = conf;
-    let elements = document.querySelectorAll('.mka-elt');
-    let droppers = document.querySelectorAll('.mka-dropzone');
-
-    //Application du drag event pour chaque element ayant la classe mka-elt
-    Array.from(elements).map(elt => {
-        bindDragEvents(elt);
-    });
-
-    //Application du drop event pour chaque element ayant la classe mka-dropzone
-    Array.from(droppers).map(elt => bindDropEvents(elt));
-};
