@@ -1,18 +1,17 @@
-let mka = document.getElementById("mka");
-
 export let active = () => {
     let isElementFocused = false;
 
-    document.onkeyup = (e) => {
-
+    document.onmousedown = (event) => {
         isElementFocused = setMkaElementFocus(event.target);
+    }
 
+    document.onkeyup = (e) => {
         //Si la touche 'Ctrl' est pressée
         if (event.ctrlKey) {
+            let code = e.which;
+
             //Si on appuie sur 'a' ou 'A' que selectAllShortcut = true et que mka est focus
-            if ((code === 65 || code === 97) && config.selectAllShortcut && isElementFocused) {
-                //Evite que le Ctrl + A sélectionne tous les blocs de la page
-                e.preventDefault();
+            if ((code === 65 || code === 97) && isElementFocused) {
 
                 let mkaElts = document.getElementsByClassName("mka-elt");
                 //On applique la classe selected à tous les éléments, de plus chaques éléments devient draggable
@@ -23,6 +22,8 @@ export let active = () => {
 
                 //On inidque le nombre d'éléments sélectionnés
                 document.getElementById("mka-count").innerHTML = mkaElts.length;
+
+                return false;
             }
         }
     }

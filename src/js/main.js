@@ -59,5 +59,9 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         deleteShortcut.active(config);
     }
 
+    if(config.selectAllShortcut) {
+        selectAllShortcut.active();
+    }
+
     select.active(mka, config);
 };
