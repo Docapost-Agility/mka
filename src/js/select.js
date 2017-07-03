@@ -1,4 +1,7 @@
+import { setMkaElementFocus } from './selectAllShortcut';
+
 let mka = null;
+
 let zone = {
     downX: null,
     downY: null,
@@ -80,24 +83,35 @@ export let active = (mkaElt, config) => {
         }
     };
 
-    window.onmouseup = (event) => {
+    document.onmouseup = (event) => {
         // Si on relache le clic gauche
         if (event.which === 1) {
-            if (!hasMoved) {
-                startLasso(event, true);
-            }
-            hasMoved = false;
             let mkaElts = document.getElementsByClassName("mka-elt");
-            Array.from(mkaElts).map(elt => {
-                if (config.dragNdrop) {
-                    elt.draggable = elt.classList.contains('mka-elt-selected');
+
+            if(setMkaElementFocus(event.target)) {
+                if (!hasMoved) {
+                    startLasso(event, true);
                 }
-            });
-            // on unbind le mousemove
-            document.body.onmousemove = () => {
-            };
-            // on supprime la selection
-            deleteSquare();
+                hasMoved = false;
+
+                Array.from(mkaElts).map(elt => {
+                    if (config.dragNdrop) {
+                        elt.draggable = elt.classList.contains('mka-elt-selected');
+                    }
+                });
+                // on unbind le mousemove
+                document.body.onmousemove = () => {
+                };
+                // on supprime la selection
+                deleteSquare();
+            } else {
+                Array.from(mkaElts).map(elt => {
+                    if(elt.classList.contains('mka-elt-selected')) {
+                        elt.classList.remove('mka-elt-selected');
+                    }
+                });
+
+            }
         }
     }
 

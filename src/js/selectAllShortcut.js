@@ -29,7 +29,7 @@ export let active = () => {
 }
 
 //Fonction qui retourne true ou false si l'id de l'élément ou d'un de ses parents est valide
-let setMkaElementFocus = (target) => {
+export let setMkaElementFocus = (target) => {
     //Si la target possède la bonne id > return true
     if (target.id === "mka") {
         return true;
