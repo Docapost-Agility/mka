@@ -70,6 +70,10 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         components.push(copyPaste);
     }
 
+    // if(config.deleteShortcut) {
+    //     deleteShortcut.active(config);
+    // }
+
     components.push(select);
 
     let publicFunctions = {
