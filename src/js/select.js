@@ -13,14 +13,45 @@ export let mkaEvents = {
     onmousedown: (event) => {
         // On démarre la sélection si on utilise le bouton gauche de la souris
         if (event.which === 1) {
-            isInLasso = config.lasso;
+            if(!event.shiftKey){
+                isInLasso = config.lasso;
 
-            // zone du click
-            square.downX = event.pageX + 0;
-            square.downY = event.pageY + 0;
-            square.upX = event.pageX + 0;
-            square.upY = event.pageY + 0;
-            orderCoordinate();
+                // zone du click
+                square.downX = event.pageX + 0;
+                square.downY = event.pageY + 0;
+                square.upX = event.pageX + 0;
+                square.upY = event.pageY + 0;
+                orderCoordinate();
+            } else {
+                let selectableElements = parentFunctions.getSelectablesElements();
+                let selection = parentFunctions.getSelection();
+                let newSelection = [];
+
+                let element = null;
+
+                selectableElements.forEach(function (elt) {
+                    if (elementIsCrossingZone(elt, event.pageX, event.pageY, event.pageX, event.pageY)) {
+                        element = elt;
+                    }
+                });
+
+                if(selection.length > 0){
+                    let firstSelectedElementIndex = selectableElements.indexOf(selection[0]);
+                    let lastSelectedElementIndex = selectableElements.indexOf(selection[selection.length - 1]);
+                    let elementIndex = selectableElements.indexOf(element);
+
+                    for(let i = 0; i < selectableElements.length; i++) {
+                        if(i >= elementIndex && i <= firstSelectedElementIndex || i <= elementIndex && i >= lastSelectedElementIndex){
+                            newSelection.push(selectableElements[i]);
+                        }
+                    }
+                } else {
+                    newSelection.push(element);
+                }
+
+                parentFunctions.updateSelection(newSelection);
+
+            }
 
             return true;
         }
