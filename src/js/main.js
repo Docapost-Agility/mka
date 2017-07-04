@@ -68,6 +68,10 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         components.push(copyPaste);
     }
 
+    if(config.deleteShortcut) {
+        components.push(deleteShortcut);
+    }
+
     if (!!config.arrows) {
         components.push(arrows);
     }
