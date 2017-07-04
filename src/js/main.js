@@ -17,7 +17,7 @@ let config = {
     "eltSelectedClass": "mka-elt-selected",
     "onDragItemClass": null,
     "dragNdrop": true,
-    "rightClik": true,
+    "rightClick": false,
     "lasso": true,
     "selectAllShortcut": true,
     "copyPaste": true,
@@ -59,7 +59,7 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
     mka.style.userSelect = "none";
 
 
-    if (config.rightClik) {
+    if (!!config.rightClick) {
         components.push(rightClick);
     }
 

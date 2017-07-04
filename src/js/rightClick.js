@@ -13,15 +13,20 @@ export let windowEvents = {
     onkeydown: (event) => {
 
     },
-    onclick: () => {
-        removeMkaRcMenu();
+    onclick: (event) => {
+        if(event.which === 1) {
+            return removeMkaRcMenu();
+        }
+        return false;
     }
 }
 
 let removeMkaRcMenu = () => {
     if (document.getElementById(mkarcmenuId)) {
         document.getElementById(mkarcmenuId).remove();
+        return true;
     }
+    return false;
 }
 
 let bindContextMenu = () => {
@@ -29,7 +34,7 @@ let bindContextMenu = () => {
     // On désactive le click droit sur l'élément principal
     parentFunctions.getContainer().addEventListener('contextmenu', (event) => {
         event.preventDefault();
-
+        removeMkaRcMenu();
         const selectableElement = parentFunctions.getSelectableElement(event.target);
         if (selectableElement !== null) {
 
@@ -37,50 +42,30 @@ let bindContextMenu = () => {
                 parentFunctions.updateSelection([selectableElement]);
             }
 
-            let mkaEltSelected = parentFunctions.getSelection();
-            // Si seulement 1 élément est sélectionné et que il y a des items pour le menu
-            if (mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
+            let selection = parentFunctions.getSelection();
 
-                let newMenu = '<ul>';
+            let contextMenu = config.rightClick(selection);
 
-                let menuParse = mkaEltSelected[0].getAttribute('mka-rc-menu-items');
+            let newMenu = document.createElement('ul');
 
-                let menu = JSON.parse(menuParse, function (key, value) {
-                    if (value
-                        && typeof value === "string"
-                        && value.substr(0, 8) == "function") {
-                        var startBody = value.indexOf('{') + 1;
-                        var endBody = value.lastIndexOf('}');
-                        var startArgs = value.indexOf('(') + 1;
-                        var endArgs = value.indexOf(')');
+            Array.from(contextMenu).map(item => {
+                let li = document.createElement('li');
+                li.innerHTML = item.title;
+                li.onclick = item.action;
+                newMenu.appendChild(li);
+            });
 
-                        return new Function(value.substring(startArgs, endArgs)
-                            , value.substring(startBody, endBody));
-                    }
-                    return value;
-                });
 
-                Array.from(menu).map(item => {
-                    newMenu += `<li onclick="${item.action}; anonymous();">${item.title}</li>`;
-                });
+            const newDiv = document.createElement('div');
+            newDiv.setAttribute('id', mkarcmenuId);
+            newDiv.style.position = 'absolute';
+            newDiv.style.left = event.pageX + 'px';
+            newDiv.style.top = event.pageY + 'px';
 
-                newMenu += '</ul>';
+            newDiv.appendChild(newMenu);
 
-                const newDiv = document.createElement('div');
-                newDiv.setAttribute('id', mkarcmenuId);
-                parentFunctions.getContainer().appendChild(newDiv);
-                // Ajout au body d'une div contenant le menu du clic droit
-                newDiv.innerHTML = newMenu;
+            parentFunctions.getContainer().appendChild(newDiv);
 
-                const mkarcmenu = document.getElementById(mkarcmenuId);
-
-                mkarcmenu.style.position = 'absolute';
-                mkarcmenu.style.left = event.pageX + 'px';
-                mkarcmenu.style.top = event.pageY + 'px';
-
-                config.focus = "rc";
-
-            }
         }
 
     });
