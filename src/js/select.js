@@ -1,5 +1,6 @@
 let parentFunctions = {};
 let config = {};
+let firstElementIndex = null;
 
 export let init = (conf, publicFunctions) => {
     config = conf;
@@ -35,13 +36,17 @@ export let mkaEvents = {
                     }
                 });
 
+                if(firstElementIndex === null){
+                    firstElementIndex = selectableElements.indexOf(selection[0]);
+                }
+
                 if(selection.length > 0){
                     let firstSelectedElementIndex = selectableElements.indexOf(selection[0]);
                     let lastSelectedElementIndex = selectableElements.indexOf(selection[selection.length - 1]);
                     let elementIndex = selectableElements.indexOf(element);
 
                     for(let i = 0; i < selectableElements.length; i++) {
-                        if(i >= elementIndex && i <= firstSelectedElementIndex || i <= elementIndex && i >= lastSelectedElementIndex){
+                        if(i >= elementIndex && i <= firstElementIndex || i <= elementIndex && i >= firstElementIndex){
                             newSelection.push(selectableElements[i]);
                         }
                     }
@@ -69,6 +74,7 @@ export let documentEvents = {
         if (isInLasso) {
             if (!event.ctrlKey && !square.isVisble()) {
                 parentFunctions.updateSelection([]);
+                firstElementIndex = null;
             }
             refreshLasso(event);
             return true;
@@ -92,6 +98,7 @@ export let windowEvents = {
                 });
                 if (!element) {
                     parentFunctions.updateSelection([]);
+                    firstElementIndex = null;
                 } else {
                     let selection = parentFunctions.getSelection();
                     if (selection.length === 0 || !event.ctrlKey) {
