@@ -1,250 +1,199 @@
-let mka = null;
-let zone = {
+let parentFunctions = {};
+let config = {};
+
+export let init = (conf, publicFunctions) => {
+    config = conf;
+    config.eltSelectingClass = config.eltSelectingClass || config.eltSelectedClass;
+    parentFunctions = publicFunctions;
+}
+
+let square = {};
+let isInLasso = false;
+let canStartLasso = false;
+let selecting = [];
+
+export let mkaEvents = {
+    onmousedown: (event) => {
+        // On démarre la sélection si on utilise le bouton gauche de la souris
+        if (event.which === 1) {
+            canStartLasso = true;
+
+            // zone du click
+            square.downX = event.pageX + 0;
+            square.downY = event.pageY + 0;
+            square.upX = event.pageX + 0;
+            square.upY = event.pageY + 0;
+            orderCoordinate();
+
+            return true;
+        }
+        return false;
+    },
+    ondblclick: (event) => {
+        isInLasso = false;
+        square.delete();
+        return false;
+    }
+};
+
+export let documentEvents = {
+    onmousemove: (event) => {
+        if (canStartLasso) {
+            isInLasso = config.lasso && event.which === 1;
+            if (isInLasso) {
+                if (!event.ctrlKey && !square.isVisble()) {
+                    parentFunctions.updateSelection([]);
+                }
+                refreshLasso(event);
+                return true;
+            } else {
+                endLasso();
+            }
+        }
+        return false;
+    }
+};
+
+export let windowEvents = {
+    onmouseup: (event) => {
+        if (event.which === 1 && !isInLasso) {
+            let element = null;
+            Array.from(parentFunctions.getSelectablesElements()).map(elt => {
+                if (elementIsCrossingZone(elt, event.pageX, event.pageY, event.pageX, event.pageY)) {
+                    element = elt;
+                }
+            });
+            if (!element) {
+                parentFunctions.updateSelection([]);
+            } else {
+                let selection = parentFunctions.getSelection();
+                if (selection.length === 0 || !event.ctrlKey) {
+                    parentFunctions.updateSelection([element]);
+                } else {
+                    let newSelection = parentFunctions.getSelection();
+                    let index = newSelection.indexOf(element);
+                    if (index === -1) {
+                        newSelection.push(element);
+                    } else {
+                        newSelection.splice(index, 1);
+                    }
+                    parentFunctions.updateSelection(newSelection);
+                }
+            }
+            return true;
+        }
+        endLasso();
+        return false;
+    }
+};
+
+square = {
     downX: null,
     downY: null,
     upX: null,
     upY: null,
-};
-
-let hasMoved = false;
-
-// we add div
-let drawSquare = () => {
-    let node = document.createElement("div");
-    node.id = "selection";
-    mka.appendChild(node);
-    node.style.position = "absolute";
-    node.style.backgroundColor = "rgba(255,0,0,0.5)";
-    node.style.border = "1px solid rgba(255,0,0,0.8)";
-
-    return node;
-};
-let node = null;
-
-let isClickedElementSelected = (event) => {
-    let path = event.path;
-    let isElementSelected = false;
-
-    path.forEach(function (block) {
-        if (block.classList) {
-            let classList = block.classList;
-
-            classList.forEach(function (cssClass) {
-                if (cssClass === "mka-elt-selected") {
-                    isElementSelected = true;
-                }
-            });
+    get: () => {
+        let squareId = "selection-square";
+        let squareElt = document.getElementById(squareId);
+        if (!squareElt) {
+            squareElt = document.createElement("div");
+            squareElt.id = squareId;
+            squareElt.style.position = "absolute";
+            squareElt.style.backgroundColor = "rgba(255,0,0,0.5)";
+            squareElt.style.border = "1px solid rgba(255,0,0,0.8)";
+            squareElt.style.display = "none";
+            parentFunctions.getContainer().appendChild(squareElt);
         }
-    });
+        return squareElt;
+    },
+    refresh: () => {
+        let squareElt = square.get();
+        squareElt.style.display = "block";
+        squareElt.style.top = square.y1 + "px";
+        squareElt.style.left = square.x1 + "px";
 
-    return isElementSelected;
-}
+        squareElt.style.width = (square.x2 - square.x1) + "px";
+        squareElt.style.height = (square.y2 - square.y1) + "px";
+    },
+    delete: () => {
+        square.get().style.display = "none";
+    },
+    isVisble: () => {
+        return square.get().style.display === "block";
+    },
+    isCrossingElt: (elt) => {
+        return elementIsCrossingZone(elt, square.x1, square.y1, square.x2, square.y2);
+    }
+};
 
-let startLasso = (event, isClick) => {
-    zone.upX = event.pageX + 0;
-    zone.upY = event.pageY + 0;
+let refreshLasso = (event) => {
+    square.upX = event.pageX + 0;
+    square.upY = event.pageY + 0;
 
     orderCoordinate();
 
-    if (!isClickedElementSelected(event) || isClick) {
-        selectItem(event.ctrlKey, isClick);
-        refreshSquare(node);
-        return false;
-    }
-    return true;
+    selectLassoItems(event.ctrlKey);
+    square.refresh();
+
 };
 
-export let active = (mkaElt, config) => {
-    mka = mkaElt;
-
-    // on désactive la selection de text
-    mka.style.userSelect = "none";
-    // Lors de la pression sur la souris on bind l'action de déplacement
-    mka.onmousedown = (event) => {
-        // On démarre la sélection si on utilise le bouton gauche de la souris
-        if (event.which === 1) {
-            hasMoved = false;
-            // zone du click
-            zone.downX = event.pageX + 0;
-            zone.downY = event.pageY + 0;
-
-            // Si le down a lieu sur un elt déjà focus on ne peut pas déclancher le moove
-            if (!isClickedElementSelected(event)) {
-                node = drawSquare();
-
-                document.body.onmousemove = (event) => {
-                    hasMoved = true;
-                    startLasso(event, false);
-                };
-            }
-        }
-    };
-
-    window.onmouseup = (event) => {
-        // Si on relache le clic gauche
-        if (event.which === 1) {
-            if (!hasMoved) {
-                startLasso(event, true);
-            }
-            hasMoved = false;
-            let mkaElts = document.getElementsByClassName("mka-elt");
-            Array.from(mkaElts).map(elt => {
-                if (config.dragNdrop) {
-                    elt.draggable = elt.classList.contains('mka-elt-selected');
-                }
-            });
-            // on unbind le mousemove
-            document.body.onmousemove = () => {
-            };
-            // on supprime la selection
-            deleteSquare();
-        }
-    }
-
-    config.actions['mka-arrow'] = (e) => {
-
-        let code = e.which;
-
-        if (code == 37 || code == 38 || code == 39 || code == 40) {
-
-            // on recupere le dernier elt selectionné dans le DOM
-            let selectedArray = document.getElementsByClassName("mka-elt-selected");
-            let last = selectedArray[selectedArray.length - 1];
-
-            // si la touche ctrl n'est pas appuyée on efface pas
-            if (!event.ctrlKey) {
-                // on clean les éléments déjà sélectionné
-                let mkaElts = document.getElementsByClassName("mka-elt");
-                Array.from(mkaElts).map(elt => {
-                    elt.classList.remove("mka-elt-selected")
-                });
-            }
-
-            if (!!last) {
-                switch (e.which) {
-                    case 37: // left
-                        console.log("left");
-                        break;
-
-                    case 38: // up
-                        console.log("up");
-                        let prev = last.previousElementSibling;
-                        if (!!prev) {
-                            prev.classList.add("mka-elt-selected");
-                            prev.draggable = true;
-                        }
-                        break;
-                    case 39: // right
-                        console.log("right");
-                        break;
-
-                    case 40: // down
-                        let next = last.nextElementSibling;
-                        if (!!next) {
-                            next.classList.add("mka-elt-selected");
-                            next.draggable = true;
-                        }
-                        break;
-
-                    default:
-                        return; // exit this handler for other keys
-                }
-            }
-        }
-        // }
-    };
-
-    mka.onclick = () => {
-        config.focus = "mka";
-    }
-}
-
-
-let selectItem = (ctrlKey, isClick) => {
-    let mkaElts = document.getElementsByClassName("mka-elt");
-
-    let isAlreadySelected = false;
-
-    let countselectedItems;
-
-    // on parcourt chaque elt pour savoir s'ils sont dans la zone selectionné
-    Array.from(mkaElts).map(elt => {
-        let rect = elt.getBoundingClientRect();
-        let zoneElt = {
-            x1: elt.offsetLeft,
-            x2: (elt.offsetLeft + rect.width),
-            y1: elt.offsetTop,
-            y2: (elt.offsetTop + rect.height)
-        }
-
-        // Permet de savoir si la zone de l'elt croise la zone de selection
-        if (zone.x2 >= zoneElt.x1 && zoneElt.x2 >= zone.x1 && zone.y2 >= zoneElt.y1 && zoneElt.y2 >= zone.y1) {
-
-            // si pour le moment il n'y a pas de eu de déplacement
-            if (isClick && elt.classList.contains("mka-elt-selected")) {
-                if (ctrlKey) {
-                    elt.classList.remove("mka-elt-selected");
-                } else {
-                    elt.classList.add("mka-elt-selected");
-                }
-
-                // Le click a eu lieu sur un elt déjà sélectionné on retourn un boulean pour ne pas bind le moove
-                isAlreadySelected = true;
-            } else {
-                elt.classList.add("mka-elt-selected");
-            }
-        } else {
-            // si la touche ctrl n'est pas appuyée on efface pas
-            if (!ctrlKey) {
-                elt.classList.remove("mka-elt-selected");
-            }
-
-        }
-    });
-
-    countselectedItems = document.getElementById("mka").getElementsByClassName("mka-elt-selected").length;
-
-    // si l'élément HTML mka-count existe
-    if (document.getElementById("mka-count") != null || document.getElementById("mka-count") != undefined) {
-        document.getElementById("mka-count").innerHTML = countselectedItems;
-    }
-
-    return isAlreadySelected;
-};
-
-let deleteSquare = () => {
-    console.log("delete");
-    let node = document.getElementById("selection");
-    if (!!node) {
-        mka.removeChild(node);
+let endLasso = () => {
+    square.delete();
+    canStartLasso = false;
+    if (isInLasso) {
+        isInLasso = false;
+        Array.from(selecting).map(elt => {
+            elt.classList.remove(config.eltSelectingClass);
+        });
+        parentFunctions.updateSelection(selecting);
+        selecting = [];
     }
 }
 
 let orderCoordinate = () => {
     // we order coordinate to simplify
-    zone.x1 = zone.downX;
-    zone.x2 = zone.upX;
-    zone.y1 = zone.downY;
-    zone.y2 = zone.upY;
+    square.x1 = square.downX;
+    square.x2 = square.upX;
+    square.y1 = square.downY;
+    square.y2 = square.upY;
     // on part vers la gauche
-    if (zone.downX > zone.upX) {
-        zone.x1 = zone.upX;
-        zone.x2 = zone.downX;
+    if (square.downX > square.upX) {
+        square.x1 = square.upX;
+        square.x2 = square.downX;
     }
 
     // on part vers le haut
-    if (zone.downY > zone.upY) {
-        zone.y1 = zone.upY;
-        zone.y2 = zone.downY;
+    if (square.downY > square.upY) {
+        square.y1 = square.upY;
+        square.y2 = square.downY;
     }
 }
 
-let refreshSquare = (node) => {
-    if(node !== null) {
-        node.style.top = zone.y1 + "px";
-        node.style.left = zone.x1 + "px";
+let selectLassoItems = (ctrlKey) => {
+    let mkaElts = parentFunctions.getSelectablesElements();
 
-        node.style.width = (zone.x2 - zone.x1) + "px";
-        node.style.height = (zone.y2 - zone.y1) + "px";
-    }
+    selecting = (ctrlKey) ? parentFunctions.getSelection() : [];
+
+    // on parcourt chaque elt pour savoir s'ils sont dans la zone selectionné
+    Array.from(mkaElts).map(elt => {
+        elt.classList.remove(config.eltSelectingClass);
+        if (square.isCrossingElt(elt) && (!ctrlKey || selecting.indexOf(elt) === -1)) {
+            selecting.push(elt);
+        }
+    });
+    Array.from(selecting).map(elt => {
+        elt.classList.add(config.eltSelectingClass);
+    });
 }
+
+let elementIsCrossingZone = (elt, x1, y1, x2, y2) => {
+    let rect = elt.getBoundingClientRect();
+    let zoneElt = {
+        x1: elt.offsetLeft,
+        x2: (elt.offsetLeft + rect.width),
+        y1: elt.offsetTop,
+        y2: (elt.offsetTop + rect.height)
+    };
+    return zoneElt.x2 > x1 && x2 > zoneElt.x1 && zoneElt.y2 > y1 && y2 > zoneElt.y1;
+};
+
