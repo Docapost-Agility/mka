@@ -13,7 +13,7 @@ if (!mka) throw new Error('mka id not found');
 
 let config = {
     "focus": "mka",
-    "eltSelectedClass": null,
+    "eltSelectedClass": "mka-elt-selected",
     "onDragItemClass": null,
     "dragNdrop": true,
     "rightClik": true,
@@ -90,12 +90,12 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             return mka;
         },
         elementIsSelected: (elt) => {
-            if (elt.classList && elt.classList.contains("mka-elt-selected")) {
+            if (elt.classList && elt.classList.contains(config.eltSelectedClass)) {
                 return true;
             }
             while (elt.parentNode) {
                 elt = elt.parentNode;
-                if (elt.classList && elt.classList.contains("mka-elt-selected")) {
+                if (elt.classList && elt.classList.contains(config.eltSelectedClass)) {
                     return true;
                 }
             }
@@ -114,29 +114,44 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             return last;
         },
         getSelection: () => {
-            return selection;
+            let copy = [];
+            Array.from(selection).map(elt => {
+                copy.push(elt);
+            });
+            return copy;
         },
         updateSelection: (newSelection) => {
-            selection = newSelection;
-            Array.from(selectables).map(elt => {
-                elt.classList.remove("mka-elt-selected");
-            });
-            Array.from(selection).map(elt => {
-                elt.classList.add("mka-elt-selected");
-            });
-            Array.from(components).map(component => {
-                component.onSelectionUpdate && component.onSelectionUpdate(selection);
-            });
+            let sameSelection = false;
+            if (selection.length === newSelection.length) {
+                sameSelection = true;
+                Array.from(selection).map(elt => {
+                    if (newSelection.indexOf(elt) === -1) {
+                        sameSelection = false;
+                    }
+                });
+            }
+            if (!sameSelection) {
+                selection = newSelection;
+                Array.from(selectables).map(elt => {
+                    elt.classList.remove(config.eltSelectedClass);
+                });
+                Array.from(selection).map(elt => {
+                    elt.classList.add(config.eltSelectedClass);
+                });
+                Array.from(components).map(component => {
+                    component.onSelectionUpdate && component.onSelectionUpdate(selection);
+                });
+            }
         },
         removeElements: (elements) => {
             Array.from(elements).map(elt => {
                 let index = selectables.indexOf(elt);
-                if(index !== -1) {
-                    selectables.splice(index,1);
+                if (index !== -1) {
+                    selectables.splice(index, 1);
                 }
                 index = selection.indexOf(elt);
-                if(index !== -1) {
-                    selection.splice(index,1);
+                if (index !== -1) {
+                    selection.splice(index, 1);
                 }
                 elt.parentNode.removeChild(elt);
             });
@@ -176,7 +191,7 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         }
     }
 
-    let mouseEventsList = ["onmousedown", "onmousemove", "onmouseup","ondblclick"];
+    let mouseEventsList = ["onmousedown", "onmousemove", "onmouseup", "ondblclick"];
     let mouseEventsTargets = [
         {name: "windowEvents", value: window},
         {name: "documentEvents", value: document.body},
