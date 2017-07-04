@@ -57,7 +57,9 @@ document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.s
 
 document.getElementById('mka').mkaInit({
     "eltSelectedClass": "jessy",
+    // to activate copy paste
     "copyPaste": true,
+    // to log at paste
     "pasteFunction": function (items) {
         console.log(items);
         let data = [];
