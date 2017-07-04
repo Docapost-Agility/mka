@@ -3,17 +3,20 @@ let config = {};
 
 export let init = (conf, publicFunctions) => {
     config = conf;
+    config.eltSelectingClass = config.eltSelectingClass || config.eltSelectedClass;
     parentFunctions = publicFunctions;
 }
 
 let square = {};
 let isInLasso = false;
+let canStartLasso = false;
+let selecting = [];
 
 export let mkaEvents = {
     onmousedown: (event) => {
         // On démarre la sélection si on utilise le bouton gauche de la souris
         if (event.which === 1) {
-            isInLasso = config.lasso;
+            canStartLasso = true;
 
             // zone du click
             square.downX = event.pageX + 0;
@@ -35,12 +38,17 @@ export let mkaEvents = {
 
 export let documentEvents = {
     onmousemove: (event) => {
-        if (isInLasso) {
-            if (!event.ctrlKey && !square.isVisble()) {
-                parentFunctions.updateSelection([]);
+        if (canStartLasso) {
+            isInLasso = config.lasso && event.which === 1;
+            if (isInLasso) {
+                if (!event.ctrlKey && !square.isVisble()) {
+                    parentFunctions.updateSelection([]);
+                }
+                refreshLasso(event);
+                return true;
+            } else {
+                endLasso();
             }
-            refreshLasso(event);
-            return true;
         }
         return false;
     }
@@ -48,37 +56,33 @@ export let documentEvents = {
 
 export let windowEvents = {
     onmouseup: (event) => {
-        isInLasso = false;
-        square.delete();
-        if (event.which === 1) {
-            let tolerance = 30;
-            if (Math.abs(square.downX - event.pageX) < tolerance && Math.abs(square.downY - event.pageY) < tolerance) {
-                let element = null;
-                Array.from(parentFunctions.getSelectablesElements()).map(elt => {
-                    if (elementIsCrossingZone(elt, event.pageX, event.pageY, event.pageX, event.pageY)) {
-                        element = elt;
-                    }
-                });
-                if (!element) {
-                    parentFunctions.updateSelection([]);
+        if (event.which === 1 && !isInLasso) {
+            let element = null;
+            Array.from(parentFunctions.getSelectablesElements()).map(elt => {
+                if (elementIsCrossingZone(elt, event.pageX, event.pageY, event.pageX, event.pageY)) {
+                    element = elt;
+                }
+            });
+            if (!element) {
+                parentFunctions.updateSelection([]);
+            } else {
+                let selection = parentFunctions.getSelection();
+                if (selection.length === 0 || !event.ctrlKey) {
+                    parentFunctions.updateSelection([element]);
                 } else {
-                    let selection = parentFunctions.getSelection();
-                    if (selection.length === 0 || !event.ctrlKey) {
-                        parentFunctions.updateSelection([element]);
+                    let newSelection = parentFunctions.getSelection();
+                    let index = newSelection.indexOf(element);
+                    if (index === -1) {
+                        newSelection.push(element);
                     } else {
-                        let newSelection = parentFunctions.getSelection();
-                        let index = newSelection.indexOf(element);
-                        if (index === -1) {
-                            newSelection.push(element);
-                        } else {
-                            newSelection.splice(index, 1);
-                        }
-                        parentFunctions.updateSelection(newSelection);
+                        newSelection.splice(index, 1);
                     }
+                    parentFunctions.updateSelection(newSelection);
                 }
             }
             return true;
         }
+        endLasso();
         return false;
     }
 };
@@ -133,6 +137,19 @@ let refreshLasso = (event) => {
 
 };
 
+let endLasso = () => {
+    square.delete();
+    canStartLasso = false;
+    if (isInLasso) {
+        isInLasso = false;
+        Array.from(selecting).map(elt => {
+            elt.classList.remove(config.eltSelectingClass);
+        });
+        parentFunctions.updateSelection(selecting);
+        selecting = [];
+    }
+}
+
 let orderCoordinate = () => {
     // we order coordinate to simplify
     square.x1 = square.downX;
@@ -155,16 +172,18 @@ let orderCoordinate = () => {
 let selectLassoItems = (ctrlKey) => {
     let mkaElts = parentFunctions.getSelectablesElements();
 
-    let selection = (ctrlKey) ? parentFunctions.getSelection() : [];
+    selecting = (ctrlKey) ? parentFunctions.getSelection() : [];
 
     // on parcourt chaque elt pour savoir s'ils sont dans la zone selectionné
     Array.from(mkaElts).map(elt => {
-        if (square.isCrossingElt(elt) && !(ctrlKey && parentFunctions.elementIsSelected(elt))) {
-            selection.push(elt);
+        elt.classList.remove(config.eltSelectingClass);
+        if (square.isCrossingElt(elt) && (!ctrlKey || selecting.indexOf(elt) === -1)) {
+            selecting.push(elt);
         }
     });
-
-    parentFunctions.updateSelection(selection);
+    Array.from(selecting).map(elt => {
+        elt.classList.add(config.eltSelectingClass);
+    });
 }
 
 let elementIsCrossingZone = (elt, x1, y1, x2, y2) => {
@@ -175,6 +194,6 @@ let elementIsCrossingZone = (elt, x1, y1, x2, y2) => {
         y1: elt.offsetTop,
         y2: (elt.offsetTop + rect.height)
     };
-    return zoneElt.x2 >= x1 && x2 >= zoneElt.x1 && zoneElt.y2 >= y1 && y2 >= zoneElt.y1;
+    return zoneElt.x2 > x1 && x2 > zoneElt.x1 && zoneElt.y2 > y1 && y2 > zoneElt.y1;
 };
 
