@@ -16,6 +16,7 @@ export let mkaEvents = {
         if (event.which === 1) {
             if(!event.shiftKey){
                 isInLasso = config.lasso;
+                firstElementIndex = null;
 
                 // zone du click
                 square.downX = event.pageX + 0;
