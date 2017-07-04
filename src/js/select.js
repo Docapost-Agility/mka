@@ -45,8 +45,6 @@ export let mkaEvents = {
                 }
 
                 if(selection.length > 0){
-                    let firstSelectedElementIndex = selectableElements.indexOf(selection[0]);
-                    let lastSelectedElementIndex = selectableElements.indexOf(selection[selection.length - 1]);
                     let elementIndex = selectableElements.indexOf(element);
 
                     for(let i = 0; i < selectableElements.length; i++) {
