@@ -11,10 +11,15 @@ export let init = (conf, publicFunctions) => {
 
 export let windowEvents = {
     onkeydown: (event) => {
-
+        let code = event.which;
+        if ((code == 37 || code == 38 || code == 39 || code == 40) && !!document.getElementById(mkarcmenuId)) {
+            event.preventDefault();
+            return true;
+        }
+        return false;
     },
     onclick: (event) => {
-        if(event.which === 1) {
+        if (event.which === 1) {
             return removeMkaRcMenu();
         }
         return false;
@@ -67,7 +72,6 @@ let bindContextMenu = () => {
             parentFunctions.getContainer().appendChild(newDiv);
 
         }
-
     });
 
 }

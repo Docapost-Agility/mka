@@ -12,7 +12,6 @@ let mka = document.getElementById("mka");
 if (!mka) throw new Error('mka id not found');
 
 let config = {
-    "focus": "mka",
     "eltSelectableClass": "mka-elt",
     "eltSelectedClass": "mka-elt-selected",
     "onDragItemClass": null,
@@ -39,10 +38,6 @@ let config = {
 }
 
 config.actions = [];
-
-// document.onkeydown = (e) => {
-//     config.actions[config.focus + '-arrow'](e);
-// }
 
 let selectables = [];
 let selection = [];
