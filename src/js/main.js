@@ -64,6 +64,10 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         components.push(dndHandler);
     }
 
+    if(config.selectAllShortcut){
+        components.push(selectAllShortcut);
+    }
+
     if (config.copyPaste) {
         components.push(copyPaste);
     }
@@ -139,6 +143,21 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             Array.from(components).map(component => {
                 component.onSelectionUpdate && component.onSelectionUpdate(selection);
             });
+        },
+        isMkaContainerFocused: (target) => {
+            if (target.id === config.focus) {
+                return true;
+            }
+
+            while (target.parentNode) {
+                target = target.parentNode;
+
+                if (target.id === config.focus) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     };
 
