@@ -91,7 +91,7 @@ export let documentEvents = {
 };
 
 export let windowEvents = {
-    onmouseup: (event) => {
+    onclick: (event) => {
         if (event.which === 1 && !isInLasso && !event.shiftKey) {
             let element = null;
             Array.from(parentFunctions.getSelectablesElements()).map(elt => {

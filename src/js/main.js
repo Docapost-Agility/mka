@@ -12,11 +12,11 @@ let mka = document.getElementById("mka");
 if (!mka) throw new Error('mka id not found');
 
 let config = {
-    "focus": "mka",
+    "eltSelectableClass": "mka-elt",
     "eltSelectedClass": "mka-elt-selected",
     "onDragItemClass": null,
     "dragNdrop": true,
-    "rightClik": true,
+    "rightClick": false,
     "lasso": true,
     "selectAllShortcut": true,
     "copyPaste": true,
@@ -39,11 +39,7 @@ let config = {
 
 config.actions = [];
 
-// document.onkeydown = (e) => {
-//     config.actions[config.focus + '-arrow'](e);
-// }
-
-let selectables = [].slice.call(document.getElementsByClassName("mka-elt"));
+let selectables = [];
 let selection = [];
 let components = [];
 
@@ -52,11 +48,13 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         config[i] = clientConfig[i];
     });
 
+    selectables = [].slice.call(document.getElementsByClassName(config.eltSelectableClass));
+
     // on désactive la selection de text
     mka.style.userSelect = "none";
 
 
-    if (config.rightClik) {
+    if (!!config.rightClick) {
         components.push(rightClick);
     }
 
@@ -64,8 +62,16 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         components.push(dndHandler);
     }
 
+    if(config.selectAllShortcut){
+        components.push(selectAllShortcut);
+    }
+
     if (config.copyPaste) {
         components.push(copyPaste);
+    }
+
+    if(config.deleteShortcut) {
+        components.push(deleteShortcut);
     }
 
     if (!!config.arrows) {
@@ -96,6 +102,18 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
                 }
             }
             return false;
+        },
+        getSelectableElement: (elt) => {
+            if (elt.classList && elt.classList.contains(config.eltSelectableClass)) {
+                return elt;
+            }
+            while (elt.parentNode) {
+                elt = elt.parentNode;
+                if (elt.classList && elt.classList.contains(config.eltSelectableClass)) {
+                    return elt;
+                }
+            }
+            return null;
         },
         getSelectablesElements: () => {
             return selectables;
@@ -154,6 +172,21 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             Array.from(components).map(component => {
                 component.onSelectionUpdate && component.onSelectionUpdate(selection);
             });
+        },
+        isMkaContainerFocused: (target) => {
+            if (target.id === config.focus) {
+                return true;
+            }
+
+            while (target.parentNode) {
+                target = target.parentNode;
+
+                if (target.id === config.focus) {
+                    return true;
+                }
+            }
+
+            return false;
         }
     };
 
@@ -172,7 +205,7 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         }
     }
 
-    let mouseEventsList = ["onmousedown", "onmousemove", "onmouseup", "ondblclick"];
+    let mouseEventsList = ["onmousedown", "onmousemove", "onmouseup", "onclick", "ondblclick"];
     let mouseEventsTargets = [
         {name: "windowEvents", value: window},
         {name: "documentEvents", value: document.body},
