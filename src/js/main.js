@@ -1,3 +1,4 @@
+import * as dbClick from './dbClick';
 import * as rightClick from './rightClick';
 import * as dndHandler from './DragAndDrop';
 import * as select from './select';
@@ -14,6 +15,7 @@ let config = {
     "onDragItemClass": null,
     "dragNdrop": true,
     "rightClick": false,
+    "dbClick": false,
     "lasso": true,
     "selectAllShortcut": true,
     "copyPaste": true,
@@ -52,6 +54,9 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
     // on désactive la selection de text
     mka.style.userSelect = "none";
 
+    if (!!config.dbClick) {
+        components.push(dbClick);
+    }
 
     if (!!config.rightClick) {
         components.push(rightClick);
