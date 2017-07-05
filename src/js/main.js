@@ -42,8 +42,10 @@ config.actions = [];
 let selectables = [];
 let selection = [];
 let components = [];
+let parentContainerElement;
 
 HTMLElement.prototype.mkaInit = function (clientConfig) {
+    parentContainerElement = this;
     Object.keys(clientConfig).map((i) => {
         config[i] = clientConfig[i];
     });
@@ -174,14 +176,14 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             });
         },
         isMkaContainerFocused: (target) => {
-            if (target.id === config.focus) {
+            if (target === parentContainerElement) {
                 return true;
             }
 
             while (target.parentNode) {
                 target = target.parentNode;
 
-                if (target.id === config.focus) {
+                if (target === parentContainerElement) {
                     return true;
                 }
             }
