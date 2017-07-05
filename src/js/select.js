@@ -92,7 +92,7 @@ export let documentEvents = {
 
 export let windowEvents = {
     onmouseup: (event) => {
-        if (event.which === 1 && !isInLasso) {
+        if (event.which === 1 && !isInLasso && !event.shiftKey) {
             let element = null;
             Array.from(parentFunctions.getSelectablesElements()).map(elt => {
                 if (elementIsCrossingZone(elt, event.pageX, event.pageY, event.pageX, event.pageY)) {
