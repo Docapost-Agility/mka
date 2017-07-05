@@ -173,14 +173,14 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             });
         },
         isMkaContainerFocused: (target) => {
-            if (target.id === config.focus) {
+            if (target === mka) {
                 return true;
             }
 
             while (target.parentNode) {
                 target = target.parentNode;
 
-                if (target.id === config.focus) {
+                if (target === mka) {
                     return true;
                 }
             }
