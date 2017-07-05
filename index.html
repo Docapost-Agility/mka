@@ -559,11 +559,16 @@
         return menu;
     }
 
+    let dbClick = (elt) => {
+        console.log('dbclick', elt);
+    }
+
     document.getElementById('itemsList').mkaInit({
         "eltsSelectable": document.getElementById('itemsList').getElementsByTagName('li'),
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": true,
         "rightClick": getContextMenu,
+        "dbClick": dbClick,
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,

@@ -20,7 +20,10 @@ export let windowEvents = {
 
                 e.preventDefault();
             }
+            return true;
         }
+
+        return false;
     },
     onmousedown : (e) => {
         isMkaContainerFocused = parentFunctions.isMkaContainerFocused(e.target);
