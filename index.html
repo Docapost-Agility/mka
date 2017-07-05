@@ -98,7 +98,7 @@
     <h3>Nombre d'element sélectionné <span id="mka-count">0</span></h3>
 
     <ul id="mka" class="list-group" style="margin-top: 40px">
-        <li id="firstElement" class="mka-elt list-group-item" item-id="1">
+        <li class="mka-elt list-group-item" item-id="1">
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">ITEMZER</h4>
@@ -528,38 +528,42 @@
 
 </style>
 
-    <script type="text/javascript">
-        let actionFunction = function () {
-            alert('actionFunction');
+<script type="text/javascript">
+    let getContextMenu = (selection) => {
+        let menu = [];
+
+        menu.push({
+            title: "action 1",
+            action: () => {
+                console.log("action 1");
+            }
+        });
+        menu.push({
+            title: "action 3",
+            action: () => {
+                console.log("action 3");
+            }
+        });
+        if (selection.length > 1) {
+            menu.push({
+                title: "action multiple",
+                action: () => {
+                    console.log("action multiple");
+                }
+            });
         }
-
-        const firstElementMenu = [
-            {
-                title: "Menu Item 1",
-                action: actionFunction
-            },
-            {
-                title: "Menu Item 2",
-                action: actionFunction
-            }
-        ];
-
-        document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu, function (key, value) {
-            if (typeof value === 'function') {
-                return value.toString();
-            }
-            return value;
-        }));
+        return menu;
+    }
 
 
     document.getElementById('mka').mkaInit({
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": true,
-        "rightClik": true,
+        "rightClick": getContextMenu,
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,
-        "count" : "mka-count",
+        "count": "mka-count",
         "pasteFunction": function (items) {
             console.log(items);
             let data = [];
@@ -567,7 +571,7 @@
                 console.log(elt.getAttribute("item-id"));
                 data.push(elt.getAttribute("item-id"));
             });
-            console.group("Call WS with :" );
+            console.group("Call WS with :");
             console.group(data);
             console.groupEnd();
         }

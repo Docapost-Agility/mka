@@ -1,73 +1,77 @@
-export let active = (mka, config) => {
-    config.actions["rc-arrow"] = onkeydown;
-    const mkarcmenuId = 'mkarcmenu'
+let parentFunctions = {};
+let config = {};
+const mkarcmenuId = 'mkarcmenu';
 
-    let removeMkaRcMenu = () => {
-        if (document.getElementById(mkarcmenuId)) {
-            document.getElementById(mkarcmenuId).remove();
+export let init = (conf, publicFunctions) => {
+    config = conf;
+    parentFunctions = publicFunctions;
+
+    bindContextMenu();
+}
+
+export let windowEvents = {
+    onkeydown: (event) => {
+        let code = event.which;
+        if ((code == 37 || code == 38 || code == 39 || code == 40) && !!document.getElementById(mkarcmenuId)) {
+            event.preventDefault();
+            return true;
         }
+        return false;
+    },
+    onclick: (event) => {
+        if (event.which === 1) {
+            return removeMkaRcMenu();
+        }
+        return false;
     }
+}
+
+let removeMkaRcMenu = () => {
+    if (document.getElementById(mkarcmenuId)) {
+        document.getElementById(mkarcmenuId).remove();
+        return true;
+    }
+    return false;
+}
+
+let bindContextMenu = () => {
 
     // On désactive le click droit sur l'élément principal
-    mka.addEventListener('contextmenu', (event) => {
+    parentFunctions.getContainer().addEventListener('contextmenu', (event) => {
         event.preventDefault();
-
-        // Si le menu est dèja open (au click droit sur la zone de sélection), on supprime le menu pour après en rajouter un nouveau
         removeMkaRcMenu();
+        const selectableElement = parentFunctions.getSelectableElement(event.target);
+        if (selectableElement !== null) {
 
-        let mkaEltSelected = document.getElementsByClassName('mka-elt-selected')
-        // Si seulement 1 élément est sélectionné et que il y a des items pour le menu
-        if (mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
+            if (!parentFunctions.elementIsSelected(selectableElement)) {
+                parentFunctions.updateSelection([selectableElement]);
+            }
 
-            let newMenu = '<ul>';
+            let selection = parentFunctions.getSelection();
 
-            let menuParse = mkaEltSelected[0].getAttribute('mka-rc-menu-items');
+            let contextMenu = config.rightClick(selection);
 
-            let menu = JSON.parse(menuParse, function (key, value) {
-                if (value
-                    && typeof value === "string"
-                    && value.substr(0, 8) == "function") {
-                    var startBody = value.indexOf('{') + 1;
-                    var endBody = value.lastIndexOf('}');
-                    var startArgs = value.indexOf('(') + 1;
-                    var endArgs = value.indexOf(')');
+            let newMenu = document.createElement('ul');
 
-                    return new Function(value.substring(startArgs, endArgs)
-                        , value.substring(startBody, endBody));
-                }
-                return value;
+            Array.from(contextMenu).map(item => {
+                let li = document.createElement('li');
+                li.innerHTML = item.title;
+                li.onclick = item.action;
+                newMenu.appendChild(li);
             });
 
-            menu.forEach(function (item) {
-                newMenu += `<li onclick="${item.action}; anonymous();">${item.title}</li>`;
-            });
-
-            newMenu += '</ul>';
 
             const newDiv = document.createElement('div');
             newDiv.setAttribute('id', mkarcmenuId);
-            document.body.appendChild(newDiv);
-            // Ajout au body d'une div contenant le menu du clic droit
-            newDiv.innerHTML = newMenu;
+            newDiv.style.position = 'absolute';
+            newDiv.style.left = event.pageX + 'px';
+            newDiv.style.top = event.pageY + 'px';
 
-            const mkarcmenu = document.getElementById(mkarcmenuId);
+            newDiv.appendChild(newMenu);
 
-            mkarcmenu.style.position = 'absolute';
-            mkarcmenu.style.left = event.pageX + 'px';
-            mkarcmenu.style.top = event.pageY + 'px';
-
-            config.focus = "rc";
+            parentFunctions.getContainer().appendChild(newDiv);
 
         }
     });
 
-    window.onclick = () => {
-        removeMkaRcMenu();
-    };
 }
-
-let onkeydown = (e) => {
-    console.log(e);
-}
-
-
