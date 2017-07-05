@@ -1,10 +1,9 @@
 let parentFunctions = {};
 let config = {};
-let firstElementIndex = null;
+let focusedElementIndex = null;
 
 export let init = (conf, publicFunctions) => {
     config = conf;
-    config.eltSelectingClass = config.eltSelectingClass || config.eltSelectedClass;
     parentFunctions = publicFunctions;
 }
 
@@ -13,63 +12,70 @@ let isInLasso = false;
 let canStartLasso = false;
 let selecting = [];
 
+
 export let mkaEvents = {
-    onmousedown: (event) => {
-        // On démarre la sélection si on utilise le bouton gauche de la souris
-        if (event.which === 1) {
-            if(!event.shiftKey){
-                canStartLasso = true;
-                firstElementIndex = null;
+        onmousedown: (event) => {
+            // On démarre la sélection si on utilise le bouton gauche de la souris
+            if (event.which === 1) {
+                if (!event.shiftKey) {
+                    focusedElementIndex = null;
 
-                // zone du click
-                square.downX = event.pageX + 0;
-                square.downY = event.pageY + 0;
-                square.upX = event.pageX + 0;
-                square.upY = event.pageY + 0;
-                orderCoordinate();
-            } else {
-                let selectableElements = parentFunctions.getSelectablesElements();
-                let selection = parentFunctions.getSelection();
-                let newSelection = [];
+                    // zone du click
+                    square.downX = event.pageX + 0;
+                    square.downY = event.pageY + 0;
+                    square.upX = event.pageX + 0;
+                    square.upY = event.pageY + 0;
 
-                let element = null;
+                    canStartLasso = true;
 
-                selectableElements.forEach(function (elt) {
-                    if (elementIsCrossingZone(elt, event.pageX, event.pageY, event.pageX, event.pageY)) {
-                        element = elt;
-                    }
-                });
-
-                if(firstElementIndex === null){
-                    firstElementIndex = selectableElements.indexOf(selection[0]);
-                }
-
-                if(selection.length > 0){
-                    let elementIndex = selectableElements.indexOf(element);
-
-                    for(let i = 0; i < selectableElements.length; i++) {
-                        if(i >= elementIndex && i <= firstElementIndex || i <= elementIndex && i >= firstElementIndex){
-                            newSelection.push(selectableElements[i]);
-                        }
-                    }
+                    orderCoordinate();
                 } else {
-                    newSelection.push(element);
+                    let selectableElements = parentFunctions.getSelectablesElements();
+                    let selection = parentFunctions.getSelection();
+                    let newSelection = [];
+
+                    let element = parentFunctions.getSelectableElement(event.target);
+
+                    if (element) {
+                        focusedElementIndex = focusedElementIndex || selectableElements.indexOf(selection[0]);
+
+                        if (selection.length > 0) {
+                            let elementIndex = selectableElements.indexOf(element);
+                            let firstIndex = Math.min(focusedElementIndex,elementIndex);
+                            let lastIndex = Math.max(focusedElementIndex,elementIndex);
+                            if(event.ctrlKey) {
+                                Array.from(selection).map(elt => {
+                                    let eltIndex = selectableElements.indexOf(elt);
+                                    if(eltIndex < firstIndex) {
+                                        firstIndex = eltIndex;
+                                    }
+                                    if(eltIndex > lastIndex) {
+                                        lastIndex = eltIndex;
+                                    }
+                                });
+                            }
+
+                            for (let i = firstIndex; i <= lastIndex; i++) {
+                                    newSelection.push(selectableElements[i]);
+                            }
+                        } else {
+                            newSelection.push(element);
+                        }
+
+                        parentFunctions.updateSelection(newSelection);
+                    }
                 }
 
-                parentFunctions.updateSelection(newSelection);
-
+                return true;
             }
-
-            return true;
+            return false;
+        },
+        ondblclick: () => {
+            endLasso();
+            return false;
         }
-        return false;
-    },
-    ondblclick: (event) => {
-        isInLasso = false;
-        square.delete();
-        return false;
     }
-};
+    ;
 
 export let documentEvents = {
     onmousemove: (event) => {
@@ -78,7 +84,7 @@ export let documentEvents = {
             if (isInLasso) {
                 if (!event.ctrlKey && !square.isVisble()) {
                     parentFunctions.updateSelection([]);
-                    firstElementIndex = null;
+                    focusedElementIndex = null;
                 }
                 refreshLasso(event);
                 return true;
@@ -91,36 +97,48 @@ export let documentEvents = {
 };
 
 export let windowEvents = {
-    onclick: (event) => {
-        if (event.which === 1 && !isInLasso && !event.shiftKey) {
-            let element = null;
-            Array.from(parentFunctions.getSelectablesElements()).map(elt => {
-                if (elementIsCrossingZone(elt, event.pageX, event.pageY, event.pageX, event.pageY)) {
-                    element = elt;
-                }
-            });
-            if (!element) {
-                parentFunctions.updateSelection([]);
-                firstElementIndex = null;
-            } else {
-                let selection = parentFunctions.getSelection();
-                if (selection.length === 0 || !event.ctrlKey) {
-                    parentFunctions.updateSelection([element]);
-                } else {
-                    let newSelection = parentFunctions.getSelection();
-                    let index = newSelection.indexOf(element);
-                    if (index === -1) {
-                        newSelection.push(element);
-                    } else {
-                        newSelection.splice(index, 1);
-                    }
-                    parentFunctions.updateSelection(newSelection);
-                }
-            }
-            return true;
-        }
+    onclick: () => {
         endLasso();
         return false;
+    },
+    onmousedown: (event) => {
+        clearSelecting();
+        if (event.which === 1) {
+            if (!event.shiftKey) {
+                let selectableElt = parentFunctions.getSelectableElement(event.target);
+                if (selectableElt) {
+                    let lastSelection = parentFunctions.getSelection();
+                    let index = lastSelection.indexOf(selectableElt);
+                    let newSelection = [selectableElt];
+
+                    if (event.ctrlKey) {
+                        newSelection = lastSelection;
+                        if (index !== -1) {
+                            newSelection.splice(index, 1);
+                        } else {
+                            newSelection.push(selectableElt);
+                        }
+                    }
+
+                    if (index !== -1) {
+                        Array.from(newSelection).map(elt => {
+                            selecting.push(elt);
+                            elt.classList.add(config.eltSelectingClass);
+                        });
+                    } else {
+                        parentFunctions.updateSelection(newSelection);
+                    }
+
+                } else if (!event.ctrlKey) {
+                    parentFunctions.updateSelection([]);
+                }
+            }
+        }
+    },
+    onmouseup: (event) => {
+        if (event.which === 1) {
+            pushSelectingElements();
+        }
     }
 };
 
@@ -152,7 +170,7 @@ square = {
         squareElt.style.width = (square.x2 - square.x1) + "px";
         squareElt.style.height = (square.y2 - square.y1) + "px";
     },
-    delete: () => {
+    remove: () => {
         square.get().style.display = "none";
     },
     isVisble: () => {
@@ -175,16 +193,26 @@ let refreshLasso = (event) => {
 };
 
 let endLasso = () => {
-    square.delete();
+    square.remove();
     canStartLasso = false;
     if (isInLasso) {
         isInLasso = false;
-        Array.from(selecting).map(elt => {
-            elt.classList.remove(config.eltSelectingClass);
-        });
-        parentFunctions.updateSelection(selecting);
-        selecting = [];
+        pushSelectingElements();
     }
+}
+
+let pushSelectingElements = () => {
+    if (selecting.length) {
+        parentFunctions.updateSelection(selecting);
+        clearSelecting();
+    }
+}
+
+let clearSelecting = () => {
+    Array.from(selecting).map(elt => {
+        elt.classList.remove(config.eltSelectingClass);
+    });
+    selecting = [];
 }
 
 let orderCoordinate = () => {
@@ -216,10 +244,8 @@ let selectLassoItems = (ctrlKey) => {
         elt.classList.remove(config.eltSelectingClass);
         if (square.isCrossingElt(elt) && (!ctrlKey || selecting.indexOf(elt) === -1)) {
             selecting.push(elt);
+            elt.classList.add(config.eltSelectingClass);
         }
-    });
-    Array.from(selecting).map(elt => {
-        elt.classList.add(config.eltSelectingClass);
     });
 }
 

@@ -14,6 +14,7 @@ if (!mka) throw new Error('mka id not found');
 let config = {
     "eltSelectableClass": "mka-elt",
     "eltSelectedClass": "mka-elt-selected",
+    "eltSelectingClass": "mka-elt-selecting",
     "onDragItemClass": null,
     "dragNdrop": true,
     "rightClick": false,
