@@ -555,11 +555,15 @@
         return menu;
     }
 
+    let dbClick = (elt) => {
+        console.log('dbclick', elt);
+    }
 
     document.getElementById('mka').mkaInit({
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": true,
         "rightClick": getContextMenu,
+        "dbClick": dbClick,
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,
