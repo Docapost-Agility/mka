@@ -42,7 +42,11 @@ export let windowEvents = {
                 default:
                     return; // exit this handler for other keys
             }
+
             event.preventDefault();
+            let scrollX = (newSelection[0].offsetLeft + newSelection[0].offsetWidth / 2) - (window.scrollX + window.innerWidth / 2);
+            let scrollY = (newSelection[0].offsetTop + newSelection[0].offsetHeight / 2) - (window.scrollY + window.innerHeight / 2);
+            window.scrollBy(scrollX, scrollY);
             parentFunctions.updateSelection(newSelection);
             return true;
         }
