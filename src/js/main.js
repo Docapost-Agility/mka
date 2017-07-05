@@ -7,13 +7,10 @@ import * as arrows from './arrows';
 import * as deleteShortcut from './deleteShortcut';
 import * as selectAllShortcut from './selectAllShortcut';
 
-// principal elt
-let mka = document.getElementById("mka");
-if (!mka) throw new Error('mka id not found');
-
 let config = {
     "eltSelectableClass": "mka-elt",
     "eltSelectedClass": "mka-elt-selected",
+    "eltSelectingClass": "mka-elt-selecting",
     "onDragItemClass": null,
     "dragNdrop": true,
     "rightClick": false,
@@ -42,10 +39,10 @@ config.actions = [];
 let selectables = [];
 let selection = [];
 let components = [];
-let parentContainerElement;
 
 HTMLElement.prototype.mkaInit = function (clientConfig) {
-    parentContainerElement = this;
+    let mka = this;
+
     Object.keys(clientConfig).map((i) => {
         config[i] = clientConfig[i];
     });
@@ -176,14 +173,14 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             });
         },
         isMkaContainerFocused: (target) => {
-            if (target === parentContainerElement) {
+            if (target === mka) {
                 return true;
             }
 
             while (target.parentNode) {
                 target = target.parentNode;
 
-                if (target === parentContainerElement) {
+                if (target === mka) {
                     return true;
                 }
             }
