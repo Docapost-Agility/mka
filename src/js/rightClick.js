@@ -1,47 +1,77 @@
-export let active = (mka, config) => {
-    config.actions["rc-arrow"] = onkeydown;
-    const mkarcmenuId = 'mkarcmenu'
+let parentFunctions = {};
+let config = {};
+const mkarcmenuId = 'mkarcmenu';
+
+export let init = (conf, publicFunctions) => {
+    config = conf;
+    parentFunctions = publicFunctions;
+
+    bindContextMenu();
+}
+
+export let windowEvents = {
+    onkeydown: (event) => {
+        let code = event.which;
+        if ((code == 37 || code == 38 || code == 39 || code == 40) && !!document.getElementById(mkarcmenuId)) {
+            event.preventDefault();
+            return true;
+        }
+        return false;
+    },
+    onclick: (event) => {
+        if (event.which === 1) {
+            return removeMkaRcMenu();
+        }
+        return false;
+    }
+}
+
+let removeMkaRcMenu = () => {
+    if (document.getElementById(mkarcmenuId)) {
+        document.getElementById(mkarcmenuId).remove();
+        return true;
+    }
+    return false;
+}
+
+let bindContextMenu = () => {
+
     // On désactive le click droit sur l'élément principal
-    mka.addEventListener('contextmenu', (event) => {
+    parentFunctions.getContainer().addEventListener('contextmenu', (event) => {
         event.preventDefault();
+        removeMkaRcMenu();
+        const selectableElement = parentFunctions.getSelectableElement(event.target);
+        if (selectableElement !== null) {
 
-        let mkaEltSelected = document.getElementsByClassName('mka-elt-selected')
-        // Si suelement 1 élément est sélectionné et que il y a des items pour le menu
-        if (mkaEltSelected.length === 1 && mkaEltSelected[0].hasAttribute('mka-rc-menu-items')) {
+            if (!parentFunctions.elementIsSelected(selectableElement)) {
+                parentFunctions.updateSelection([selectableElement]);
+            }
 
-            let newMenu = `<div id="${mkarcmenuId}"><ul>`;
+            let selection = parentFunctions.getSelection();
 
-            const menu = JSON.parse(mkaEltSelected[0].getAttribute('mka-rc-menu-items'));
-            menu.forEach(function (item) {
-                newMenu += '<li>' + item.title + '</li>';
+            let contextMenu = config.rightClick(selection);
+
+            let newMenu = document.createElement('ul');
+
+            Array.from(contextMenu).map(item => {
+                let li = document.createElement('li');
+                li.innerHTML = item.title;
+                li.onclick = item.action;
+                newMenu.appendChild(li);
             });
 
-            newMenu += '</ul></div>';
 
-            mka.innerHTML += newMenu;
+            const newDiv = document.createElement('div');
+            newDiv.setAttribute('id', mkarcmenuId);
+            newDiv.style.position = 'absolute';
+            newDiv.style.left = event.pageX + 'px';
+            newDiv.style.top = event.pageY + 'px';
 
-            const mkarcmenu = document.getElementById(mkarcmenuId);
+            newDiv.appendChild(newMenu);
 
-            mkarcmenu.style.position = 'absolute';
-            mkarcmenu.style.left = event.pageX + 'px';
-            mkarcmenu.style.top = event.pageY + 'px';
-
-            config.focus = "rc";
+            parentFunctions.getContainer().appendChild(newDiv);
 
         }
     });
 
-    document.body.onmousedown = () => {
-        if (document.getElementById(mkarcmenuId)) {
-            document.getElementById(mkarcmenuId).remove();
-        }
-    };
-
-
 }
-
-let onkeydown = (e) => {
-    console.log(e);
-}
-
-
