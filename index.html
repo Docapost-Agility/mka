@@ -97,7 +97,7 @@
 
     <h3>Nombre d'element sélectionné <span id="mka-count">0</span></h3>
 
-    <ul id="mka" class="list-group" style="margin-top: 40px">
+    <ul id="itemsList" class="list-group" style="margin-top: 40px">
         <li class="mka-elt list-group-item" item-id="1">
             <div class="card">
                 <div class="card-block">
@@ -556,7 +556,7 @@
     }
 
 
-    document.getElementById('mka').mkaInit({
+    document.getElementById('itemsList').mkaInit({
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": true,
         "rightClick": getContextMenu,

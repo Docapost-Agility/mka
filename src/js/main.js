@@ -7,10 +7,6 @@ import * as arrows from './arrows';
 import * as deleteShortcut from './deleteShortcut';
 import * as selectAllShortcut from './selectAllShortcut';
 
-// principal elt
-let mka = document.getElementById("mka");
-if (!mka) throw new Error('mka id not found');
-
 let config = {
     "eltSelectableClass": "mka-elt",
     "eltSelectedClass": "mka-elt-selected",
@@ -44,6 +40,8 @@ let selection = [];
 let components = [];
 
 HTMLElement.prototype.mkaInit = function (clientConfig) {
+    let mka = this;
+
     Object.keys(clientConfig).map((i) => {
         config[i] = clientConfig[i];
     });
