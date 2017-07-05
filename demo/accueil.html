@@ -38,7 +38,7 @@
 </nav>
 
 <div class="container">
-    <h2>Folders</h2>
+    <h2>Dossier</h2>
     <div class="row folders-container">
         <div class="col-xs-6 col-sm-4 col-lg-3">
             <div class="mka-dropzone">
@@ -78,10 +78,11 @@
         </div>
     </div>
 
-    <h3>Number of items selected <span id="mka-count">0</span></h3>
+
+    <h3>Nombre d'element sélectionné <span id="mka-count">0</span></h3>
 
     <ul id="mka" class="list-group" style="margin-top: 40px">
-        <li id="firstElement" class="mka-elt list-group-item" item-id="1">
+        <li class="mka-elt list-group-item" item-id="1">
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Item 1</h4>
@@ -113,13 +114,6 @@
             <div class="card">
                 <div class="card-block">
                     <h4 class="card-title">Item 5</h4>
-                </div>
-            </div>
-        </li>
-        <li class="mka-elt list-group-item" item-id="6">
-            <div class="card">
-                <div class="card-block">
-                    <h4 class="card-title">Item 6</h4>
                 </div>
             </div>
         </li>
@@ -182,26 +176,41 @@
 </style>
 
 <script type="text/javascript">
-    const firstElementMenu = [
-        {
-            title: "Menu Item 1"
-        },
-        {
-            title: "Menu Item 2",
-        }
-    ];
+    let getContextMenu = (selection) => {
+        let menu = [];
 
-    document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
+        menu.push({
+            title: "action 1",
+            action: () => {
+                console.log("action 1");
+            }
+        });
+        menu.push({
+            title: "action 3",
+            action: () => {
+                console.log("action 3");
+            }
+        });
+        if (selection.length > 1) {
+            menu.push({
+                title: "action multiple",
+                action: () => {
+                    console.log("action multiple");
+                }
+            });
+        }
+        return menu;
+    }
 
 
     document.getElementById('mka').mkaInit({
-        "eltSelectedClass": "jessy",
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": true,
-        "rightClik": true,
+        "rightClick": getContextMenu,
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,
+        "count": "mka-count",
         "pasteFunction": function (items) {
             console.log(items);
             let data = [];

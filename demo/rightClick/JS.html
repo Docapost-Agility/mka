@@ -43,21 +43,38 @@
     </div>
     <pre class="line-numbers" data-start=0>
 <code class="language-javascript">
-const firstElementMenu = [
-    {
-        title: "Menu Item 1"
-    },
-    {
-        title: "Menu Item 2",
-    }
-];
+let getContextMenu = (selection) => {
+    let menu = [];
 
-document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
+    menu.push({
+        title: "action 1",
+        action: () => {
+            console.log("action 1");
+        }
+    });
+    menu.push({
+        title: "action 3",
+        action: () => {
+            console.log("action 3");
+        }
+    });
+    if (selection.length > 1) {
+        menu.push({
+            title: "action multiple",
+            action: () => {
+                console.log("action multiple");
+            }
+        });
+    }
+    return menu;
+}
+
 
 document.getElementById('mka').mkaInit({
-    "eltSelectedClass": "jessy",
-    // to activate right click
-    "rightClik": true
+    "lasso": true,
+    "count": "mka-count",
+    // To activate rightClick
+    "rightClick": getContextMenu
 });
 </code>
 </pre>
@@ -69,38 +86,38 @@ document.getElementById('mka').mkaInit({
 
     <div class="container" style="max-width:750px">
 
-        <h5>Number of items selected <span id="mka-count">0</span></h5>
+        <h3>Nombre d'element sélectionné <span id="mka-count">0</span></h3>
 
         <ul id="mka" class="list-group" style="margin-top: 40px">
-            <li id="firstElement" class="mka-elt list-group-item" item-id="1">
+            <li class="mka-elt list-group-item" item-id="1">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 1</h4>
                     </div>
                 </div>
             </li>
-            <li class="mka-elt list-group-item" item-id="1">
+            <li class="mka-elt list-group-item" item-id="2">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 2</h4>
                     </div>
                 </div>
             </li>
-            <li class="mka-elt list-group-item" item-id="2">
+            <li class="mka-elt list-group-item" item-id="3">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 3</h4>
                     </div>
                 </div>
             </li>
-            <li class="mka-elt list-group-item" item-id="2">
+            <li class="mka-elt list-group-item" item-id="4">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 4</h4>
                     </div>
                 </div>
             </li>
-            <li class="mka-elt list-group-item" item-id="2">
+            <li class="mka-elt list-group-item" item-id="5">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 5</h4>
@@ -162,24 +179,41 @@ document.getElementById('mka').mkaInit({
             background: linear-gradient(to right, #753a88, #cc2b5e);
 
         }
+
     </style>
 
     <script type="text/javascript">
-        const firstElementMenu = [
-            {
-                title: "Menu Item 1"
-            },
-            {
-                title: "Menu Item 2",
-            }
-        ];
+        let getContextMenu = (selection) => {
+            let menu = [];
 
-        document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
+            menu.push({
+                title: "action 1",
+                action: () => {
+                    console.log("action 1");
+                }
+            });
+            menu.push({
+                title: "action 3",
+                action: () => {
+                    console.log("action 3");
+                }
+            });
+            if (selection.length > 1) {
+                menu.push({
+                    title: "action multiple",
+                    action: () => {
+                        console.log("action multiple");
+                    }
+                });
+            }
+            return menu;
+        }
 
 
         document.getElementById('mka').mkaInit({
-            "eltSelectedClass": "jessy",
-            "rightClik": true
+            "lasso": true,
+            "count": "mka-count",
+            "rightClick": getContextMenu
         });
     </script>
 </div>

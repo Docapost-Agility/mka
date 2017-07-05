@@ -99,6 +99,7 @@
 <div class="pull-right" style="margin-right:5%; width: 44%; border: 1px solid #ddd; border-radius: 4px">
 
     <div class="container" style="max-width:750px">
+
         <h2>Folders</h2>
         <div class="row folders-container">
             <div class="col-xs-6 col-sm-4 col-lg-3">
@@ -121,39 +122,38 @@
             </div>
         </div>
 
-
-        <h5>Number of items selected <span id="mka-count">0</span></h5>
+        <h3>Nombre d'element sélectionné <span id="mka-count">0</span></h3>
 
         <ul id="mka" class="list-group" style="margin-top: 40px">
-            <li id="firstElement" class="mka-elt list-group-item" item-id="1">
+            <li class="mka-elt list-group-item" item-id="1">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 1</h4>
                     </div>
                 </div>
             </li>
-            <li class="mka-elt list-group-item" item-id="1">
+            <li class="mka-elt list-group-item" item-id="2">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 2</h4>
                     </div>
                 </div>
             </li>
-            <li class="mka-elt list-group-item" item-id="2">
+            <li class="mka-elt list-group-item" item-id="3">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 3</h4>
                     </div>
                 </div>
             </li>
-            <li class="mka-elt list-group-item" item-id="2">
+            <li class="mka-elt list-group-item" item-id="4">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 4</h4>
                     </div>
                 </div>
             </li>
-            <li class="mka-elt list-group-item" item-id="2">
+            <li class="mka-elt list-group-item" item-id="5">
                 <div class="card">
                     <div class="card-block">
                         <h4 class="card-title">Item 5</h4>
@@ -215,23 +215,13 @@
             background: linear-gradient(to right, #753a88, #cc2b5e);
 
         }
+
     </style>
 
     <script type="text/javascript">
-        const firstElementMenu = [
-            {
-                title: "Menu Item 1"
-            },
-            {
-                title: "Menu Item 2",
-            }
-        ];
-
-        document.getElementById('firstElement').setAttribute('mka-rc-menu-items', JSON.stringify(firstElementMenu));
-
-
         document.getElementById('mka').mkaInit({
-            "eltSelectedClass": "jessy",
+            "lasso": true,
+            "count": "mka-count",
             "onDragItemClass": "drag-class-sample",
             "dragNdrop": true,
         });
