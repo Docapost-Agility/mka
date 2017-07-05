@@ -8,7 +8,7 @@ import * as deleteShortcut from './deleteShortcut';
 import * as selectAllShortcut from './selectAllShortcut';
 
 let config = {
-    "eltSelectableClass": "mka-elt",
+    "eltsSelectable": [],
     "eltSelectedClass": "mka-elt-selected",
     "eltSelectingClass": "mka-elt-selecting",
     "onDragItemClass": null,
@@ -47,7 +47,7 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         config[i] = clientConfig[i];
     });
 
-    selectables = [].slice.call(document.getElementsByClassName(config.eltSelectableClass));
+    selectables = [].slice.call(config.eltsSelectable);
 
     // on désactive la selection de text
     mka.style.userSelect = "none";
@@ -103,12 +103,12 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             return false;
         },
         getSelectableElement: (elt) => {
-            if (elt.classList && elt.classList.contains(config.eltSelectableClass)) {
+            if (elt.classList && selectables.indexOf(elt) !== -1) {
                 return elt;
             }
             while (elt.parentNode) {
                 elt = elt.parentNode;
-                if (elt.classList && elt.classList.contains(config.eltSelectableClass)) {
+                if (elt.classList && selectables.indexOf(elt) !== -1) {
                     return elt;
                 }
             }
