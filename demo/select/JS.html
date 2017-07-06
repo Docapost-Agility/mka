@@ -53,7 +53,10 @@
     </div>
     <pre class="line-numbers" data-start=0>
 <code class="language-javascript">
-document.getElementById('mka').mkaInit({
+document.getElementById('itemsList').mkaInit({
+
+    "eltsSelectable": document.getElementById('itemsList').getElementsByTagName('li'),
+
     "onDragItemClass": "drag-class-sample",
 
     "dragNdrop": false,
@@ -72,7 +75,7 @@ document.getElementById('mka').mkaInit({
         console.log(items);
         let data = [];
         items.map((elt) => {
-            console.log(elt.getAttribute("item-id"));
+            alert(elt.getAttribute("item-id"));
             data.push(elt.getAttribute("item-id"));
         });
         console.group("Call WS with :");
@@ -91,7 +94,7 @@ document.getElementById('mka').mkaInit({
 
         <h3>Number of selected items <span id="mka-count">0</span></h3>
 
-        <ul id="mka" class="list-group" style="margin-top: 40px">
+        <ul id="itemsList" class="list-group" style="margin-top: 40px">
             <li class="mka-elt list-group-item" item-id="1">
                 <div class="card">
                     <div class="card-block">
@@ -143,6 +146,10 @@ document.getElementById('mka').mkaInit({
             text-align: center;
         }
 
+        .mka-elt-selecting {
+            background-color: #D1EEFF;
+        }
+
         .mka-elt-selected {
             background-color: #bebebe;
         }
@@ -182,11 +189,11 @@ document.getElementById('mka').mkaInit({
             background: linear-gradient(to right, #753a88, #cc2b5e);
 
         }
-
     </style>
 
     <script type="text/javascript">
-        document.getElementById('mka').mkaInit({
+        document.getElementById('itemsList').mkaInit({
+            "eltsSelectable": document.getElementById('itemsList').getElementsByTagName('li'),
             "onDragItemClass": "drag-class-sample",
             "dragNdrop": false,
             "lasso": true,
@@ -197,7 +204,7 @@ document.getElementById('mka').mkaInit({
                 console.log(items);
                 let data = [];
                 items.map((elt) => {
-                    console.log(elt.getAttribute("item-id"));
+                    alert(elt.getAttribute("item-id"));
                     data.push(elt.getAttribute("item-id"));
                 });
                 console.group("Call WS with :");
