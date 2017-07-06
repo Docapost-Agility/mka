@@ -1,3 +1,4 @@
+import * as dbClick from './dbClick';
 import * as rightClick from './rightClick';
 import * as dndHandler from './DragAndDrop';
 import * as select from './select';
@@ -7,16 +8,14 @@ import * as arrows from './arrows';
 import * as deleteShortcut from './deleteShortcut';
 import * as selectAllShortcut from './selectAllShortcut';
 
-// principal elt
-let mka = document.getElementById("mka");
-if (!mka) throw new Error('mka id not found');
-
 let config = {
-    "eltSelectableClass": "mka-elt",
+    "eltsSelectable": [],
     "eltSelectedClass": "mka-elt-selected",
+    "eltSelectingClass": "mka-elt-selecting",
     "onDragItemClass": null,
     "dragNdrop": true,
     "rightClick": false,
+    "dbClick": false,
     "lasso": true,
     "selectAllShortcut": true,
     "copyPaste": true,
@@ -44,15 +43,20 @@ let selection = [];
 let components = [];
 
 HTMLElement.prototype.mkaInit = function (clientConfig) {
+    let mka = this;
+
     Object.keys(clientConfig).map((i) => {
         config[i] = clientConfig[i];
     });
 
-    selectables = [].slice.call(document.getElementsByClassName(config.eltSelectableClass));
+    selectables = [].slice.call(config.eltsSelectable);
 
     // on désactive la selection de text
     mka.style.userSelect = "none";
 
+    if (!!config.dbClick) {
+        components.push(dbClick);
+    }
 
     if (!!config.rightClick) {
         components.push(rightClick);
@@ -104,12 +108,12 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             return false;
         },
         getSelectableElement: (elt) => {
-            if (elt.classList && elt.classList.contains(config.eltSelectableClass)) {
+            if (elt.classList && selectables.indexOf(elt) !== -1) {
                 return elt;
             }
             while (elt.parentNode) {
                 elt = elt.parentNode;
-                if (elt.classList && elt.classList.contains(config.eltSelectableClass)) {
+                if (elt.classList && selectables.indexOf(elt) !== -1) {
                     return elt;
                 }
             }
@@ -174,14 +178,14 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             });
         },
         isMkaContainerFocused: (target) => {
-            if (target.id === config.focus) {
+            if (target === mka) {
                 return true;
             }
 
             while (target.parentNode) {
                 target = target.parentNode;
 
-                if (target.id === config.focus) {
+                if (target === mka) {
                     return true;
                 }
             }

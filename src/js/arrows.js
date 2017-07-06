@@ -44,10 +44,12 @@ export let windowEvents = {
             }
 
             event.preventDefault();
-            let scrollX = (newSelection[0].offsetLeft + newSelection[0].offsetWidth / 2) - (window.scrollX + window.innerWidth / 2);
-            let scrollY = (newSelection[0].offsetTop + newSelection[0].offsetHeight / 2) - (window.scrollY + window.innerHeight / 2);
-            window.scrollBy(scrollX, scrollY);
-            parentFunctions.updateSelection(newSelection);
+            if (newSelection[0]) {
+                let scrollX = (newSelection[0].offsetLeft + newSelection[0].offsetWidth / 2) - (window.scrollX + window.innerWidth / 2);
+                let scrollY = (newSelection[0].offsetTop + newSelection[0].offsetHeight / 2) - (window.scrollY + window.innerHeight / 2);
+                window.scrollBy(scrollX, scrollY);
+                parentFunctions.updateSelection(newSelection);
+            }
             return true;
         }
         return false;

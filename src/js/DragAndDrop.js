@@ -51,17 +51,6 @@ export let documentEvents = {
     }
 };
 
-export let windowEvents = {
-    onmouseup: () => {
-        draggableTarget = false;
-        if (isDragging) {
-            isDragging = false;
-            return true;
-        }
-        return false;
-    }
-};
-
 let bindDragEvents = (element) => {
 
     element.addEventListener('dragstart', function (e) {
