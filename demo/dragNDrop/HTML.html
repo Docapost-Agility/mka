@@ -202,10 +202,27 @@
 
     <script type="text/javascript">
         document.getElementById('mka').mkaInit({
-            "lasso": true,
-            "count": "mka-count",
             "onDragItemClass": "drag-class-sample",
             "dragNdrop": true,
+            "lasso": false,
+            "selectAllShortcut": false,
+            "copyPaste": false,
+            "count": "mka-count",
+            "pasteFunction": function (items) {
+                console.log(items);
+                let data = [];
+                items.map((elt) => {
+                    console.log(elt.getAttribute("item-id"));
+                    data.push(elt.getAttribute("item-id"));
+                });
+                console.group("Call WS with :");
+                console.group(data);
+                console.groupEnd();
+            }
+            // "dropFunction" : function(ids) {
+            //     console.log(ids);
+            //     console.log("drop du client");
+            // }
         });
     </script>
 </div>
