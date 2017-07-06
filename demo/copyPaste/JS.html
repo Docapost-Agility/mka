@@ -44,10 +44,20 @@
     <pre class="line-numbers" data-start=0>
 <code class="language-javascript">
 document.getElementById('mka').mkaInit({
-    "lasso": true,
-    "count": "mka-count",
-    // To activate copy/paste
+    "onDragItemClass": "drag-class-sample",
+
+    "dragNdrop": false,
+
+    "lasso": false,
+
+    "selectAllShortcut": false,
+
+    // To activate copyPaste
     "copyPaste": true,
+
+    "count": "mka-count",
+
+    // To activate Paste
     "pasteFunction": function (items) {
         console.log(items);
         let data = [];
@@ -165,37 +175,13 @@ document.getElementById('mka').mkaInit({
     </style>
 
     <script type="text/javascript">
-        let getContextMenu = (selection) => {
-            let menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: () => {
-                    console.log("action 1");
-                }
-            });
-            menu.push({
-                title: "action 3",
-                action: () => {
-                    console.log("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: () => {
-                        console.log("action multiple");
-                    }
-                });
-            }
-            return menu;
-        }
-
-
         document.getElementById('mka').mkaInit({
-            "lasso": true,
-            "count": "mka-count",
+            "onDragItemClass": "drag-class-sample",
+            "dragNdrop": false,
+            "lasso": false,
+            "selectAllShortcut": false,
             "copyPaste": true,
+            "count": "mka-count",
             "pasteFunction": function (items) {
                 console.log(items);
                 let data = [];
@@ -207,6 +193,10 @@ document.getElementById('mka').mkaInit({
                 console.group(data);
                 console.groupEnd();
             }
+            // "dropFunction" : function(ids) {
+            //     console.log(ids);
+            //     console.log("drop du client");
+            // }
         });
     </script>
 </div>
