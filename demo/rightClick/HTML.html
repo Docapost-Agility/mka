@@ -195,9 +195,28 @@
 
 
         document.getElementById('mka').mkaInit({
-            "lasso": true,
+            "onDragItemClass": "drag-class-sample",
+            "dragNdrop": false,
+            "rightClick": getContextMenu,
+            "lasso": false,
+            "selectAllShortcut": false,
+            "copyPaste": false,
             "count": "mka-count",
-            "rightClick": getContextMenu
+            "pasteFunction": function (items) {
+                console.log(items);
+                let data = [];
+                items.map((elt) => {
+                    console.log(elt.getAttribute("item-id"));
+                    data.push(elt.getAttribute("item-id"));
+                });
+                console.group("Call WS with :");
+                console.group(data);
+                console.groupEnd();
+            }
+            // "dropFunction" : function(ids) {
+            //     console.log(ids);
+            //     console.log("drop du client");
+            // }
         });
     </script>
 </div>
