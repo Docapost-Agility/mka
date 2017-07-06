@@ -1,0 +1,27 @@
+.panel-default {
+    margin: 0 5% 1% 5%;
+}
+
+.panel-heading {
+    text-align: center;
+}
+
+.panel-body {
+    text-align: center;
+}
+
+.pull-left {
+    margin-left:5%;
+    width: 44%;
+}
+
+.pull-right {
+    margin-right:5%;
+    width: 44%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.container {
+    max-width:750px;
+}
