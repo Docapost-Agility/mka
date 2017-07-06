@@ -31,3 +31,9 @@
     overflow-x: hidden;
     max-height: 700px;
 }
+
+.language-javascript {
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 700px;
+}
