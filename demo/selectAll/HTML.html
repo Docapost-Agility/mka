@@ -167,37 +167,9 @@
     </style>
 
     <script type="text/javascript">
-        let getContextMenu = (selection) => {
-            let menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: () => {
-                    console.log("action 1");
-                }
-            });
-            menu.push({
-                title: "action 3",
-                action: () => {
-                    console.log("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: () => {
-                        console.log("action multiple");
-                    }
-                });
-            }
-            return menu;
-        }
-
-
         document.getElementById('mka').mkaInit({
             "onDragItemClass": "drag-class-sample",
             "dragNdrop": false,
-            "rightClick": getContextMenu,
             "lasso": false,
             "selectAllShortcut": true,
             "copyPaste": false,
