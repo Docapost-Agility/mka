@@ -44,11 +44,63 @@
     </div>
     <pre class="line-numbers" data-start=0>
 <code class="language-javascript">
+let getContextMenu = (selection) => {
+    let menu = [];
+
+    menu.push({
+        title: "action 1",
+        action: () => {
+            console.log("action 1");
+        }
+    });
+    menu.push({
+        title: "action 3",
+        action: () => {
+            console.log("action 3");
+        }
+    });
+    if (selection.length > 1) {
+        menu.push({
+            title: "action multiple",
+            action: () => {
+                console.log("action multiple");
+            }
+        });
+    }
+    return menu;
+}
 document.getElementById('mka').mkaInit({
+    "onDragItemClass": "drag-class-sample",
+
+    "dragNdrop": false,
+
+    "rightClick": getContextMenu,
+
     // To activate lasso
     "lasso": true,
+
+    "selectAllShortcut": false,
+
+    "copyPaste": false,
+
     // To activate count
-    "count": "mka-count"
+    "count": "mka-count",
+
+    "pasteFunction": function (items) {
+        console.log(items);
+        let data = [];
+        items.map((elt) => {
+            console.log(elt.getAttribute("item-id"));
+            data.push(elt.getAttribute("item-id"));
+        });
+        console.group("Call WS with :");
+        console.group(data);
+        console.groupEnd();
+    }
+    // "dropFunction" : function(ids) {
+    //     console.log(ids);
+    //     console.log("drop du client");
+    // }
 });
 </code>
 </pre>
@@ -156,9 +208,56 @@ document.getElementById('mka').mkaInit({
     </style>
 
     <script type="text/javascript">
+        let getContextMenu = (selection) => {
+            let menu = [];
+
+            menu.push({
+                title: "action 1",
+                action: () => {
+                    console.log("action 1");
+                }
+            });
+            menu.push({
+                title: "action 3",
+                action: () => {
+                    console.log("action 3");
+                }
+            });
+            if (selection.length > 1) {
+                menu.push({
+                    title: "action multiple",
+                    action: () => {
+                        console.log("action multiple");
+                    }
+                });
+            }
+            return menu;
+        }
+
+
         document.getElementById('mka').mkaInit({
+            "onDragItemClass": "drag-class-sample",
+            "dragNdrop": false,
+            "rightClick": getContextMenu,
             "lasso": true,
-            "count": "mka-count"
+            "selectAllShortcut": false,
+            "copyPaste": false,
+            "count": "mka-count",
+            "pasteFunction": function (items) {
+                console.log(items);
+                let data = [];
+                items.map((elt) => {
+                    console.log(elt.getAttribute("item-id"));
+                    data.push(elt.getAttribute("item-id"));
+                });
+                console.group("Call WS with :");
+                console.group(data);
+                console.groupEnd();
+            }
+            // "dropFunction" : function(ids) {
+            //     console.log(ids);
+            //     console.log("drop du client");
+            // }
         });
     </script>
 </div>
