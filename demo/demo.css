@@ -25,3 +25,9 @@
 .container {
     max-width:750px;
 }
+
+.language-css {
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 700px;
+}
