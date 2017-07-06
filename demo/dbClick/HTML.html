@@ -14,6 +14,7 @@
           crossorigin="anonymous">
     <link href="../prism.css" rel="stylesheet"/>
     <link href="../demo.css" rel="stylesheet"/>
+
 </head>
 <body>
 <nav class="navbar navbar-default">
@@ -25,10 +26,10 @@
             <ul class="nav navbar-nav">
                 <li><a href="../select/HTML.html">SELECT</a></li>
                 <li><a href="../selectAll/HTML.html">SELECT ALL</a></li>
-                <li class="active"><a href="../rightClick/HTML.html">RIGHT CLICK</a></li>
+                <li><a href="../rightClick/HTML.html">RIGHT CLICK</a></li>
                 <li><a href="../copyPaste/HTML.html">COPY PASTE</a></li>
                 <li><a href="../dragNDrop/HTML.html">DRAG AND DROP</a></li>
-                <li><a href="../dbClick/HTML.html">DOUBLE CLICK</a></li>
+                <li class="active"><a href="../dbClick/HTML.html">DOUBLE CLICK</a></li>
             </ul>
         </div>
     </div>
@@ -45,72 +46,33 @@
 
     <div>
         <ul class="nav nav-tabs">
-            <li role="presentation"><a href="HTML.html">HTML</a></li>
+            <li role="presentation" class="active"><a href="HTML.html">HTML</a></li>
             <li role="presentation"><a href="CSS.html">CSS</a></li>
-            <li role="presentation" class="active"><a href="JS.html">JS</a></li>
+            <li role="presentation"><a href="JS.html">JS</a></li>
         </ul>
     </div>
     <pre class="line-numbers" data-start=0>
-<code class="language-javascript">
-let getContextMenu = (selection) => {
-    let menu = [];
+<code class="language-html">
+&lt;body>
+    &lt;div class="container">
+        &lt;!--This line is optional-->
+        &lt;h3>Number of selected items &lt;span id="mka-count">0&lt;/span>&lt;/h3>
 
-    menu.push({
-        title: "action 1",
-        action: () => {
-            console.log("action 1");
-        }
-    });
-    menu.push({
-        title: "action 3",
-        action: () => {
-            console.log("action 3");
-        }
-    });
-    if (selection.length > 1) {
-        menu.push({
-            title: "action multiple",
-            action: () => {
-                console.log("action multiple");
-            }
-        });
-    }
-    return menu;
-}
-
-
-document.getElementById('mka').mkaInit({
-    "onDragItemClass": "drag-class-sample",
-
-    "dragNdrop": false,
-
-    // To activate right click
-    "rightClick": getContextMenu,
-
-    "lasso": false,
-
-    "selectAllShortcut": false,
-
-    "copyPaste": false,
-
-    "count": "mka-count",
-
-    "pasteFunction": function (items) {
-        console.log(items);
-        let data = [];
-        items.map((elt) => {
-            console.log(elt.getAttribute("item-id"));
-            data.push(elt.getAttribute("item-id"));
-        });
-        console.group("Call WS with :");
-        console.group(data);
-        console.groupEnd();
-    }
-});
+        &lt;ul id="mka" class="list-group" style="margin-top: 40px">
+            &lt;li class="mka-elt list-group-item" item-id="1">
+                &lt;div class="card">
+                    &lt;div class="card-block">
+                        &lt;h4 class="card-title">Item 1&lt;/h4>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/li>
+        &lt;/ul>
+    &lt;/div>
+    &lt;!--Link to your file mka.js-->
+    &lt;script src="../../build/mka.js">&lt;/script>
+&lt;/body>
 </code>
 </pre>
-
-
 </div>
 
 <div class="pull-right">
@@ -214,37 +176,14 @@ document.getElementById('mka').mkaInit({
     </style>
 
     <script type="text/javascript">
-        let getContextMenu = (selection) => {
-            let menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: () => {
-                    console.log("action 1");
-                }
-            });
-            menu.push({
-                title: "action 3",
-                action: () => {
-                    console.log("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: () => {
-                        console.log("action multiple");
-                    }
-                });
-            }
-            return menu;
+        let dbClick = (elt) => {
+            console.log('dbclick', elt);
         }
 
-
-        document.getElementById('mka').mkaInit({
+        document.getElementById('itemsList').mkaInit({
             "onDragItemClass": "drag-class-sample",
             "dragNdrop": false,
-            "rightClick": getContextMenu,
+            "dbClick": dbClick,
             "lasso": false,
             "selectAllShortcut": false,
             "copyPaste": false,

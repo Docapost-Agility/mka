@@ -25,10 +25,10 @@
             <ul class="nav navbar-nav">
                 <li><a href="../select/HTML.html">SELECT</a></li>
                 <li><a href="../selectAll/HTML.html">SELECT ALL</a></li>
-                <li class="active"><a href="../rightClick/HTML.html">RIGHT CLICK</a></li>
+                <li><a href="../rightClick/HTML.html">RIGHT CLICK</a></li>
                 <li><a href="../copyPaste/HTML.html">COPY PASTE</a></li>
                 <li><a href="../dragNDrop/HTML.html">DRAG AND DROP</a></li>
-                <li><a href="../dbClick/HTML.html">DOUBLE CLICK</a></li>
+                <li class="active"><a href="../dbClick/HTML.html">DOUBLE CLICK</a></li>
             </ul>
         </div>
     </div>
@@ -46,71 +46,63 @@
     <div>
         <ul class="nav nav-tabs">
             <li role="presentation"><a href="HTML.html">HTML</a></li>
-            <li role="presentation"><a href="CSS.html">CSS</a></li>
-            <li role="presentation" class="active"><a href="JS.html">JS</a></li>
+            <li role="presentation" class="active"><a href="CSS.html">CSS</a></li>
+            <li role="presentation"><a href="JS.html">JS</a></li>
         </ul>
     </div>
     <pre class="line-numbers" data-start=0>
-<code class="language-javascript">
-let getContextMenu = (selection) => {
-    let menu = [];
-
-    menu.push({
-        title: "action 1",
-        action: () => {
-            console.log("action 1");
-        }
-    });
-    menu.push({
-        title: "action 3",
-        action: () => {
-            console.log("action 3");
-        }
-    });
-    if (selection.length > 1) {
-        menu.push({
-            title: "action multiple",
-            action: () => {
-                console.log("action multiple");
-            }
-        });
-    }
-    return menu;
+<code class="language-css">
+#mka {
+    padding: 50px;
+    background-color: #f8f8f8;
+    border: 1px solid #ededed;
 }
 
+.mka-dropzone {
+    text-align: center;
+}
 
-document.getElementById('mka').mkaInit({
-    "onDragItemClass": "drag-class-sample",
+.mka-elt-selected {
+    background-color: #bebebe;
+}
 
-    "dragNdrop": false,
+.on-drag {
+    background-color: #cbcbcb !important;
+    opacity: 0.7;
+}
 
-    // To activate right click
-    "rightClick": getContextMenu,
+.folders-container {
+    background-color: #efefef;
+    border: 1px solid #afafaf;
+    padding: 15px 0;
+}
 
-    "lasso": false,
+#wrapper-drag {
+    position: relative;
+}
 
-    "selectAllShortcut": false,
+.drag-class-sample {
+    /* Sample class for onDragItemClass*/
+    color: white;
+    background: #403A3E;
+    background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
+    background: linear-gradient(to right, #BE5869, #403A3E);
+    border: 1px solid #403A3E;
+    padding: 5px;
+    text-align: center;
+    width: 250px;
+}
 
-    "copyPaste": false,
+.drag-class-sample span {
+    /* Sample class for onDragItemClass span */
+    color: white;
+    background: #cc2b5e;
+    background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
+    background: linear-gradient(to right, #753a88, #cc2b5e);
 
-    "count": "mka-count",
-
-    "pasteFunction": function (items) {
-        console.log(items);
-        let data = [];
-        items.map((elt) => {
-            console.log(elt.getAttribute("item-id"));
-            data.push(elt.getAttribute("item-id"));
-        });
-        console.group("Call WS with :");
-        console.group(data);
-        console.groupEnd();
-    }
-});
+}
 </code>
 </pre>
-
-
 </div>
 
 <div class="pull-right">
@@ -214,37 +206,14 @@ document.getElementById('mka').mkaInit({
     </style>
 
     <script type="text/javascript">
-        let getContextMenu = (selection) => {
-            let menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: () => {
-                    console.log("action 1");
-                }
-            });
-            menu.push({
-                title: "action 3",
-                action: () => {
-                    console.log("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: () => {
-                        console.log("action multiple");
-                    }
-                });
-            }
-            return menu;
+        let dbClick = (elt) => {
+            console.log('dbclick', elt);
         }
 
-
-        document.getElementById('mka').mkaInit({
+        document.getElementById('itemsList').mkaInit({
             "onDragItemClass": "drag-class-sample",
             "dragNdrop": false,
-            "rightClick": getContextMenu,
+            "dbClick": dbClick,
             "lasso": false,
             "selectAllShortcut": false,
             "copyPaste": false,

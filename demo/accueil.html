@@ -32,6 +32,7 @@
                 <li><a href="rightClick/HTML.html">RIGHT CLICK</a></li>
                 <li><a href="copyPaste/HTML.html">COPY PASTE</a></li>
                 <li><a href="dragNDrop/HTML.html">DRAG AND DROP</a></li>
+                <li><a href="dbClick/HTML.html">DOUBLE CLICK</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -202,11 +203,16 @@
         return menu;
     }
 
+    let dbClick = (elt) => {
+        console.log('dbclick', elt);
+    }
+
 
     document.getElementById('mka').mkaInit({
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": true,
         "rightClick": getContextMenu,
+        "dbClick": dbClick,
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,

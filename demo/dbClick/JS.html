@@ -25,10 +25,10 @@
             <ul class="nav navbar-nav">
                 <li><a href="../select/HTML.html">SELECT</a></li>
                 <li><a href="../selectAll/HTML.html">SELECT ALL</a></li>
-                <li class="active"><a href="../rightClick/HTML.html">RIGHT CLICK</a></li>
+                <li><a href="../rightClick/HTML.html">RIGHT CLICK</a></li>
                 <li><a href="../copyPaste/HTML.html">COPY PASTE</a></li>
                 <li><a href="../dragNDrop/HTML.html">DRAG AND DROP</a></li>
-                <li><a href="../dbClick/HTML.html">DOUBLE CLICK</a></li>
+                <li class="active"><a href="../dbClick/HTML.html">DOUBLE CLICK</a></li>
             </ul>
         </div>
     </div>
@@ -52,40 +52,17 @@
     </div>
     <pre class="line-numbers" data-start=0>
 <code class="language-javascript">
-let getContextMenu = (selection) => {
-    let menu = [];
-
-    menu.push({
-        title: "action 1",
-        action: () => {
-            console.log("action 1");
-        }
-    });
-    menu.push({
-        title: "action 3",
-        action: () => {
-            console.log("action 3");
-        }
-    });
-    if (selection.length > 1) {
-        menu.push({
-            title: "action multiple",
-            action: () => {
-                console.log("action multiple");
-            }
-        });
-    }
-    return menu;
+let dbClick = (elt) => {
+    console.log('dbclick', elt);
 }
 
-
-document.getElementById('mka').mkaInit({
+document.getElementById('itemsList').mkaInit({
     "onDragItemClass": "drag-class-sample",
 
     "dragNdrop": false,
 
-    // To activate right click
-    "rightClick": getContextMenu,
+    // To activate doubleClick
+    "dbClick": dbClick,
 
     "lasso": false,
 
@@ -214,37 +191,14 @@ document.getElementById('mka').mkaInit({
     </style>
 
     <script type="text/javascript">
-        let getContextMenu = (selection) => {
-            let menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: () => {
-                    console.log("action 1");
-                }
-            });
-            menu.push({
-                title: "action 3",
-                action: () => {
-                    console.log("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: () => {
-                        console.log("action multiple");
-                    }
-                });
-            }
-            return menu;
+        let dbClick = (elt) => {
+            console.log('dbclick', elt);
         }
 
-
-        document.getElementById('mka').mkaInit({
+        document.getElementById('itemsList').mkaInit({
             "onDragItemClass": "drag-class-sample",
             "dragNdrop": false,
-            "rightClick": getContextMenu,
+            "dbClick": dbClick,
             "lasso": false,
             "selectAllShortcut": false,
             "copyPaste": false,
