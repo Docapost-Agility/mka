@@ -97,6 +97,8 @@
 
     <h3>Nombre d'element sélectionné <span id="mka-count">0</span></h3>
 
+    <a onclick="switchMode()" >Switch mode</a>
+
     <ul id="itemsList" class="list-group" style="margin-top: 40px">
         <li class="list-group-item" item-id="1">
             <div class="card">
@@ -475,10 +477,22 @@
 <script src="build/mka.js"></script>
 
 <style>
-    #mka {
+    #itemsList {
         padding: 50px;
         background-color: #f8f8f8;
         border: 1px solid #ededed;
+    }
+
+    #itemsList.grid {
+        column-count: 4;
+        column-gap: 1em;
+    }
+
+    #itemsList.grid li.list-group-item {
+        display: inline-block;
+        margin: 0 0 1em;
+        width: 100%;
+        height: 120px;
     }
 
     .mka-dropzone {
@@ -533,6 +547,15 @@
 </style>
 
 <script type="text/javascript">
+    let switchMode = () => {
+        let list = document.getElementById("itemsList");
+        if (list.classList.contains("grid")) {
+            list.classList.remove("grid");
+        } else {
+            list.classList.add("grid");
+        }
+    }
+
     let getContextMenu = (selection) => {
         let menu = [];
 
@@ -562,6 +585,8 @@
     let dbClick = (elt) => {
         console.log('dbclick', elt);
     }
+
+
 
     document.getElementById('itemsList').mkaInit({
         "eltsSelectable": document.getElementById('itemsList').getElementsByTagName('li'),
