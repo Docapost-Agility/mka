@@ -59,7 +59,7 @@
         &lt;!--This line is optional-->
         &lt;h3>Number of selected items &lt;span id="mka-count">0&lt;/span>&lt;/h3>
 
-        &lt;ul id="mka" class="list-group" style="margin-top: 40px">
+        &lt;ul id="itemsList" class="list-group" style="margin-top: 40px">
             &lt;li class="mka-elt list-group-item" item-id="1">
                 &lt;div class="card">
                     &lt;div class="card-block">
@@ -82,7 +82,7 @@
 
         <h3>Number of selected items <span id="mka-count">0</span></h3>
 
-        <ul id="mka" class="list-group" style="margin-top: 40px">
+        <ul id="itemsList" class="list-group" style="margin-top: 40px">
             <li class="mka-elt list-group-item" item-id="1">
                 <div class="card">
                     <div class="card-block">
@@ -134,6 +134,10 @@
             text-align: center;
         }
 
+        .mka-elt-selecting {
+            background-color: #D1EEFF;
+        }
+
         .mka-elt-selected {
             background-color: #bebebe;
         }
@@ -171,12 +175,13 @@
             background: #cc2b5e;
             background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
             background: linear-gradient(to right, #753a88, #cc2b5e);
-        }
 
+        }
     </style>
 
     <script type="text/javascript">
-        document.getElementById('mka').mkaInit({
+        document.getElementById('itemsList').mkaInit({
+            "eltsSelectable": document.getElementById('itemsList').getElementsByTagName('li'),
             "onDragItemClass": "drag-class-sample",
             "dragNdrop": false,
             "lasso": false,
@@ -187,7 +192,7 @@
                 console.log(items);
                 let data = [];
                 items.map((elt) => {
-                    console.log(elt.getAttribute("item-id"));
+                    alert(elt.getAttribute("item-id"));
                     data.push(elt.getAttribute("item-id"));
                 });
                 console.group("Call WS with :");
