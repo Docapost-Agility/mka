@@ -65,8 +65,9 @@ let bindDragEvents = (element) => {
         const wrapperSize = selection[0].scrollWidth;
 
         //On rajoute le code html de chaque éléments dans une variable
+        //Chaque élément possède une div parente (Nécessaire lorsque le wrapper passe dans setWrapperStyle)
         Array.from(selection).map((elt) => {
-            innerCode += elt.innerHTML;
+            innerCode +=  '<div>' + elt.innerHTML + '</div>';
         });
 
         //On set le innerHTML avec tous les éléments récupérés précedemment
