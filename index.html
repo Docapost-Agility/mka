@@ -20,8 +20,8 @@
 <div class="container">
     <h2>Dossier</h2>
     <div class="row folders-container">
-        <div class="col-xs-6 col-sm-4 col-lg-3 folder">
-            <div class="mka-dropzone">
+        <div class="col-xs-6 col-sm-4 col-lg-3">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -29,8 +29,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6 col-sm-4 col-lg-3 folder">
-            <div class="mka-dropzone">
+        <div class="col-xs-6 col-sm-4 col-lg-3">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -38,8 +38,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6 col-sm-4 col-lg-3 folder">
-            <div class="mka-dropzone">
+        <div class="col-xs-6 col-sm-4 col-lg-3">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -47,8 +47,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6 col-sm-4 col-lg-3 folder">
-            <div class="mka-dropzone">
+        <div class="col-xs-6 col-sm-4 col-lg-3">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -56,8 +56,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6 col-sm-4 col-lg-3 folder">
-            <div class="mka-dropzone">
+        <div class="col-xs-6 col-sm-4 col-lg-3">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -65,8 +65,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6 col-sm-4 col-lg-3 folder">
-            <div class="mka-dropzone">
+        <div class="col-xs-6 col-sm-4 col-lg-3">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -74,8 +74,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6 col-sm-4 col-lg-3 folder">
-            <div class="mka-dropzone">
+        <div class="col-xs-6 col-sm-4 col-lg-3">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -83,8 +83,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-6 col-sm-4 col-lg-3 folder">
-            <div class="mka-dropzone">
+        <div class="col-xs-6 col-sm-4 col-lg-3">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -495,7 +495,7 @@
         height: 120px;
     }
 
-    .mka-dropzone {
+    .folder {
         text-align: center;
     }
 
@@ -586,12 +586,16 @@
         console.log('dbclick', elt);
     }
 
-
+    let drop = (elts, zone) => {
+        console.log('drop', elts);
+        console.log('dropZone', zone);
+    }
 
     document.getElementById('itemsList').mkaInit({
         "eltsSelectable": "li",
         "onDragItemClass": "drag-class-sample",
-        "dragNdrop": true,
+        "dragNdrop": drop,
+        "droppableElements": ".folders-container .folder",
         "rightClick": getContextMenu,
         "dbClick": dbClick,
         "lasso": true,
