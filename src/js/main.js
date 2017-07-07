@@ -234,12 +234,111 @@ let bindEvents = (container) => {
     });
 }
 
-let refreshComponents = (container, elements) => {
+let refreshComponents = (container) => {
     let components = container.mkaParams.components;
 
     Array.from(components).map(component => {
-        component.refresh && component.refresh(elements, container.mkaParams.configs);
+        component.refresh && component.refresh(container.mkaParams.selectables, container.mkaParams.configs);
     });
+}
+
+let updateSelectableElements = (container, elements) => {
+    if (container.mkaParams.selectables) {
+        Array.from(container.mkaParams.selectables).map(elt => {
+            elt.mkaSelectable = false;
+        });
+    }
+    Array.from(elements).map(elt => {
+        elt.mkaSelectable = true;
+    });
+    container.mkaParams.selectables = elements;
+}
+
+let mkaRefresh = (container) => {
+    let newSelectables = [].slice.call(container.querySelectorAll(container.mkaParams.configs.eltsSelectable));
+    let newSelection = [];
+    Array.from(container.mkaParams.selection).map(elt => {
+        if (newSelectables.indexOf(elt) !== -1) {
+            newSelection.push(elt);
+        }
+    });
+    updateSelection(container, newSelection);
+
+    updateSelectableElements(container, newSelectables);
+
+    refreshComponents(container);
+}
+
+let listenContainerDOMChange = (container) => {
+    let containsSelectableElement = (node) => {
+        //Check if removed node is selectable
+        if (!!node.mkaSelectable) {
+            return true;
+        }
+
+        //Check if added node is selectable
+        let parentNode = node.parentNode;
+        if (parentNode) {
+            let selectablesNodes = parentNode.querySelectorAll(container.mkaParams.configs.eltsSelectable);
+            for (let i = 0; i < selectablesNodes.length; i++) {
+                if (selectablesNodes.item(i) === node) {
+                    return true;
+                }
+            }
+        }
+
+        //Check if current node contains selectables elements
+        if (node.querySelectorAll && node.querySelectorAll(container.mkaParams.configs.eltsSelectable).length > 0) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    // Function to detect when dom change for refresh selectable elements
+    if (typeof MutationObserver !== "undefined") {
+        var observer = new MutationObserver(function (mutations) {
+            let needToRefresh = false;
+            mutations.forEach(function (mutation) {
+                if (!needToRefresh) {
+                    // If new element are added
+                    if (mutation.addedNodes) {
+                        for (let i = 0; i < mutation.addedNodes.length; i++) {
+                            needToRefresh = containsSelectableElement(mutation.addedNodes.item(i));
+                        }
+                    }
+                    // If element are removed
+                    if (mutation.removedNodes) {
+                        for (let i = 0; i < mutation.removedNodes.length; i++) {
+                            needToRefresh = containsSelectableElement(mutation.removedNodes.item(i));
+                        }
+                    }
+                }
+            });
+            if (needToRefresh) {
+                mkaRefresh(container);
+            }
+        });
+
+        observer.observe(container, {childList: true, subtree: true});
+    } else {
+        //IE < 11
+        container.addEventListener('DOMNodeRemoved', function (event) {
+            if (containsSelectableElement(event.target)) {
+                setTimeout(() => {
+                    mkaRefresh(container);
+                }, 0);
+            }
+        });
+        container.addEventListener('DOMNodeInserted', function (event) {
+            if (containsSelectableElement(event.target)) {
+                setTimeout(() => {
+                    mkaRefresh(container);
+                }, 0);
+            }
+        });
+    }
 }
 
 HTMLElement.prototype.mkaInit = function (clientConfigs) {
@@ -248,11 +347,13 @@ HTMLElement.prototype.mkaInit = function (clientConfigs) {
 
     let configs = getConfigs(clientConfigs);
 
+    let selectables = [].slice.call(container.querySelectorAll(configs.eltsSelectable));
+
     container.mkaParams = {
         configs: configs,
-        selectables: [].slice.call(configs.eltsSelectable),
         selection: []
     };
+    updateSelectableElements(container, selectables);
 
     pushComponents(container);
 
@@ -260,9 +361,11 @@ HTMLElement.prototype.mkaInit = function (clientConfigs) {
 
     bindEvents(container);
 
+    listenContainerDOMChange(container);
+
 };
 
-HTMLElement.prototype.mkaRefresh = function (elements) {
+HTMLElement.prototype.mkaRefresh = function () {
     let container = this;
 
     if (!container.mkaParams || !container.mkaParams.configs) {
@@ -270,53 +373,6 @@ HTMLElement.prototype.mkaRefresh = function (elements) {
         return false;
     }
 
-    updateSelection(container, []);
-    container.mkaParams.selectables = [].slice.call(elements);
+    mkaRefresh(container);
 
-    refreshComponents(container, elements);
-}
-
-HTMLElement.prototype.mkaAdd = function (elements) {
-    let container = this;
-
-    if (!container.mkaParams || !container.mkaParams.configs) {
-        console.log("No MKA found on this element, call mkaInit first");
-        return false;
-    }
-
-    Array.from([].slice.call(elements)).map(elt => {
-        if (container.mkaParams.selectables.indexOf(elt) === -1) {
-            container.mkaParams.selectables.push(elt);
-        }
-    });
-
-    refreshComponents(container, elements);
-}
-
-HTMLElement.prototype.mkaRemove = function (elements) {
-    let container = this;
-
-    if (!container.mkaParams || !container.mkaParams.configs) {
-        console.log("No MKA found on this element, call mkaInit first");
-        return false;
-    }
-
-    let newSelection = [];
-    Array.from(container.mkaParams.selection).map(elt => {
-        if ([].slice.call(elements).indexOf(elt) === -1) {
-            newSelection.push(elt);
-        }
-    });
-    updateSelection(container, newSelection);
-
-    let selectables = [];
-    Array.from(container.mkaParams.selectables).map(elt => {
-        if ([].slice.call(elements).indexOf(elt) === -1) {
-            selectables.push(elt);
-        }
-    });
-    container.mkaParams.selectables = selectables;
-
-
-    refreshComponents(container, elements);
 }
