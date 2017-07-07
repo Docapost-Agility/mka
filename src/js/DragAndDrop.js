@@ -1,35 +1,25 @@
-// let mka = document.getElementById("mka");
-let parentFunctions = {};
-let config = {};
-let defaultConfig = {
-    dropableClass: '.mka-dropzone'
-};
-
-export let init = (conf, publicFunctions) => {
-    config = conf;
-    Object.keys(defaultConfig).map((i) => {
-        config[i] = config[i] || defaultConfig[i];
-    });
-
-    parentFunctions = publicFunctions;
+export let init = (conf, parentFunctions) => {
+    // config = conf;
+    parentFunctions.setProperty('isDragging', false);
+    parentFunctions.setProperty('draggableTarget', false);
 
     let elements = parentFunctions.getSelectablesElements();
-    let droppers = document.querySelectorAll(config.dropableClass);
 
     //Application du drag event pour chaque element ayant la classe mka-elt
     Array.from(elements).map(elt => {
-        bindDragEvents(elt);
+        bindDragEvents(elt, parentFunctions, conf);
     });
 
-    //Application du drop event pour chaque element ayant la classe mka-dropzone
-    Array.from(droppers).map(elt => bindDropEvents(elt));
+    if (conf.droppableElements) {
+        let droppers = document.querySelectorAll(conf.droppableElements);
+        //Application du drop event pour chaque element ayant la classe mka-dropzone
+        Array.from(droppers).map(elt => bindDropEvents(elt, parentFunctions, conf));
+    }
 }
 
-let isDragging = false;
-let draggableTarget = false;
 
-export let onSelectionUpdate = (selection) => {
-    Array.from(parentFunctions.getSelectablesElements()).map(elt => {
+export let onSelectionUpdate = (selection, selectables) => {
+    Array.from(selectables).map(elt => {
         elt.draggable = false;
     });
     Array.from(selection).map(elt => {
@@ -38,20 +28,29 @@ export let onSelectionUpdate = (selection) => {
 };
 
 export let mkaEvents = {
-    onmousedown: (event) => {
-        draggableTarget = event.target && parentFunctions.elementIsSelected(event.target);
+    onmousedown: (event, parentFunctions) => {
+        parentFunctions.setProperty('draggableTarget', event.target && parentFunctions.elementIsSelected(event.target));
         return false;
     }
 };
 
 export let documentEvents = {
-    onmousemove: () => {
-        isDragging = draggableTarget;
+    onmousemove: (event, parentFunctions) => {
+        let isDragging = parentFunctions.getProperty('draggableTarget');
+        parentFunctions.setProperty('isDragging', isDragging);
         return isDragging;
     }
 };
 
-let bindDragEvents = (element) => {
+export let windowEvents = {
+    onmouseup: (event, parentFunctions) => {
+        parentFunctions.setProperty('isDragging', false);
+        parentFunctions.setProperty('draggableTarget', false);
+        return false;
+    }
+};
+
+let bindDragEvents = (element, parentFunctions, conf) => {
 
     element.addEventListener('dragstart', function (e) {
         // On recupere les élts sélectionnés
@@ -78,7 +77,7 @@ let bindDragEvents = (element) => {
         wrapper.style.position = "absolute";
         wrapper.style.top = "-10000px";
 
-        wrapper = setWrapperStyle(wrapper);
+        wrapper = setWrapperStyle(wrapper, conf);
 
         document.body.appendChild(wrapper);
 
@@ -98,7 +97,7 @@ let bindDragEvents = (element) => {
     });
 }
 
-export function bindDropEvents(dropper) {
+let bindDropEvents = (dropper, parentFunctions, conf) => {
 
     dropper.addEventListener('dragover', function (e) {
         //Ajout de la classe pour le hover de la dropzone
@@ -115,20 +114,17 @@ export function bindDropEvents(dropper) {
     });
 
     dropper.addEventListener('drop', function (e) {
-
-        // Lorsque l'utilisateur relache la sélection sur la zone dropable 
+        // Lorsque l'utilisateur relache la sélection sur la zone dropable
         // on execute l'action défini par l'utilsateur
         let selection = parentFunctions.getSelection();
-        config.dropFunction([1, 2]);
-        // Suppression des éléments selectionnés
-        // On recupere les élts sélectionnés
-        parentFunctions.removeElements(selection);
-
+        if (typeof conf.dragNdrop === 'function') {
+            conf.dragNdrop(selection, dropper);
+        }
     });
 }
 
 
-let setWrapperStyle = (wrapper) => {
+let setWrapperStyle = (wrapper, conf) => {
     //On récupère les éléments enfants du wrapper qui servira pour le drag
     let wrapperChildren = wrapper.children;
     //On choisit le nombre de pixels qui séparera les éléments en fonction du nombre d'éléments dans la liste
@@ -141,8 +137,8 @@ let setWrapperStyle = (wrapper) => {
         let child = wrapperChildren[i];
 
         //Si l'utilisateur a configuré le onDragItemsClass, on applique la classe en question
-        if (config.onDragItemClass) {
-            child.classList.add(config.onDragItemClass);
+        if (conf.onDragItemClass) {
+            child.classList.add(conf.onDragItemClass);
         } else {
             //Sinon on force un style par défaut si l'utilisateur n'a pas configuré le onDragItemsClass
             child.style.color = "black";
@@ -151,11 +147,8 @@ let setWrapperStyle = (wrapper) => {
             child.style.padding = "5px";
             child.style.textAlign = "center";
             child.style.width = "100%";
-
-
             // console.log("You can use your own class");
         }
-
 
         // Chaque élément a une position abolute
         // On multiplie i par un nombre de pixels pour indiquer le décalage et avoir un effet d'empilement
@@ -179,7 +172,7 @@ let setWrapperStyle = (wrapper) => {
             span.style.textAlign = "center";
 
             //Si on n'a pas configuré le onDragItemClass alors on applique un style par défaut
-            if (!config.onDragItemClass) {
+            if (!conf.onDragItemClass) {
                 span.style.backgroundColor = "red";
                 span.style.color = "white";
             }
