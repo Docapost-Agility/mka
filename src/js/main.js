@@ -8,7 +8,7 @@ import * as arrows from './arrows';
 import * as deleteShortcut from './deleteShortcut';
 import * as selectAllShortcut from './selectAllShortcut';
 
-let config = {
+let defaultConfigs = {
     "eltsSelectable": [],
     "eltSelectedClass": "mka-elt-selected",
     "eltSelectingClass": "mka-elt-selecting",
@@ -36,78 +36,102 @@ let config = {
     }
 }
 
-config.actions = [];
+let updateSelection = (container, newSelection) => {
+    let configs = container.mkaParams.configs;
+    let components = container.mkaParams.components;
+    let selectables = container.mkaParams.selectables;
 
-let selectables = [];
-let selection = [];
-let components = [];
+    let sameSelection = false;
+    if (container.mkaParams.selection.length === newSelection.length) {
+        sameSelection = true;
+        Array.from(container.mkaParams.selection).map(elt => {
+            if (newSelection.indexOf(elt) === -1) {
+                sameSelection = false;
+            }
+        });
+    }
+    if (!sameSelection) {
+        container.mkaParams.selection = newSelection;
+        Array.from(selectables).map(elt => {
+            elt.classList.remove(configs.eltSelectedClass);
+        });
+        Array.from(container.mkaParams.selection).map(elt => {
+            elt.classList.add(configs.eltSelectedClass);
+        });
+        Array.from(components).map(component => {
+            component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection);
+        });
+    }
+}
 
-HTMLElement.prototype.mkaInit = function (clientConfig) {
-    let mka = this;
-
-    Object.keys(clientConfig).map((i) => {
-        config[i] = clientConfig[i];
+let getConfigs = (clientConfigs) => {
+    let configs = {};
+    Object.keys(defaultConfigs).map((i) => {
+        configs[i] = clientConfigs[i] || defaultConfigs[i];
     });
+    return configs;
+}
 
-    selectables = [].slice.call(config.eltsSelectable);
+let pushComponents = (container) => {
+    let configs = container.mkaParams.configs;
 
-    // on désactive la selection de text
-    mka.style.userSelect = "none";
+    container.mkaParams.components = [];
 
-    if (!!config.dbClick) {
-        components.push(dbClick);
+    if (!!configs.dbClick) {
+        container.mkaParams.components.push(dbClick);
     }
 
-    if (!!config.rightClick) {
-        components.push(rightClick);
+    if (!!configs.rightClick) {
+        container.mkaParams.components.push(rightClick);
     }
 
-    if (config.dragNdrop) {
-        components.push(dndHandler);
+    if (configs.dragNdrop) {
+        container.mkaParams.components.push(dndHandler);
     }
 
-    if(config.selectAllShortcut){
-        components.push(selectAllShortcut);
+    if (configs.selectAllShortcut) {
+        container.mkaParams.components.push(selectAllShortcut);
     }
 
-    if (config.copyPaste) {
-        components.push(copyPaste);
+    if (configs.copyPaste) {
+        container.mkaParams.components.push(copyPaste);
     }
 
-    if(config.deleteShortcut) {
-        components.push(deleteShortcut);
+    if (configs.deleteShortcut) {
+        container.mkaParams.components.push(deleteShortcut);
     }
 
-    if (!!config.arrows) {
-        components.push(arrows);
+    if (!!configs.arrows) {
+        container.mkaParams.components.push(arrows);
     }
-    if (!!config.count) {
-        components.push(count);
+    if (!!configs.count) {
+        container.mkaParams.components.push(count);
     }
 
-    // if(config.deleteShortcut) {
-    //     deleteShortcut.active(config);
-    // }
+    container.mkaParams.components.push(select);
+}
 
-    components.push(select);
-
+let initComponents = (container) => {
+    let configs = container.mkaParams.configs;
+    let components = container.mkaParams.components;
     let publicFunctions = {
         getContainer: () => {
-            return mka;
+            return container;
         },
         elementIsSelected: (elt) => {
-            if (elt.classList && elt.classList.contains(config.eltSelectedClass)) {
+            if (elt.classList && elt.classList.contains(configs.eltSelectedClass)) {
                 return true;
             }
             while (elt.parentNode) {
                 elt = elt.parentNode;
-                if (elt.classList && elt.classList.contains(config.eltSelectedClass)) {
+                if (elt.classList && elt.classList.contains(configs.eltSelectedClass)) {
                     return true;
                 }
             }
             return false;
         },
         getSelectableElement: (elt) => {
+            let selectables = container.mkaParams.selectables;
             if (elt.classList && selectables.indexOf(elt) !== -1) {
                 return elt;
             }
@@ -120,11 +144,12 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
             return null;
         },
         getSelectablesElements: () => {
-            return selectables;
+            return container.mkaParams.selectables;
+            ;
         },
         getLastSelectedInDom: () => {
             let last = null;
-            Array.from(selection).map(elt => {
+            Array.from(container.mkaParams.selection).map(elt => {
                 if (!last || elt.offsetTop > last.offsetTop || elt.offsetTop === last.offsetTop && elt.offsetLeft > last.offsetLeft) {
                     last = elt;
                 }
@@ -133,59 +158,39 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
         },
         getSelection: () => {
             let copy = [];
-            Array.from(selection).map(elt => {
+            Array.from(container.mkaParams.selection).map(elt => {
                 copy.push(elt);
             });
             return copy;
         },
         updateSelection: (newSelection) => {
-            let sameSelection = false;
-            if (selection.length === newSelection.length) {
-                sameSelection = true;
-                Array.from(selection).map(elt => {
-                    if (newSelection.indexOf(elt) === -1) {
-                        sameSelection = false;
-                    }
-                });
-            }
-            if (!sameSelection) {
-                selection = newSelection;
-                Array.from(selectables).map(elt => {
-                    elt.classList.remove(config.eltSelectedClass);
-                });
-                Array.from(selection).map(elt => {
-                    elt.classList.add(config.eltSelectedClass);
-                });
-                Array.from(components).map(component => {
-                    component.onSelectionUpdate && component.onSelectionUpdate(selection);
-                });
-            }
+            updateSelection(container, newSelection);
         },
         removeElements: (elements) => {
             Array.from(elements).map(elt => {
-                let index = selectables.indexOf(elt);
+                let index = container.mkaParams.selectables.indexOf(elt);
                 if (index !== -1) {
-                    selectables.splice(index, 1);
+                    container.mkaParams.selectables.splice(index, 1);
                 }
-                index = selection.indexOf(elt);
+                index = container.mkaParams.selection.indexOf(elt);
                 if (index !== -1) {
-                    selection.splice(index, 1);
+                    container.mkaParams.selection.splice(index, 1);
                 }
                 elt.parentNode.removeChild(elt);
             });
             Array.from(components).map(component => {
-                component.onSelectionUpdate && component.onSelectionUpdate(selection);
+                component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection);
             });
         },
         isMkaContainerFocused: (target) => {
-            if (target === mka) {
+            if (target === container) {
                 return true;
             }
 
             while (target.parentNode) {
                 target = target.parentNode;
 
-                if (target === mka) {
+                if (target === container) {
                     return true;
                 }
             }
@@ -195,8 +200,12 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
     };
 
     Array.from(components).map(component => {
-        component.init && component.init(config, publicFunctions);
+        component.init && component.init(configs, publicFunctions);
     });
+}
+
+let bindEvents = (container) => {
+    let components = container.mkaParams.components;
 
     let bindComponentsEvents = (target, eventName) => {
         target.value[eventName] = (event) => {
@@ -213,7 +222,7 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
     let mouseEventsTargets = [
         {name: "windowEvents", value: window},
         {name: "documentEvents", value: document.body},
-        {name: "mkaEvents", value: mka}
+        {name: "mkaEvents", value: container}
     ];
 
     let keyEventsList = ["onkeydown", "onkeypress", "onkeyup"];
@@ -227,4 +236,91 @@ HTMLElement.prototype.mkaInit = function (clientConfig) {
     Array.from(keyEventsList).map(keyEventName => {
         bindComponentsEvents({name: "windowEvents", value: window}, keyEventName);
     });
+}
+
+let refreshComponents = (container, elements) => {
+    let components = container.mkaParams.components;
+
+    Array.from(components).map(component => {
+        component.refresh && component.refresh(elements, container.mkaParams.configs);
+    });
+}
+
+HTMLElement.prototype.mkaInit = function (clientConfigs) {
+    let container = this;
+    container.style.userSelect = "none";
+
+    let configs = getConfigs(clientConfigs);
+
+    container.mkaParams = {
+        configs: configs,
+        selectables: [].slice.call(configs.eltsSelectable),
+        selection: []
+    };
+
+    pushComponents(container);
+
+    initComponents(container);
+
+    bindEvents(container);
+
 };
+
+HTMLElement.prototype.mkaRefresh = function (elements) {
+    let container = this;
+
+    if (!container.mkaParams || !container.mkaParams.configs) {
+        console.log("No MKA found on this element, call mkaInit first");
+        return false;
+    }
+
+    updateSelection(container, []);
+    container.mkaParams.selectables = [].slice.call(elements);
+
+    refreshComponents(container, elements);
+}
+
+HTMLElement.prototype.mkaAdd = function (elements) {
+    let container = this;
+
+    if (!container.mkaParams || !container.mkaParams.configs) {
+        console.log("No MKA found on this element, call mkaInit first");
+        return false;
+    }
+
+    Array.from([].slice.call(elements)).map(elt => {
+        if (container.mkaParams.selectables.indexOf(elt) === -1) {
+            container.mkaParams.selectables.push(elt);
+        }
+    });
+
+    refreshComponents(container, elements);
+}
+
+HTMLElement.prototype.mkaRemove = function (elements) {
+    let container = this;
+
+    if (!container.mkaParams || !container.mkaParams.configs) {
+        console.log("No MKA found on this element, call mkaInit first");
+        return false;
+    }
+
+    let newSelection = [];
+    Array.from(container.mkaParams.selection).map(elt => {
+        if ([].slice.call(elements).indexOf(elt) === -1) {
+            newSelection.push(elt);
+        }
+    });
+    updateSelection(container, newSelection);
+
+    let selectables = [];
+    Array.from(container.mkaParams.selectables).map(elt => {
+        if ([].slice.call(elements).indexOf(elt) === -1) {
+            selectables.push(elt);
+        }
+    });
+    container.mkaParams.selectables = selectables;
+
+
+    refreshComponents(container, elements);
+}
