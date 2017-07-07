@@ -591,6 +591,14 @@
         console.log('dropZone', zone);
     }
 
+    let deleteItems = (elements) => {
+        elements.forEach((elt) => {
+            if (elt.parentNode) {
+                elt.parentNode.removeChild(elt);
+            }
+        })
+    }
+
     document.getElementById('itemsList').mkaInit({
         "eltsSelectable": "li",
         "onDragItemClass": "drag-class-sample",
@@ -601,6 +609,7 @@
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,
+        "deleteShortcut": deleteItems,
         "count": "mka-count",
         "pasteFunction": function (items) {
             console.log(items);
