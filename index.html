@@ -589,7 +589,7 @@
 
 
     document.getElementById('itemsList').mkaInit({
-        "eltsSelectable": document.getElementById('itemsList').getElementsByTagName('li'),
+        "eltsSelectable": "li",
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": true,
         "rightClick": getContextMenu,
@@ -614,6 +614,7 @@
         //     console.log("drop du client");
         // }
     });
+
 </script>
 
 </body>
