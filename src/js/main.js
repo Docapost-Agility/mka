@@ -9,11 +9,12 @@ import * as deleteShortcut from './deleteShortcut';
 import * as selectAllShortcut from './selectAllShortcut';
 
 let defaultConfigs = {
-    "eltsSelectable": [],
+    "eltsSelectable": '',
     "eltSelectedClass": "mka-elt-selected",
     "eltSelectingClass": "mka-elt-selecting",
     "onDragItemClass": null,
-    "dragNdrop": true,
+    "dragNdrop": false,
+    "droppableElements": '',
     "rightClick": false,
     "dbClick": false,
     "lasso": true,
@@ -22,10 +23,6 @@ let defaultConfigs = {
     "arrows": true,
     "deleteShortcut": false,
     "count": "",
-    "dropFunction": function (ids) {
-        console.log(ids);
-        console.log("Default drop function, think to implement this function");
-    },
     "pasteFunction": (items) => {
         console.log(items);
         console.log("Default past function, think to implement this function");
@@ -55,7 +52,7 @@ let updateSelection = (container, newSelection) => {
             elt.classList.add(configs.eltSelectedClass);
         });
         Array.from(components).map(component => {
-            component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection);
+            component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection, container.mkaParams.selectables);
         });
     }
 }
@@ -107,12 +104,21 @@ let pushComponents = (container) => {
     container.mkaParams.components.push(select);
 }
 
-let initComponents = (container) => {
+let getPublicFunctions = (container) => {
     let configs = container.mkaParams.configs;
     let components = container.mkaParams.components;
-    let publicFunctions = {
+
+    container.mkaParams.customProperties = container.mkaParams.customProperties || {};
+
+    return {
         getContainer: () => {
             return container;
+        },
+        setProperty: (key, value) => {
+            container.mkaParams.customProperties[key] = value;
+        },
+        getProperty: (key) => {
+            return container.mkaParams.customProperties[key];
         },
         elementIsSelected: (elt) => {
             if (elt.classList && elt.classList.contains(configs.eltSelectedClass)) {
@@ -175,7 +181,7 @@ let initComponents = (container) => {
                 elt.parentNode.removeChild(elt);
             });
             Array.from(components).map(component => {
-                component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection);
+                component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection, container.mkaParams.selectables);
             });
         },
         isMkaContainerFocused: (target) => {
@@ -193,14 +199,20 @@ let initComponents = (container) => {
 
             return false;
         }
-    };
+    }
+}
+
+let initComponents = (container) => {
+    let configs = container.mkaParams.configs;
+    let components = container.mkaParams.components;
 
     Array.from(components).map(component => {
-        component.init && component.init(configs, publicFunctions);
+        component.init && component.init(configs, getPublicFunctions(container));
     });
 }
 
 let bindEvents = (container) => {
+    let publicFunctions = getPublicFunctions(container)
     let components = container.mkaParams.components;
 
     let bindComponentsEvents = (target, eventName) => {
@@ -208,7 +220,7 @@ let bindEvents = (container) => {
             let stop = false;
             Array.from(components).map(component => {
                 if (!stop) {
-                    stop = component[target.name] && component[target.name][eventName] && component[target.name][eventName](event) || false;
+                    stop = component[target.name] && component[target.name][eventName] && component[target.name][eventName](event, publicFunctions) || false;
                 }
             });
         }
