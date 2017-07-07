@@ -20,7 +20,7 @@ let defaultConfigs = {
     "selectAllShortcut": true,
     "copyPaste": true,
     "arrows": true,
-    "deleteShortcut": true,
+    "deleteShortcut": false,
     "count": "",
     "dropFunction": function (ids) {
         console.log(ids);
@@ -29,10 +29,6 @@ let defaultConfigs = {
     "pasteFunction": (items) => {
         console.log(items);
         console.log("Default past function, think to implement this function");
-    },
-    "deleteFunction": function (items) {
-        console.log(items);
-        console.log("Default delete function, think to implement this function");
     }
 }
 
@@ -97,7 +93,7 @@ let pushComponents = (container) => {
         container.mkaParams.components.push(copyPaste);
     }
 
-    if (configs.deleteShortcut) {
+    if (!!configs.deleteShortcut) {
         container.mkaParams.components.push(deleteShortcut);
     }
 

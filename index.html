@@ -586,6 +586,14 @@
         console.log('dbclick', elt);
     }
 
+    let deleteItems = (elements) => {
+        elements.forEach((elt) => {
+            if (elt.parentNode) {
+                elt.parentNode.removeChild(elt);
+            }
+        })
+    }
+
 
 
     document.getElementById('itemsList').mkaInit({
@@ -597,6 +605,7 @@
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,
+        "deleteShortcut": deleteItems,
         "count": "mka-count",
         "pasteFunction": function (items) {
             console.log(items);
