@@ -1,6 +1,6 @@
-export let onSelectionUpdate = (selection, selectables, conf) => {
+export let onSelectionUpdate = (params) => {
 // si l'élément HTML mka-count existe
-    if (!!document.getElementById(conf.count)) {
-        document.getElementById(conf.count).innerHTML = selection.length;
+    if (params.selection && params.configs && !!document.getElementById(params.configs.count)) {
+        document.getElementById(params.configs.count).innerHTML = params.selection.length;
     }
 }
