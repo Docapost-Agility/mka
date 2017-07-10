@@ -29,7 +29,7 @@ let defaultConfigs = {
     }
 }
 
-let updateSelection = (container, newSelection) => {
+let updateSelection = (container, newSelection, actionId) => {
     let configs = container.mkaParams.configs;
     let components = container.mkaParams.components;
     let selectables = container.mkaParams.selectables;
@@ -51,8 +51,15 @@ let updateSelection = (container, newSelection) => {
         Array.from(container.mkaParams.selection).map(elt => {
             elt.classList.add(configs.eltSelectedClass);
         });
+        let params = {
+            selection: container.mkaParams.selection,
+            selectables: container.mkaParams.selectables,
+            configs: container.mkaParams.configs,
+            parentFunctions: getPublicFunctions(container),
+            actionId: actionId
+        }
         Array.from(components).map(component => {
-            component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection, container.mkaParams.selectables, container.mkaParams.configs);
+            component.onSelectionUpdate && component.onSelectionUpdate(params);
         });
     }
 }
@@ -165,8 +172,8 @@ let getPublicFunctions = (container) => {
             });
             return copy;
         },
-        updateSelection: (newSelection) => {
-            updateSelection(container, newSelection);
+        updateSelection: (newSelection, actionId) => {
+            updateSelection(container, newSelection, actionId);
         },
         removeElements: (elements) => {
             Array.from(elements).map(elt => {

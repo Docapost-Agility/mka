@@ -18,11 +18,11 @@ export let init = (conf, parentFunctions) => {
 }
 
 
-export let onSelectionUpdate = (selection, selectables) => {
-    Array.from(selectables).map(elt => {
+export let onSelectionUpdate = (params) => {
+    Array.from(params.selectables).map(elt => {
         elt.draggable = false;
     });
-    Array.from(selection).map(elt => {
+    Array.from(params.selection).map(elt => {
         elt.draggable = true;
     });
 };
