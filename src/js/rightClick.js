@@ -1,12 +1,7 @@
-let parentFunctions = {};
-let config = {};
 const mkarcmenuId = 'mkarcmenu';
 
-export let init = (conf, publicFunctions) => {
-    config = conf;
-    parentFunctions = publicFunctions;
-
-    bindContextMenu();
+export let init = (conf, parentFunctions) => {
+    bindContextMenu(conf, parentFunctions);
 }
 
 export let windowEvents = {
@@ -34,7 +29,7 @@ let removeMkaRcMenu = () => {
     return false;
 }
 
-let bindContextMenu = () => {
+let bindContextMenu = (conf, parentFunctions) => {
 
     // On désactive le click droit sur l'élément principal
     parentFunctions.getContainer().addEventListener('contextmenu', (event) => {
@@ -49,7 +44,7 @@ let bindContextMenu = () => {
 
             let selection = parentFunctions.getSelection();
 
-            let contextMenu = config.rightClick(selection);
+            let contextMenu = conf.rightClick(selection);
 
             let newMenu = document.createElement('ul');
 
