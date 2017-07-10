@@ -1,16 +1,27 @@
 export let init = (conf, parentFunctions) => {
-    parentFunctions.setProperty('currentFocus', null);
+    parentFunctions.setProperty('arrows.currentFocus', null);
+    parentFunctions.setProperty('arrows.isContainerFocused', false);
 }
 
 export let windowEvents = {
+    onmousedown: (e, parentFunctions) => {
+        parentFunctions.setProperty('arrows.isContainerFocused', parentFunctions.isMkaContainerFocused(e.target));
+        return false;
+    },
     onkeydown: (event, parentFunctions) => {
         let code = event.which;
         if (code == 37 || code == 38 || code == 39 || code == 40) {
             let lastSelectedInDom = parentFunctions.getLastSelectedInDom();
             //currentFocus = event.shiftKey && (currentFocus || lastInDom) || null;
 
-            if (!!lastSelectedInDom) {
-
+            if (!lastSelectedInDom) {
+                if (parentFunctions.getProperty('arrows.isContainerFocused')) {
+                    let firstElement = parentFunctions.getSelectablesElements()[0];
+                    if (firstElement) {
+                        parentFunctions.updateSelection([firstElement]);
+                    }
+                }
+            } else {
                 let centerScroll = (elt) => {
                     let scrollX = (elt.offsetBodyLeft() + elt.offsetWidth / 2) - (window.scrollX + window.innerWidth / 2);
                     let scrollY = (elt.offsetBodyTop() + elt.offsetHeight / 2) - (window.scrollY + window.innerHeight / 2);
