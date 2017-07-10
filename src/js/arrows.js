@@ -1,15 +1,9 @@
-let parentFunctions = {};
-let config = {};
-
-export let init = (conf, publicFunctions) => {
-    config = conf;
-    parentFunctions = publicFunctions;
+export let init = (conf, parentFunctions) => {
+    parentFunctions.setProperty('currentFocus', null);
 }
 
-let currentFocus = null;
-
 export let windowEvents = {
-    onkeydown: (event) => {
+    onkeydown: (event, parentFunctions) => {
         let code = event.which;
         if (code == 37 || code == 38 || code == 39 || code == 40) {
             let lastSelectedInDom = parentFunctions.getLastSelectedInDom();
