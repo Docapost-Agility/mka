@@ -220,14 +220,14 @@ let bindEvents = (container) => {
         target.value[eventName] = (event) => {
             let stop = false;
             if (saveIfAlreadyExists && typeof saveIfAlreadyExists === 'function') {
-                stop = saveIfAlreadyExists(event);
+                stop = saveIfAlreadyExists(event).forceStop;
             }
             Array.from(components).map(component => {
                 if (!stop) {
                     stop = component[target.name] && component[target.name][eventName] && component[target.name][eventName](event, publicFunctions, container.mkaParams.configs) || false;
                 }
             });
-            return stop;
+            return {forceStop: stop};
         }
     }
 
