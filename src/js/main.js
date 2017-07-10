@@ -52,7 +52,7 @@ let updateSelection = (container, newSelection) => {
             elt.classList.add(configs.eltSelectedClass);
         });
         Array.from(components).map(component => {
-            component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection, container.mkaParams.selectables);
+            component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection, container.mkaParams.selectables, container.mkaParams.configs);
         });
     }
 }

@@ -1,14 +1,6 @@
-let parentFunctions = {};
-let config = {};
-
-export let init = (conf, publicFunctions) => {
-    config = conf;
-    parentFunctions = publicFunctions;
-}
-
-export let onSelectionUpdate = (selection) => {
+export let onSelectionUpdate = (selection, selectables, conf) => {
 // si l'élément HTML mka-count existe
-    if (!!document.getElementById(config.count)) {
-        document.getElementById(config.count).innerHTML = selection.length;
+    if (!!document.getElementById(conf.count)) {
+        document.getElementById(conf.count).innerHTML = selection.length;
     }
 }
