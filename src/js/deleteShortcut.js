@@ -1,17 +1,10 @@
-let parentFunctions = {};
-let config = {};
-
-export let init = (conf, publicFunctions) => {
-    config = conf;
-    parentFunctions = publicFunctions;
-}
 export let windowEvents = {
-    onkeyup: (e) => {
+    onkeyup: (e, parentFunctions, conf) => {
 
         let selection = parentFunctions.getSelection();
 
-        if(e.which == '46' && selection.length > 0 && typeof config.deleteShortcut === 'function') {
-            config.deleteShortcut(selection);
+        if(e.which == '46' && selection.length > 0 && typeof conf.deleteShortcut === 'function') {
+            conf.deleteShortcut(selection);
             return true;
         }
 

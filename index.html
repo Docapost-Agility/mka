@@ -656,6 +656,14 @@
         })
     }
 
+    let deleteFolders = (elements) => {
+        elements.forEach((elt) => {
+            if (elt.parentNode && elt.parentNode.parentNode) {
+                elt.parentNode.parentNode.removeChild(elt.parentNode);
+            }
+        })
+    }
+
     document.getElementById('itemsList').mkaInit({
         "eltsSelectable": "li",
         "onDragItemClass": "drag-class-sample",
@@ -694,6 +702,7 @@
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,
+        "deleteShortcut": deleteFolders,
         "count": "mka-count-folders",
         "pasteFunction": function (items) {
             console.log(items);
