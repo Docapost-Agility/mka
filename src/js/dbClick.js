@@ -1,17 +1,9 @@
-let parentFunctions = {};
-let config = {};
-
-export let init = (conf, publicFunctions) => {
-    config = conf;
-    parentFunctions = publicFunctions;
-}
-
 export let mkaEvents = {
-    ondblclick: (e) => {
+    ondblclick: (e, parentFunctions, conf) => {
         let element = parentFunctions.getSelectableElement(e.target);
-        if (!!element && typeof config.dbClick === 'function') {
+        if (!!element && typeof conf.dbClick === 'function') {
             parentFunctions.updateSelection([element]);
-            config.dbClick(element);
+            conf.dbClick(element);
             return true;
         }
         return false;
