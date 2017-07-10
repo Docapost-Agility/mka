@@ -593,7 +593,7 @@
         }
     }
 
-    let getContextMenu = (selection) => {
+    let getContextMenuItems = (selection) => {
         let menu = [];
 
         menu.push({
@@ -606,6 +606,26 @@
             title: "action 3",
             action: () => {
                 console.log("action 3");
+            }
+        });
+        if (selection.length > 1) {
+            menu.push({
+                title: "action multiple",
+                action: () => {
+                    console.log("action multiple");
+                }
+            });
+        }
+        return menu;
+    }
+
+    let getContextMenuFolders = (selection) => {
+        let menu = [];
+
+        menu.push({
+            title: "action 1",
+            action: () => {
+                console.log("action 1");
             }
         });
         if (selection.length > 1) {
@@ -641,7 +661,7 @@
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": drop,
         "droppableElements": ".folders-container .folder",
-        "rightClick": getContextMenu,
+        "rightClick": getContextMenuItems,
         "dbClick": dbClick,
         "lasso": true,
         "selectAllShortcut": true,
@@ -669,7 +689,7 @@
         "eltsSelectable": ".folder",
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": true,
-        "rightClick": getContextMenu,
+        "rightClick": getContextMenuFolders,
         "dbClick": dbClick,
         "lasso": true,
         "selectAllShortcut": true,
