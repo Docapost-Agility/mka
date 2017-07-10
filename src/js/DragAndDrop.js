@@ -66,7 +66,7 @@ let bindDragEvents = (element, parentFunctions, conf) => {
         //On rajoute le code html de chaque éléments dans une variable
         //Chaque élément possède une div parente (Nécessaire lorsque le wrapper passe dans setWrapperStyle)
         Array.from(selection).map((elt) => {
-            innerCode +=  '<div>' + elt.innerHTML + '</div>';
+            innerCode +=  `<div> ${elt.innerHTML} </div>`;
         });
 
         //On set le innerHTML avec tous les éléments récupérés précedemment
