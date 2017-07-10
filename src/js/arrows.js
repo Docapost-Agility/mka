@@ -18,8 +18,8 @@ export let windowEvents = {
             if (!!lastSelectedInDom) {
 
                 let centerScroll = (elt) => {
-                    let scrollX = (elt.offsetLeft + elt.offsetWidth / 2) - (window.scrollX + window.innerWidth / 2);
-                    let scrollY = (elt.offsetTop + elt.offsetHeight / 2) - (window.scrollY + window.innerHeight / 2);
+                    let scrollX = (elt.offsetBodyLeft() + elt.offsetWidth / 2) - (window.scrollX + window.innerWidth / 2);
+                    let scrollY = (elt.offsetBodyTop() + elt.offsetHeight / 2) - (window.scrollY + window.innerHeight / 2);
                     window.scrollBy(scrollX, scrollY);
                 }
                 centerScroll(lastSelectedInDom);
@@ -35,26 +35,26 @@ export let windowEvents = {
                 switch (code) {
                     //left
                     case 37 :
-                        posX = lastSelectedInDom.offsetLeft;
-                        posY = lastSelectedInDom.offsetTop + rect.height / 2;
+                        posX = lastSelectedInDom.offsetBodyLeft();
+                        posY = lastSelectedInDom.offsetBodyTop() + rect.height / 2;
                         updateX = -interval;
                         break;
                     //up
                     case 38 :
-                        posX = lastSelectedInDom.offsetLeft + rect.width / 2;
-                        posY = lastSelectedInDom.offsetTop;
+                        posX = lastSelectedInDom.offsetBodyLeft() + rect.width / 2;
+                        posY = lastSelectedInDom.offsetBodyTop();
                         updateY = -interval;
                         break;
                     //right
                     case 39 :
-                        posX = lastSelectedInDom.offsetLeft + rect.width;
-                        posY = lastSelectedInDom.offsetTop + rect.height / 2;
+                        posX = lastSelectedInDom.offsetBodyLeft() + rect.width;
+                        posY = lastSelectedInDom.offsetBodyTop() + rect.height / 2;
                         updateX = interval;
                         break;
                     //down
                     case 40 :
-                        posX = lastSelectedInDom.offsetLeft + rect.width / 2;
-                        posY = lastSelectedInDom.offsetTop + rect.height;
+                        posX = lastSelectedInDom.offsetBodyLeft() + rect.width / 2;
+                        posY = lastSelectedInDom.offsetBodyTop() + rect.height;
                         updateY = interval;
                         break;
                 }
@@ -65,11 +65,11 @@ export let windowEvents = {
                 let container = parentFunctions.getContainer();
 
                 let isSameLineThanOrigin = (elt) => {
-                    let eltCenterY = elt.offsetTop + elt.getBoundingClientRect().height / 2;
+                    let eltCenterY = elt.offsetBodyTop() + elt.getBoundingClientRect().height / 2;
                     if (code === 37) {
-                        return eltCenterY >= lastSelectedInDom.offsetTop;
+                        return eltCenterY >= lastSelectedInDom.offsetBodyTop();
                     } else if (code === 39) {
-                        return eltCenterY <= lastSelectedInDom.offsetTop + rect.height;
+                        return eltCenterY <= lastSelectedInDom.offsetBodyTop() + rect.height;
                     }
                 }
 
@@ -88,11 +88,11 @@ export let windowEvents = {
                                 return null;
                             } else {
                                 if (code === 37) {
-                                    posY = (!lineChanged) ? lastSelectedInDom.offsetTop - interval - window.scrollY : posY - interval;
-                                    posX = container.offsetLeft + container.getBoundingClientRect().width - interval;
+                                    posY = (!lineChanged) ? lastSelectedInDom.offsetBodyTop() - interval - window.scrollY : posY - interval;
+                                    posX = container.offsetBodyLeft() + container.getBoundingClientRect().width - interval;
                                 } else {
-                                    posY = (!lineChanged) ? lastSelectedInDom.offsetTop + rect.height + interval - window.scrollY : posY + interval;
-                                    posX = container.offsetLeft + interval;
+                                    posY = (!lineChanged) ? lastSelectedInDom.offsetBodyTop() + rect.height + interval - window.scrollY : posY + interval;
+                                    posX = container.offsetBodyLeft() + interval;
                                 }
                                 return getNextElement(true);
                             }

@@ -1,5 +1,8 @@
 export let init = (conf, parentFunctions) => {
     parentFunctions.setProperty('focusedElementIndex', null);
+    parentFunctions.setProperty('selecting', []);
+
+    let squareId = "selection-square-" + Math.floor(Math.random() * 100000);
 
     let square = {
         downX: null,
@@ -7,7 +10,6 @@ export let init = (conf, parentFunctions) => {
         upX: null,
         upY: null,
         get: () => {
-            let squareId = "selection-square";
             let squareElt = document.getElementById(squareId);
             if (!squareElt) {
                 squareElt = document.createElement("div");
@@ -58,11 +60,13 @@ export let mkaEvents = {
                     square.downY = event.pageY + 0;
                     square.upX = event.pageX + 0;
                     square.upY = event.pageY + 0;
-                    parentFunctions.setProperty('square', square);;
+                    parentFunctions.setProperty('square', square);
+                    ;
 
-                    parentFunctions.setProperty('canStartLasso', true);;
+                    parentFunctions.setProperty('canStartLasso', true);
+                    ;
 
-                    orderCoordinate();
+                    orderCoordinate(square);
                 } else {
                     let selectableElements = parentFunctions.getSelectablesElements();
                     let selection = parentFunctions.getSelection();
@@ -171,11 +175,13 @@ export let windowEvents = {
                 }
             }
         }
+        return false;
     },
     onmouseup: (event, parentFunctions, conf) => {
         if (event.which === 1) {
             pushSelectingElements(parentFunctions, conf);
         }
+        return false;
     }
 };
 
@@ -254,10 +260,10 @@ let selectLassoItems = (ctrlKey, square, parentFunctions, conf) => {
 let elementIsCrossingZone = (elt, x1, y1, x2, y2) => {
     let rect = elt.getBoundingClientRect();
     let zoneElt = {
-        x1: elt.offsetLeft,
-        x2: (elt.offsetLeft + rect.width),
-        y1: elt.offsetTop,
-        y2: (elt.offsetTop + rect.height)
+        x1: elt.offsetBodyLeft(),
+        x2: (elt.offsetBodyLeft() + rect.width),
+        y1: elt.offsetBodyTop(),
+        y2: (elt.offsetBodyTop() + rect.height)
     };
     return zoneElt.x2 > x1 && x2 > zoneElt.x1 && zoneElt.y2 > y1 && y2 > zoneElt.y1;
 };
