@@ -9,30 +9,23 @@ import * as deleteShortcut from './deleteShortcut';
 import * as selectAllShortcut from './selectAllShortcut';
 
 let defaultConfigs = {
-    "eltsSelectable": [],
+    "eltsSelectable": '',
     "eltSelectedClass": "mka-elt-selected",
     "eltSelectingClass": "mka-elt-selecting",
     "onDragItemClass": null,
-    "dragNdrop": true,
+    "dragNdrop": false,
+    "droppableElements": '',
     "rightClick": false,
     "dbClick": false,
     "lasso": true,
     "selectAllShortcut": true,
     "copyPaste": true,
     "arrows": true,
-    "deleteShortcut": true,
+    "deleteShortcut": false,
     "count": "",
-    "dropFunction": function (ids) {
-        console.log(ids);
-        console.log("Default drop function, think to implement this function");
-    },
     "pasteFunction": (items) => {
         console.log(items);
         console.log("Default past function, think to implement this function");
-    },
-    "deleteFunction": function (items) {
-        console.log(items);
-        console.log("Default delete function, think to implement this function");
     }
 }
 
@@ -59,7 +52,7 @@ let updateSelection = (container, newSelection) => {
             elt.classList.add(configs.eltSelectedClass);
         });
         Array.from(components).map(component => {
-            component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection);
+            component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection, container.mkaParams.selectables);
         });
     }
 }
@@ -97,7 +90,7 @@ let pushComponents = (container) => {
         container.mkaParams.components.push(copyPaste);
     }
 
-    if (configs.deleteShortcut) {
+    if (!!configs.deleteShortcut) {
         container.mkaParams.components.push(deleteShortcut);
     }
 
@@ -111,12 +104,21 @@ let pushComponents = (container) => {
     container.mkaParams.components.push(select);
 }
 
-let initComponents = (container) => {
+let getPublicFunctions = (container) => {
     let configs = container.mkaParams.configs;
     let components = container.mkaParams.components;
-    let publicFunctions = {
+
+    container.mkaParams.customProperties = container.mkaParams.customProperties || {};
+
+    return {
         getContainer: () => {
             return container;
+        },
+        setProperty: (key, value) => {
+            container.mkaParams.customProperties[key] = value;
+        },
+        getProperty: (key) => {
+            return container.mkaParams.customProperties[key];
         },
         elementIsSelected: (elt) => {
             if (elt.classList && elt.classList.contains(configs.eltSelectedClass)) {
@@ -179,7 +181,7 @@ let initComponents = (container) => {
                 elt.parentNode.removeChild(elt);
             });
             Array.from(components).map(component => {
-                component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection);
+                component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection, container.mkaParams.selectables);
             });
         },
         isMkaContainerFocused: (target) => {
@@ -197,14 +199,20 @@ let initComponents = (container) => {
 
             return false;
         }
-    };
+    }
+}
+
+let initComponents = (container) => {
+    let configs = container.mkaParams.configs;
+    let components = container.mkaParams.components;
 
     Array.from(components).map(component => {
-        component.init && component.init(configs, publicFunctions);
+        component.init && component.init(configs, getPublicFunctions(container));
     });
 }
 
 let bindEvents = (container) => {
+    let publicFunctions = getPublicFunctions(container)
     let components = container.mkaParams.components;
 
     let bindComponentsEvents = (target, eventName) => {
@@ -212,7 +220,7 @@ let bindEvents = (container) => {
             let stop = false;
             Array.from(components).map(component => {
                 if (!stop) {
-                    stop = component[target.name] && component[target.name][eventName] && component[target.name][eventName](event) || false;
+                    stop = component[target.name] && component[target.name][eventName] && component[target.name][eventName](event, publicFunctions) || false;
                 }
             });
         }
@@ -238,12 +246,111 @@ let bindEvents = (container) => {
     });
 }
 
-let refreshComponents = (container, elements) => {
+let refreshComponents = (container) => {
     let components = container.mkaParams.components;
 
     Array.from(components).map(component => {
-        component.refresh && component.refresh(elements, container.mkaParams.configs);
+        component.refresh && component.refresh(container.mkaParams.selectables, container.mkaParams.configs);
     });
+}
+
+let updateSelectableElements = (container, elements) => {
+    if (container.mkaParams.selectables) {
+        Array.from(container.mkaParams.selectables).map(elt => {
+            elt.mkaSelectable = false;
+        });
+    }
+    Array.from(elements).map(elt => {
+        elt.mkaSelectable = true;
+    });
+    container.mkaParams.selectables = elements;
+}
+
+let mkaRefresh = (container) => {
+    let newSelectables = [].slice.call(container.querySelectorAll(container.mkaParams.configs.eltsSelectable));
+    let newSelection = [];
+    Array.from(container.mkaParams.selection).map(elt => {
+        if (newSelectables.indexOf(elt) !== -1) {
+            newSelection.push(elt);
+        }
+    });
+    updateSelection(container, newSelection);
+
+    updateSelectableElements(container, newSelectables);
+
+    refreshComponents(container);
+}
+
+let listenContainerDOMChange = (container) => {
+    let containsSelectableElement = (node) => {
+        //Check if removed node is selectable
+        if (!!node.mkaSelectable) {
+            return true;
+        }
+
+        //Check if added node is selectable
+        let parentNode = node.parentNode;
+        if (parentNode) {
+            let selectablesNodes = parentNode.querySelectorAll(container.mkaParams.configs.eltsSelectable);
+            for (let i = 0; i < selectablesNodes.length; i++) {
+                if (selectablesNodes.item(i) === node) {
+                    return true;
+                }
+            }
+        }
+
+        //Check if current node contains selectables elements
+        if (node.querySelectorAll && node.querySelectorAll(container.mkaParams.configs.eltsSelectable).length > 0) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    // Function to detect when dom change for refresh selectable elements
+    if (typeof MutationObserver !== "undefined") {
+        var observer = new MutationObserver(function (mutations) {
+            let needToRefresh = false;
+            mutations.forEach(function (mutation) {
+                if (!needToRefresh) {
+                    // If new element are added
+                    if (mutation.addedNodes) {
+                        for (let i = 0; i < mutation.addedNodes.length; i++) {
+                            needToRefresh = containsSelectableElement(mutation.addedNodes.item(i));
+                        }
+                    }
+                    // If element are removed
+                    if (mutation.removedNodes) {
+                        for (let i = 0; i < mutation.removedNodes.length; i++) {
+                            needToRefresh = containsSelectableElement(mutation.removedNodes.item(i));
+                        }
+                    }
+                }
+            });
+            if (needToRefresh) {
+                mkaRefresh(container);
+            }
+        });
+
+        observer.observe(container, {childList: true, subtree: true});
+    } else {
+        //IE < 11
+        container.addEventListener('DOMNodeRemoved', function (event) {
+            if (containsSelectableElement(event.target)) {
+                setTimeout(() => {
+                    mkaRefresh(container);
+                }, 0);
+            }
+        });
+        container.addEventListener('DOMNodeInserted', function (event) {
+            if (containsSelectableElement(event.target)) {
+                setTimeout(() => {
+                    mkaRefresh(container);
+                }, 0);
+            }
+        });
+    }
 }
 
 HTMLElement.prototype.mkaInit = function (clientConfigs) {
@@ -252,11 +359,13 @@ HTMLElement.prototype.mkaInit = function (clientConfigs) {
 
     let configs = getConfigs(clientConfigs);
 
+    let selectables = [].slice.call(container.querySelectorAll(configs.eltsSelectable));
+
     container.mkaParams = {
         configs: configs,
-        selectables: [].slice.call(configs.eltsSelectable),
         selection: []
     };
+    updateSelectableElements(container, selectables);
 
     pushComponents(container);
 
@@ -264,9 +373,11 @@ HTMLElement.prototype.mkaInit = function (clientConfigs) {
 
     bindEvents(container);
 
+    listenContainerDOMChange(container);
+
 };
 
-HTMLElement.prototype.mkaRefresh = function (elements) {
+HTMLElement.prototype.mkaRefresh = function () {
     let container = this;
 
     if (!container.mkaParams || !container.mkaParams.configs) {
@@ -274,53 +385,6 @@ HTMLElement.prototype.mkaRefresh = function (elements) {
         return false;
     }
 
-    updateSelection(container, []);
-    container.mkaParams.selectables = [].slice.call(elements);
+    mkaRefresh(container);
 
-    refreshComponents(container, elements);
-}
-
-HTMLElement.prototype.mkaAdd = function (elements) {
-    let container = this;
-
-    if (!container.mkaParams || !container.mkaParams.configs) {
-        console.log("No MKA found on this element, call mkaInit first");
-        return false;
-    }
-
-    Array.from([].slice.call(elements)).map(elt => {
-        if (container.mkaParams.selectables.indexOf(elt) === -1) {
-            container.mkaParams.selectables.push(elt);
-        }
-    });
-
-    refreshComponents(container, elements);
-}
-
-HTMLElement.prototype.mkaRemove = function (elements) {
-    let container = this;
-
-    if (!container.mkaParams || !container.mkaParams.configs) {
-        console.log("No MKA found on this element, call mkaInit first");
-        return false;
-    }
-
-    let newSelection = [];
-    Array.from(container.mkaParams.selection).map(elt => {
-        if ([].slice.call(elements).indexOf(elt) === -1) {
-            newSelection.push(elt);
-        }
-    });
-    updateSelection(container, newSelection);
-
-    let selectables = [];
-    Array.from(container.mkaParams.selectables).map(elt => {
-        if ([].slice.call(elements).indexOf(elt) === -1) {
-            selectables.push(elt);
-        }
-    });
-    container.mkaParams.selectables = selectables;
-
-
-    refreshComponents(container, elements);
 }

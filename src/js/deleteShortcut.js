@@ -10,13 +10,8 @@ export let windowEvents = {
 
         let selection = parentFunctions.getSelection();
 
-        if(e.which == '46' && selection.length > 0) {
-            config.deleteFunction(selection);
-
-            selection.forEach(function (elt) {
-               elt.parentNode.removeChild(elt);
-            });
-
+        if(e.which == '46' && selection.length > 0 && typeof config.deleteShortcut === 'function') {
+            config.deleteShortcut(selection);
             return true;
         }
 
