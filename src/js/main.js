@@ -60,7 +60,7 @@ let updateSelection = (container, newSelection) => {
 let getConfigs = (clientConfigs) => {
     let configs = {};
     Object.keys(defaultConfigs).map((i) => {
-        configs[i] = clientConfigs[i] || defaultConfigs[i];
+        configs[i] = (typeof clientConfigs[i] !== 'undefined') ? clientConfigs[i] : defaultConfigs[i];
     });
     return configs;
 }
@@ -212,17 +212,22 @@ let initComponents = (container) => {
 }
 
 let bindEvents = (container) => {
-    let publicFunctions = getPublicFunctions(container)
+    let publicFunctions = getPublicFunctions(container);
     let components = container.mkaParams.components;
 
     let bindComponentsEvents = (target, eventName) => {
+        let saveIfAlreadyExists = target.value[eventName];
         target.value[eventName] = (event) => {
             let stop = false;
+            if (saveIfAlreadyExists && typeof saveIfAlreadyExists === 'function') {
+                stop = saveIfAlreadyExists(event);
+            }
             Array.from(components).map(component => {
                 if (!stop) {
-                    stop = component[target.name] && component[target.name][eventName] && component[target.name][eventName](event, publicFunctions) || false;
+                    stop = component[target.name] && component[target.name][eventName] && component[target.name][eventName](event, publicFunctions, container.mkaParams.configs) || false;
                 }
             });
+            return stop;
         }
     }
 
@@ -387,4 +392,29 @@ HTMLElement.prototype.mkaRefresh = function () {
 
     mkaRefresh(container);
 
+}
+
+let getOffsetBody = (elt, offsetType) => {
+    let offset = elt[offsetType];
+    while (elt.offsetParent !== document.body) {
+        elt = elt.offsetParent;
+        offset = offset + elt[offsetType];
+    }
+    return offset;
+}
+
+HTMLElement.prototype.offsetBodyLeft = function () {
+    return getOffsetBody(this, "offsetLeft");
+}
+
+HTMLElement.prototype.offsetBodyTop = function () {
+    return getOffsetBody(this, "offsetTop");
+}
+
+HTMLElement.prototype.offsetBodyRight = function () {
+    return getOffsetBody(this, "offsetRight");
+}
+
+HTMLElement.prototype.offsetBodyBottom = function () {
+    return getOffsetBody(this, "offsetBottom");
 }

@@ -1,34 +1,72 @@
-let parentFunctions = {};
-let config = {};
-let focusedElementIndex = null;
+export let init = (conf, parentFunctions) => {
+    parentFunctions.setProperty('focusedElementIndex', null);
+    parentFunctions.setProperty('selecting', []);
 
-export let init = (conf, publicFunctions) => {
-    config = conf;
-    parentFunctions = publicFunctions;
+    let squareId = "selection-square-" + Math.floor(Math.random() * 100000);
+
+    let square = {
+        downX: null,
+        downY: null,
+        upX: null,
+        upY: null,
+        get: () => {
+            let squareElt = document.getElementById(squareId);
+            if (!squareElt) {
+                squareElt = document.createElement("div");
+                squareElt.id = squareId;
+                squareElt.style.position = "absolute";
+                squareElt.style.backgroundColor = "rgba(255,0,0,0.5)";
+                squareElt.style.border = "1px solid rgba(255,0,0,0.8)";
+                squareElt.style.display = "none";
+                parentFunctions.getContainer().appendChild(squareElt);
+            }
+            return squareElt;
+        },
+        refresh: () => {
+            let squareElt = square.get();
+            squareElt.style.display = "block";
+            squareElt.style.top = square.y1 + "px";
+            squareElt.style.left = square.x1 + "px";
+
+            squareElt.style.width = (square.x2 - square.x1) + "px";
+            squareElt.style.height = (square.y2 - square.y1) + "px";
+        },
+        remove: () => {
+            square.get().style.display = "none";
+        },
+        isVisble: () => {
+            return square.get().style.display === "block";
+        },
+        isCrossingElt: (elt) => {
+            return elementIsCrossingZone(elt, square.x1, square.y1, square.x2, square.y2);
+        }
+    };
+    parentFunctions.setProperty('square', square);
 }
 
-let square = {};
-let isInLasso = false;
-let canStartLasso = false;
-let selecting = [];
+// let square = {};
 
 
 export let mkaEvents = {
-        onmousedown: (event) => {
+        onmousedown: (event, parentFunctions) => {
             // On démarre la sélection si on utilise le bouton gauche de la souris
             if (event.which === 1) {
                 if (!event.shiftKey) {
-                    focusedElementIndex = null;
+                    parentFunctions.setProperty('focusedElementIndex', null);
 
+                    let square = parentFunctions.getProperty('square');
                     // zone du click
                     square.downX = event.pageX + 0;
                     square.downY = event.pageY + 0;
                     square.upX = event.pageX + 0;
                     square.upY = event.pageY + 0;
+                    parentFunctions.setProperty('square', square);
+                    ;
 
-                    canStartLasso = true;
+                    parentFunctions.setProperty('canStartLasso', true);
+                    ;
 
-                    orderCoordinate();
+                    orderCoordinate(square);
                 } else {
                     let selectableElements = parentFunctions.getSelectablesElements();
                     let selection = parentFunctions.getSelection();
@@ -37,26 +75,27 @@ export let mkaEvents = {
                     let element = parentFunctions.getSelectableElement(event.target);
 
                     if (element) {
-                        focusedElementIndex = focusedElementIndex || selectableElements.indexOf(selection[0]);
+                        let focusedElementIndex = parentFunctions.getProperty('focusedElementIndex') || selectableElements.indexOf(selection[0]);
+                        parentFunctions.setProperty('focusedElementIndex', focusedElementIndex);
 
                         if (selection.length > 0) {
                             let elementIndex = selectableElements.indexOf(element);
-                            let firstIndex = Math.min(focusedElementIndex,elementIndex);
-                            let lastIndex = Math.max(focusedElementIndex,elementIndex);
-                            if(event.ctrlKey) {
+                            let firstIndex = Math.min(focusedElementIndex, elementIndex);
+                            let lastIndex = Math.max(focusedElementIndex, elementIndex);
+                            if (event.ctrlKey) {
                                 Array.from(selection).map(elt => {
                                     let eltIndex = selectableElements.indexOf(elt);
-                                    if(eltIndex < firstIndex) {
+                                    if (eltIndex < firstIndex) {
                                         firstIndex = eltIndex;
                                     }
-                                    if(eltIndex > lastIndex) {
+                                    if (eltIndex > lastIndex) {
                                         lastIndex = eltIndex;
                                     }
                                 });
                             }
 
                             for (let i = firstIndex; i <= lastIndex; i++) {
-                                    newSelection.push(selectableElements[i]);
+                                newSelection.push(selectableElements[i]);
                             }
                         } else {
                             newSelection.push(element);
@@ -70,26 +109,27 @@ export let mkaEvents = {
             }
             return false;
         },
-        ondblclick: () => {
-            endLasso();
+        ondblclick: (event, parentFunctions, conf) => {
+            endLasso(parentFunctions, conf);
             return false;
         }
     }
     ;
 
 export let documentEvents = {
-    onmousemove: (event) => {
-        if (canStartLasso) {
-            isInLasso = config.lasso && event.which === 1;
+    onmousemove: (event, parentFunctions, conf) => {
+        if (parentFunctions.getProperty('canStartLasso')) {
+            let isInLasso = conf.lasso && event.which === 1;
+            parentFunctions.setProperty('isInLasso', isInLasso);
             if (isInLasso) {
-                if (!event.ctrlKey && !square.isVisble()) {
+                if (!event.ctrlKey && !parentFunctions.getProperty('square').isVisble()) {
                     parentFunctions.updateSelection([]);
-                    focusedElementIndex = null;
+                    parentFunctions.setProperty('focusedElementIndex', null);
                 }
-                refreshLasso(event);
+                refreshLasso(event, parentFunctions, conf);
                 return true;
             } else {
-                endLasso();
+                endLasso(parentFunctions, conf);
             }
         }
         return false;
@@ -97,12 +137,12 @@ export let documentEvents = {
 };
 
 export let windowEvents = {
-    onclick: () => {
-        endLasso();
+    onclick: (event, parentFunctions, conf) => {
+        endLasso(parentFunctions, conf);
         return false;
     },
-    onmousedown: (event) => {
-        clearSelecting();
+    onmousedown: (event, parentFunctions, conf) => {
+        clearSelecting(parentFunctions, conf);
         if (event.which === 1) {
             if (!event.shiftKey) {
                 let selectableElt = parentFunctions.getSelectableElement(event.target);
@@ -123,8 +163,9 @@ export let windowEvents = {
                     if (index !== -1) {
                         Array.from(newSelection).map(elt => {
                             selecting.push(elt);
-                            elt.classList.add(config.eltSelectingClass);
+                            elt.classList.add(conf.eltSelectingClass);
                         });
+                        parentFunctions.setProperty('selecting', selecting);
                     } else {
                         parentFunctions.updateSelection(newSelection);
                     }
@@ -134,88 +175,54 @@ export let windowEvents = {
                 }
             }
         }
+        return false;
     },
-    onmouseup: (event) => {
+    onmouseup: (event, parentFunctions, conf) => {
         if (event.which === 1) {
-            pushSelectingElements();
+            pushSelectingElements(parentFunctions, conf);
         }
+        return false;
     }
 };
 
-square = {
-    downX: null,
-    downY: null,
-    upX: null,
-    upY: null,
-    get: () => {
-        let squareId = "selection-square";
-        let squareElt = document.getElementById(squareId);
-        if (!squareElt) {
-            squareElt = document.createElement("div");
-            squareElt.id = squareId;
-            squareElt.style.position = "absolute";
-            squareElt.style.backgroundColor = "rgba(255,0,0,0.5)";
-            squareElt.style.border = "1px solid rgba(255,0,0,0.8)";
-            squareElt.style.display = "none";
-            parentFunctions.getContainer().appendChild(squareElt);
-        }
-        return squareElt;
-    },
-    refresh: () => {
-        let squareElt = square.get();
-        squareElt.style.display = "block";
-        squareElt.style.top = square.y1 + "px";
-        squareElt.style.left = square.x1 + "px";
-
-        squareElt.style.width = (square.x2 - square.x1) + "px";
-        squareElt.style.height = (square.y2 - square.y1) + "px";
-    },
-    remove: () => {
-        square.get().style.display = "none";
-    },
-    isVisble: () => {
-        return square.get().style.display === "block";
-    },
-    isCrossingElt: (elt) => {
-        return elementIsCrossingZone(elt, square.x1, square.y1, square.x2, square.y2);
-    }
-};
-
-let refreshLasso = (event) => {
+let refreshLasso = (event, parentFunctions, conf) => {
+    let square = parentFunctions.getProperty('square');
     square.upX = event.pageX + 0;
     square.upY = event.pageY + 0;
+    parentFunctions.setProperty('square', square);
 
-    orderCoordinate();
+    orderCoordinate(square);
 
-    selectLassoItems(event.ctrlKey);
+    selectLassoItems(event.ctrlKey, square, parentFunctions, conf);
     square.refresh();
 
 };
 
-let endLasso = () => {
-    square.remove();
-    canStartLasso = false;
-    if (isInLasso) {
-        isInLasso = false;
-        pushSelectingElements();
+let endLasso = (parentFunctions, conf) => {
+    parentFunctions.getProperty('square').remove();
+    parentFunctions.setProperty('canStartLasso', false);
+
+    if (parentFunctions.getProperty('isInLasso')) {
+        parentFunctions.setProperty('isInLasso', false);
+        pushSelectingElements(parentFunctions, conf);
     }
 }
 
-let pushSelectingElements = () => {
-    if (selecting.length) {
-        parentFunctions.updateSelection(selecting);
-        clearSelecting();
+let pushSelectingElements = (parentFunctions, conf) => {
+    if (parentFunctions.getProperty('selecting').length) {
+        parentFunctions.updateSelection(parentFunctions.getProperty('selecting'));
+        clearSelecting(parentFunctions, conf);
     }
 }
 
-let clearSelecting = () => {
-    Array.from(selecting).map(elt => {
-        elt.classList.remove(config.eltSelectingClass);
+let clearSelecting = (parentFunctions, conf) => {
+    Array.from(parentFunctions.getProperty('selecting')).map(elt => {
+        elt.classList.remove(conf.eltSelectingClass);
     });
-    selecting = [];
+    parentFunctions.setProperty('selecting', []);
 }
 
-let orderCoordinate = () => {
+let orderCoordinate = (square) => {
     // we order coordinate to simplify
     square.x1 = square.downX;
     square.x2 = square.upX;
@@ -234,28 +241,29 @@ let orderCoordinate = () => {
     }
 }
 
-let selectLassoItems = (ctrlKey) => {
+let selectLassoItems = (ctrlKey, square, parentFunctions, conf) => {
     let mkaElts = parentFunctions.getSelectablesElements();
 
-    selecting = (ctrlKey) ? parentFunctions.getSelection() : [];
+    let selecting = (ctrlKey) ? parentFunctions.getSelection() : [];
 
     // on parcourt chaque elt pour savoir s'ils sont dans la zone selectionné
     Array.from(mkaElts).map(elt => {
-        elt.classList.remove(config.eltSelectingClass);
+        elt.classList.remove(conf.eltSelectingClass);
         if (square.isCrossingElt(elt) && (!ctrlKey || selecting.indexOf(elt) === -1)) {
             selecting.push(elt);
-            elt.classList.add(config.eltSelectingClass);
+            elt.classList.add(conf.eltSelectingClass);
         }
     });
+    parentFunctions.setProperty('selecting', selecting);
 }
 
 let elementIsCrossingZone = (elt, x1, y1, x2, y2) => {
     let rect = elt.getBoundingClientRect();
     let zoneElt = {
-        x1: elt.offsetLeft,
-        x2: (elt.offsetLeft + rect.width),
-        y1: elt.offsetTop,
-        y2: (elt.offsetTop + rect.height)
+        x1: elt.offsetBodyLeft(),
+        x2: (elt.offsetBodyLeft() + rect.width),
+        y1: elt.offsetBodyTop(),
+        y2: (elt.offsetBodyTop() + rect.height)
     };
     return zoneElt.x2 > x1 && x2 > zoneElt.x1 && zoneElt.y2 > y1 && y2 > zoneElt.y1;
 };
