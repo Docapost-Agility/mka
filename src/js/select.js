@@ -161,6 +161,7 @@ export let windowEvents = {
                     }
 
                     if (index !== -1) {
+                        let selecting = [];
                         Array.from(newSelection).map(elt => {
                             selecting.push(elt);
                             elt.classList.add(conf.eltSelectingClass);
