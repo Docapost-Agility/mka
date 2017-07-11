@@ -6,23 +6,22 @@ export let init = (conf, parentFunctions) => {
     let elements = parentFunctions.getSelectablesElements();
 
     //Application du drag event pour chaque element ayant la classe mka-elt
-    Array.from(elements).map(elt => {
+    elements.forEach(elt => {
         bindDragEvents(elt, parentFunctions, conf);
     });
 
     if (conf.droppableElements) {
-        let droppers = document.querySelectorAll(conf.droppableElements);
+        let droppers = [].slice.call(document.querySelectorAll(conf.droppableElements));
         //Application du drop event pour chaque element ayant la classe mka-dropzone
-        Array.from(droppers).map(elt => bindDropEvents(elt, parentFunctions, conf));
+        droppers.forEach(elt => bindDropEvents(elt, parentFunctions, conf));
     }
 }
 
-
 export let onSelectionUpdate = (params) => {
-    Array.from(params.selectables).map(elt => {
+    params.selectables.forEach(elt => {
         elt.draggable = false;
     });
-    Array.from(params.selection).map(elt => {
+    params.selection.forEach(elt => {
         elt.draggable = true;
     });
 };
@@ -57,7 +56,7 @@ let bindDragEvents = (element, parentFunctions, conf) => {
         let selection = parentFunctions.getSelection();
 
         // on ajoute une class pour modifier le style de la selection
-        Array.from(selection).map((elt) => elt.classList.add("on-drag"));
+        selection.forEach((elt) => elt.classList.add("on-drag"));
 
         let innerCode = "";
         let wrapper = document.createElement('div');
@@ -65,8 +64,8 @@ let bindDragEvents = (element, parentFunctions, conf) => {
 
         //On rajoute le code html de chaque éléments dans une variable
         //Chaque élément possède une div parente (Nécessaire lorsque le wrapper passe dans setWrapperStyle)
-        Array.from(selection).map((elt) => {
-            innerCode +=  `<div> ${elt.innerHTML} </div>`;
+        selection.forEach((elt) => {
+            innerCode += `<div> ${elt.innerHTML} </div>`;
         });
 
         //On set le innerHTML avec tous les éléments récupérés précedemment
@@ -94,7 +93,7 @@ let bindDragEvents = (element, parentFunctions, conf) => {
         document.getElementById("wrapper-drag").outerHTML = "";
 
         // on retire la class
-        Array.from(selection).map((elt) => elt.classList.remove("on-drag"));
+        selection.forEach((elt) => elt.classList.remove("on-drag"));
     });
 }
 

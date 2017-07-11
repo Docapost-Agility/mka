@@ -78,7 +78,7 @@ export let mkaEvents = {
                         let firstIndex = Math.min(focusedElementIndex, elementIndex);
                         let lastIndex = Math.max(focusedElementIndex, elementIndex);
                         if (event.ctrlKey) {
-                            Array.from(selection).map(elt => {
+                            selection.forEach(elt => {
                                 let eltIndex = selectableElements.indexOf(elt);
                                 if (eltIndex < firstIndex) {
                                     firstIndex = eltIndex;
@@ -151,7 +151,7 @@ export let windowEvents = {
                     }
 
                     let selecting = [];
-                    Array.from(newSelection).map(elt => {
+                    newSelection.forEach(elt => {
                         selecting.push(elt);
                         elt.classList.add(conf.eltSelectingClass);
                     });
@@ -204,7 +204,7 @@ let pushSelectingElements = (parentFunctions, conf) => {
 }
 
 let clearSelecting = (parentFunctions, conf) => {
-    Array.from(parentFunctions.getProperty('selecting')).map(elt => {
+    parentFunctions.getProperty('selecting').forEach(elt => {
         elt.classList.remove(conf.eltSelectingClass);
     });
     parentFunctions.setProperty('selecting', []);
@@ -235,7 +235,7 @@ let selectLassoItems = (ctrlKey, square, parentFunctions, conf) => {
     let selecting = (ctrlKey) ? parentFunctions.getSelection() : [];
 
     // on parcourt chaque elt pour savoir s'ils sont dans la zone selectionné
-    Array.from(mkaElts).map(elt => {
+    mkaElts.forEach(elt => {
         elt.classList.remove(conf.eltSelectingClass);
         if (square.isCrossingElt(elt) && (!ctrlKey || selecting.indexOf(elt) === -1)) {
             selecting.push(elt);
