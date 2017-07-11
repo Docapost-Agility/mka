@@ -22,11 +22,22 @@ export let windowEvents = {
 }
 
 let removeMkaRcMenu = () => {
-    if (document.getElementById(mkarcmenuId)) {
-        document.getElementById(mkarcmenuId).remove();
+    const menu = document.getElementById(mkarcmenuId);
+    if (menu && menu.style.display !== 'none') {
+        menu.style.display = 'none';
         return true;
     }
     return false;
+}
+
+let getMkaRcMenu = () => {
+    let menu = document.getElementById(mkarcmenuId);
+    if (!menu) {
+        menu = document.createElement('div');
+        menu.setAttribute('id', mkarcmenuId);
+        document.body.appendChild(menu);
+    }
+    return menu;
 }
 
 let bindContextMenu = (conf, parentFunctions) => {
@@ -36,37 +47,33 @@ let bindContextMenu = (conf, parentFunctions) => {
         event.preventDefault();
         removeMkaRcMenu();
         const selectableElement = parentFunctions.getSelectableElement(event.target);
-        if (selectableElement !== null) {
 
+        if (selectableElement !== null) {
+            // Si l'élément n'est pas sélectionné, on restreint la sélection à ce seul élémentœ
             if (!parentFunctions.elementIsSelected(selectableElement)) {
                 parentFunctions.updateSelection([selectableElement]);
             }
 
-            let selection = parentFunctions.getSelection();
-
-            let contextMenu = conf.rightClick(selection);
-
-            let newMenu = document.createElement('ul');
-
-            contextMenu.forEach(item => {
-                let li = document.createElement('li');
-                li.innerHTML = item.title;
-                li.onclick = item.action;
-                newMenu.appendChild(li);
-            });
-
-
-            const newDiv = document.createElement('div');
-            newDiv.setAttribute('id', mkarcmenuId);
-            newDiv.style.position = 'absolute';
-            newDiv.style.left = event.pageX + 'px';
-            newDiv.style.top = event.pageY + 'px';
-
-            newDiv.appendChild(newMenu);
-
-            parentFunctions.getContainer().appendChild(newDiv);
-
+        } else {
+            parentFunctions.updateSelection([]);
         }
+
+        let selection = parentFunctions.getSelection();
+
+        let menu = getMkaRcMenu();
+        let htmlMenu = conf.rightClick(selection);
+
+        if (htmlMenu instanceof HTMLElement) {
+            menu.innerHTML = '';
+            menu.appendChild(htmlMenu);
+        } else {
+            menu.innerHTML = htmlMenu;
+        }
+
+        menu.style.position = 'absolute';
+        menu.style.left = event.pageX + 'px';
+        menu.style.top = event.pageY + 'px';
+        menu.style.display = 'block';
     });
 
 }

@@ -616,27 +616,26 @@
                 }
             });
         }
-        return menu;
+
+        var htmlMenu = document.createElement('ul');
+
+        menu.forEach(function (item) {
+            var li = document.createElement('li');
+            li.innerHTML = item.title;
+            li.onclick = item.action;
+            htmlMenu.appendChild(li);
+        });
+
+        return htmlMenu;
     }
 
     var getContextMenuFolders = function (selection) {
-        var menu = [];
+        var htmlMenu = '<ul>' +
+            '<li onclick="console.log(\'action dossier 1\');">action dossier 1</li>' +
+            '<li onclick="console.log(\'action dossier 3\');">action dossier 3</li>' +
+            '</ul>';
 
-        menu.push({
-            title: "action 1",
-            action: function () {
-                console.log("action 1");
-            }
-        });
-        if (selection.length > 1) {
-            menu.push({
-                title: "action multiple",
-                action: function () {
-                    console.log("action multiple");
-                }
-            });
-        }
-        return menu;
+        return htmlMenu;
     }
 
     var dbClick = function (elt) {
