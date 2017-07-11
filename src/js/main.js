@@ -37,7 +37,7 @@ let updateSelection = (container, newSelection, actionId) => {
     let sameSelection = false;
     if (container.mkaParams.selection.length === newSelection.length) {
         sameSelection = true;
-        Array.from(container.mkaParams.selection).map(elt => {
+        container.mkaParams.selection.forEach(elt => {
             if (newSelection.indexOf(elt) === -1) {
                 sameSelection = false;
             }
@@ -45,10 +45,10 @@ let updateSelection = (container, newSelection, actionId) => {
     }
     if (!sameSelection) {
         container.mkaParams.selection = newSelection;
-        Array.from(selectables).map(elt => {
+        selectables.forEach(elt => {
             elt.classList.remove(configs.eltSelectedClass);
         });
-        Array.from(container.mkaParams.selection).map(elt => {
+        container.mkaParams.selection.forEach(elt => {
             elt.classList.add(configs.eltSelectedClass);
         });
         let params = {
@@ -58,7 +58,7 @@ let updateSelection = (container, newSelection, actionId) => {
             parentFunctions: getPublicFunctions(container),
             actionId: actionId
         }
-        Array.from(components).map(component => {
+        components.forEach(component => {
             component.onSelectionUpdate && component.onSelectionUpdate(params);
         });
     }
@@ -66,7 +66,7 @@ let updateSelection = (container, newSelection, actionId) => {
 
 let getConfigs = (clientConfigs) => {
     let configs = {};
-    Object.keys(defaultConfigs).map((i) => {
+    Object.keys(defaultConfigs).forEach((i) => {
         configs[i] = (typeof clientConfigs[i] !== 'undefined') ? clientConfigs[i] : defaultConfigs[i];
     });
     return configs;
@@ -158,7 +158,7 @@ let getPublicFunctions = (container) => {
         },
         getLastSelectedInDom: () => {
             let last = null;
-            Array.from(container.mkaParams.selection).map(elt => {
+            container.mkaParams.selection.forEach(elt => {
                 if (!last || elt.offsetTop > last.offsetTop || elt.offsetTop === last.offsetTop && elt.offsetLeft > last.offsetLeft) {
                     last = elt;
                 }
@@ -167,7 +167,7 @@ let getPublicFunctions = (container) => {
         },
         getSelection: () => {
             let copy = [];
-            Array.from(container.mkaParams.selection).map(elt => {
+            container.mkaParams.selection.forEach(elt => {
                 copy.push(elt);
             });
             return copy;
@@ -176,7 +176,7 @@ let getPublicFunctions = (container) => {
             updateSelection(container, newSelection, actionId);
         },
         removeElements: (elements) => {
-            Array.from(elements).map(elt => {
+            elements.forEach(elt => {
                 let index = container.mkaParams.selectables.indexOf(elt);
                 if (index !== -1) {
                     container.mkaParams.selectables.splice(index, 1);
@@ -187,7 +187,7 @@ let getPublicFunctions = (container) => {
                 }
                 elt.parentNode.removeChild(elt);
             });
-            Array.from(components).map(component => {
+            components.forEach(component => {
                 component.onSelectionUpdate && component.onSelectionUpdate(container.mkaParams.selection, container.mkaParams.selectables);
             });
         },
@@ -213,7 +213,7 @@ let initComponents = (container) => {
     let configs = container.mkaParams.configs;
     let components = container.mkaParams.components;
 
-    Array.from(components).map(component => {
+    components.forEach(component => {
         component.init && component.init(configs, getPublicFunctions(container));
     });
 }
@@ -229,7 +229,7 @@ let bindEvents = (container) => {
             if (saveIfAlreadyExists && typeof saveIfAlreadyExists === 'function') {
                 stop = saveIfAlreadyExists(event).forceStop;
             }
-            Array.from(components).map(component => {
+            components.forEach(component => {
                 if (!stop) {
                     stop = component[target.name] && component[target.name][eventName] && component[target.name][eventName](event, publicFunctions, container.mkaParams.configs) || false;
                 }
@@ -247,13 +247,13 @@ let bindEvents = (container) => {
 
     let keyEventsList = ["onkeydown", "onkeypress", "onkeyup"];
 
-    Array.from(mouseEventsTargets).map(mouseEventTarget => {
-        Array.from(mouseEventsList).map(mouseEventName => {
+    mouseEventsTargets.forEach(mouseEventTarget => {
+        mouseEventsList.forEach(mouseEventName => {
             bindComponentsEvents(mouseEventTarget, mouseEventName);
         });
     });
 
-    Array.from(keyEventsList).map(keyEventName => {
+    keyEventsList.forEach(keyEventName => {
         bindComponentsEvents({name: "windowEvents", value: window}, keyEventName);
     });
 }
@@ -261,18 +261,18 @@ let bindEvents = (container) => {
 let refreshComponents = (container) => {
     let components = container.mkaParams.components;
 
-    Array.from(components).map(component => {
+    components.forEach(component => {
         component.refresh && component.refresh(container.mkaParams.selectables, container.mkaParams.configs);
     });
 }
 
 let updateSelectableElements = (container, elements) => {
     if (container.mkaParams.selectables) {
-        Array.from(container.mkaParams.selectables).map(elt => {
+        container.mkaParams.selectables.forEach(elt => {
             elt.mkaSelectable = false;
         });
     }
-    Array.from(elements).map(elt => {
+    elements.forEach(elt => {
         elt.mkaSelectable = true;
     });
     container.mkaParams.selectables = elements;
@@ -281,7 +281,7 @@ let updateSelectableElements = (container, elements) => {
 let mkaRefresh = (container) => {
     let newSelectables = [].slice.call(container.querySelectorAll(container.mkaParams.configs.eltsSelectable));
     let newSelection = [];
-    Array.from(container.mkaParams.selection).map(elt => {
+    container.mkaParams.selection.forEach(elt => {
         if (newSelectables.indexOf(elt) !== -1) {
             newSelection.push(elt);
         }

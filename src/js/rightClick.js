@@ -48,7 +48,7 @@ let bindContextMenu = (conf, parentFunctions) => {
 
             let newMenu = document.createElement('ul');
 
-            Array.from(contextMenu).map(item => {
+            contextMenu.forEach(item => {
                 let li = document.createElement('li');
                 li.innerHTML = item.title;
                 li.onclick = item.action;

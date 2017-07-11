@@ -134,7 +134,7 @@
     <h3>Nombre d'element sélectionné <span id="mka-count-items">0</span></h3>
     <h3>Nombre de dossier sélectionné <span id="mka-count-folders">0</span></h3>
 
-    <a onclick="switchMode()" >Switch mode</a>
+    <a onclick="switchMode()">Switch mode</a>
 
     <ul id="itemsList" class="list-group" style="margin-top: 40px">
         <li class="list-group-item" item-id="1">
@@ -584,8 +584,8 @@
 </style>
 
 <script type="text/javascript">
-    let switchMode = () => {
-        let list = document.getElementById("itemsList");
+    var switchMode = function () {
+        var list = document.getElementById("itemsList");
         if (list.classList.contains("grid")) {
             list.classList.remove("grid");
         } else {
@@ -593,25 +593,25 @@
         }
     }
 
-    let getContextMenuItems = (selection) => {
-        let menu = [];
+    var getContextMenuItems = function (selection) {
+        var menu = [];
 
         menu.push({
             title: "action 1",
-            action: () => {
+            action: function () {
                 console.log("action 1");
             }
         });
         menu.push({
             title: "action 3",
-            action: () => {
+            action: function () {
                 console.log("action 3");
             }
         });
         if (selection.length > 1) {
             menu.push({
                 title: "action multiple",
-                action: () => {
+                action: function () {
                     console.log("action multiple");
                 }
             });
@@ -619,19 +619,19 @@
         return menu;
     }
 
-    let getContextMenuFolders = (selection) => {
-        let menu = [];
+    var getContextMenuFolders = function (selection) {
+        var menu = [];
 
         menu.push({
             title: "action 1",
-            action: () => {
+            action: function () {
                 console.log("action 1");
             }
         });
         if (selection.length > 1) {
             menu.push({
                 title: "action multiple",
-                action: () => {
+                action: function () {
                     console.log("action multiple");
                 }
             });
@@ -639,25 +639,25 @@
         return menu;
     }
 
-    let dbClick = (elt) => {
+    var dbClick = function (elt) {
         console.log('dbclick', elt);
     }
 
-    let drop = (elts, zone) => {
+    var drop = function (elts, zone) {
         console.log('drop', elts);
         console.log('dropZone', zone);
     }
 
-    let deleteItems = (elements) => {
-        elements.forEach((elt) => {
+    var deleteItems = function (elements) {
+        elements.forEach(function (elt) {
             if (elt.parentNode) {
                 elt.parentNode.removeChild(elt);
             }
         })
     }
 
-    let deleteFolders = (elements) => {
-        elements.forEach((elt) => {
+    var deleteFolders = function (elements) {
+        elements.forEach(function (elt) {
             if (elt.parentNode && elt.parentNode.parentNode) {
                 elt.parentNode.parentNode.removeChild(elt.parentNode);
             }
@@ -678,8 +678,8 @@
         "count": "mka-count-items",
         "pasteFunction": function (items) {
             console.log(items);
-            let data = [];
-            items.map((elt) => {
+            var data = [];
+            items.forEach(function (elt) {
                 console.log(elt.getAttribute("item-id"));
                 data.push(elt.getAttribute("item-id"));
             });
@@ -706,8 +706,8 @@
         "count": "mka-count-folders",
         "pasteFunction": function (items) {
             console.log(items);
-            let data = [];
-            items.map((elt) => {
+            var data = [];
+            items.forEach(function (elt) {
                 console.log(elt.getAttribute("item-id"));
                 data.push(elt.getAttribute("item-id"));
             });
