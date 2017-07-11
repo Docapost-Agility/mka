@@ -518,6 +518,9 @@
         padding: 50px;
         background-color: #f8f8f8;
         border: 1px solid #ededed;
+
+        height: 800px;
+        overflow: auto;
     }
 
     #itemsList.grid {
@@ -664,7 +667,7 @@
     }
 
     document.getElementById('itemsList').mkaInit({
-        "eltsSelectable": "li",
+        "eltsSelectable": "li.list-group-item",
         "onDragItemClass": "drag-class-sample",
         "dragNdrop": drop,
         "droppableElements": ".folders-container .folder",

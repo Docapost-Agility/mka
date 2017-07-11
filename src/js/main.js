@@ -406,7 +406,7 @@ HTMLElement.prototype.mkaRefresh = function () {
 
 let getOffsetBody = (elt, offsetType) => {
     let offset = elt[offsetType];
-    while (elt.offsetParent !== document.body) {
+    while (!!elt.offsetParent && elt.offsetParent !== document.body) {
         elt = elt.offsetParent;
         offset = offset + elt[offsetType];
     }
@@ -427,4 +427,22 @@ HTMLElement.prototype.offsetBodyRight = function () {
 
 HTMLElement.prototype.offsetBodyBottom = function () {
     return getOffsetBody(this, "offsetBottom");
+}
+
+let getScrollTotal = (elt, scrollType) => {
+    let scroll = elt[scrollType];
+    while (elt.parentNode && elt.parentNode !== document.body) {
+        elt = elt.parentNode;
+        scroll = scroll + elt[scrollType];
+    }
+    scroll = scroll + document.body[scrollType];
+    return scroll;
+}
+
+HTMLElement.prototype.scrollTopTotal = function () {
+    return getScrollTotal(this, "scrollTop");
+}
+
+HTMLElement.prototype.scrollLeftTotal = function () {
+    return getScrollTotal(this, "scrollLeft");
 }
