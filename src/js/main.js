@@ -368,6 +368,9 @@ let listenContainerDOMChange = (container) => {
 HTMLElement.prototype.mkaInit = function (clientConfigs) {
     let container = this;
     container.style.userSelect = "none";
+    container.style['-moz-user-select'] = 'none';
+    container.style['-webkit-user-select'] = 'none';
+    container.style['-ms-user-select'] = 'none';
 
     let configs = getConfigs(clientConfigs);
 

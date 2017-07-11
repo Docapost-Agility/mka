@@ -44,77 +44,71 @@ export let init = (conf, parentFunctions) => {
     parentFunctions.setProperty('square', square);
 }
 
-// let square = {};
-
-
 export let mkaEvents = {
-        onmousedown: (event, parentFunctions) => {
-            // On démarre la sélection si on utilise le bouton gauche de la souris
-            if (event.which === 1) {
-                if (!event.shiftKey) {
-                    parentFunctions.setProperty('focusedElementIndex', null);
+    onmousedown: (event, parentFunctions) => {
+        // On démarre la sélection si on utilise le bouton gauche de la souris
+        if (event.which === 1) {
+            if (!event.shiftKey) {
+                parentFunctions.setProperty('focusedElementIndex', null);
 
-                    let square = parentFunctions.getProperty('square');
-                    // zone du click
-                    square.downX = event.pageX + 0;
-                    square.downY = event.pageY + 0;
-                    square.upX = event.pageX + 0;
-                    square.upY = event.pageY + 0;
-                    parentFunctions.setProperty('square', square);
-                    ;
+                let square = parentFunctions.getProperty('square');
+                // zone du click
+                square.downX = event.pageX + 0;
+                square.downY = event.pageY + 0;
+                square.upX = event.pageX + 0;
+                square.upY = event.pageY + 0;
+                parentFunctions.setProperty('square', square);
 
-                    parentFunctions.setProperty('canStartLasso', true);
-                    ;
+                parentFunctions.setProperty('canStartLasso', true);
 
-                    orderCoordinate(square);
-                } else {
-                    let selectableElements = parentFunctions.getSelectablesElements();
-                    let selection = parentFunctions.getSelection();
-                    let newSelection = [];
+                orderCoordinate(square);
+            } else {
+                let selectableElements = parentFunctions.getSelectablesElements();
+                let selection = parentFunctions.getSelection();
+                let newSelection = [];
 
-                    let element = parentFunctions.getSelectableElement(event.target);
+                let element = parentFunctions.getSelectableElement(event.target);
 
-                    if (element) {
-                        let focusedElementIndex = parentFunctions.getProperty('focusedElementIndex') || selectableElements.indexOf(selection[0]);
-                        parentFunctions.setProperty('focusedElementIndex', focusedElementIndex);
+                if (element) {
+                    let focusedElementIndex = parentFunctions.getProperty('focusedElementIndex') || selectableElements.indexOf(selection[0]);
+                    parentFunctions.setProperty('focusedElementIndex', focusedElementIndex);
 
-                        if (selection.length > 0) {
-                            let elementIndex = selectableElements.indexOf(element);
-                            let firstIndex = Math.min(focusedElementIndex, elementIndex);
-                            let lastIndex = Math.max(focusedElementIndex, elementIndex);
-                            if (event.ctrlKey) {
-                                Array.from(selection).map(elt => {
-                                    let eltIndex = selectableElements.indexOf(elt);
-                                    if (eltIndex < firstIndex) {
-                                        firstIndex = eltIndex;
-                                    }
-                                    if (eltIndex > lastIndex) {
-                                        lastIndex = eltIndex;
-                                    }
-                                });
-                            }
-
-                            for (let i = firstIndex; i <= lastIndex; i++) {
-                                newSelection.push(selectableElements[i]);
-                            }
-                        } else {
-                            newSelection.push(element);
+                    if (selection.length > 0) {
+                        let elementIndex = selectableElements.indexOf(element);
+                        let firstIndex = Math.min(focusedElementIndex, elementIndex);
+                        let lastIndex = Math.max(focusedElementIndex, elementIndex);
+                        if (event.ctrlKey) {
+                            Array.from(selection).map(elt => {
+                                let eltIndex = selectableElements.indexOf(elt);
+                                if (eltIndex < firstIndex) {
+                                    firstIndex = eltIndex;
+                                }
+                                if (eltIndex > lastIndex) {
+                                    lastIndex = eltIndex;
+                                }
+                            });
                         }
 
-                        parentFunctions.updateSelection(newSelection);
+                        for (let i = firstIndex; i <= lastIndex; i++) {
+                            newSelection.push(selectableElements[i]);
+                        }
+                    } else {
+                        newSelection.push(element);
                     }
-                }
 
-                return true;
+                    parentFunctions.updateSelection(newSelection);
+                }
             }
-            return false;
-        },
-        ondblclick: (event, parentFunctions, conf) => {
-            endLasso(parentFunctions, conf);
-            return false;
+
+            return true;
         }
+        return false;
+    },
+    ondblclick: (event, parentFunctions, conf) => {
+        endLasso(parentFunctions, conf);
+        return false;
     }
-    ;
+};
 
 export let documentEvents = {
     onmousemove: (event, parentFunctions, conf) => {
@@ -137,10 +131,6 @@ export let documentEvents = {
 };
 
 export let windowEvents = {
-    onclick: (event, parentFunctions, conf) => {
-        endLasso(parentFunctions, conf);
-        return false;
-    },
     onmousedown: (event, parentFunctions, conf) => {
         clearSelecting(parentFunctions, conf);
         if (event.which === 1) {
@@ -160,16 +150,12 @@ export let windowEvents = {
                         }
                     }
 
-                    if (index !== -1) {
-                        let selecting = [];
-                        Array.from(newSelection).map(elt => {
-                            selecting.push(elt);
-                            elt.classList.add(conf.eltSelectingClass);
-                        });
-                        parentFunctions.setProperty('selecting', selecting);
-                    } else {
-                        parentFunctions.updateSelection(newSelection);
-                    }
+                    let selecting = [];
+                    Array.from(newSelection).map(elt => {
+                        selecting.push(elt);
+                        elt.classList.add(conf.eltSelectingClass);
+                    });
+                    parentFunctions.setProperty('selecting', selecting);
 
                 } else if (!event.ctrlKey) {
                     parentFunctions.updateSelection([]);
@@ -181,6 +167,7 @@ export let windowEvents = {
     onmouseup: (event, parentFunctions, conf) => {
         if (event.which === 1) {
             pushSelectingElements(parentFunctions, conf);
+            endLasso(parentFunctions, conf);
         }
         return false;
     }
