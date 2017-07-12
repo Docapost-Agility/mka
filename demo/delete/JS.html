@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
           crossorigin="anonymous">
+
     <link href="../prism.css" rel="stylesheet"/>
     <link href="../demo.css" rel="stylesheet"/>
 </head>
@@ -19,7 +20,7 @@
 <div id="menu_pages"></div>
 
 <div id="explication"></div>
-<script src="rightClick.js"></script>
+<script src="delete.js"></script>
 
 <div class="pull-left">
 
@@ -32,73 +33,41 @@
     </div>
     <pre class="line-numbers" data-start=0>
 <code class="language-javascript">
-var getContextMenuItems = function (selection) {
-    var menu = [];
-
-    menu.push({
-        title: "action 1",
-        action: function () {
-            alert("action 1");
+var deleteItems = function (elements) {
+    elements.forEach(function (elt) {
+        if (elt.parentNode) {
+            elt.parentNode.removeChild(elt);
         }
-    });
-    menu.push({
-        title: "action 3",
-        action: function () {
-            alert("action 3");
-        }
-    });
-    if (selection.length > 1) {
-        menu.push({
-            title: "action multiple",
-            action: function () {
-                alert("action multiple");
-            }
-        });
-    }
-
-    var htmlMenu = document.createElement('ul');
-
-    menu.forEach(function (item) {
-        var li = document.createElement('li');
-        li.innerHTML = item.title;
-        li.onclick = item.action;
-        htmlMenu.appendChild(li);
-    });
-
-    return htmlMenu;
+    })
 }
 
-var getContextMenuFolders = function (selection) {
-    var htmlMenu = '&lt;ul>' +
-            '&lt;li onclick="alert('action dossier 1');">action dossier 1&lt;/li>' +
-            '&lt;li onclick="alert('action dossier 3');">action dossier 3&lt;/li>' +
-            '&lt;/ul>';
-
-    return htmlMenu;
+var deleteFolders = function (elements) {
+    elements.forEach(function (elt) {
+        if (elt.parentNode && elt.parentNode.parentNode) {
+            elt.parentNode.parentNode.removeChild(elt.parentNode);
+        }
+    })
 }
 
 document.getElementById('itemsList').mkaInit({
     "eltsSelectable": "li",
-    "rightClick": getContextMenuItems,
-    "lasso": false,
+    "lasso": true,
     "selectAllShortcut": false,
     "copyPaste": false,
     "count": "mka-count-items",
+    "deleteShortcut": deleteItems
 });
 
 document.getElementsByClassName('folders-container').item(0).mkaInit({
     "eltsSelectable": ".folder",
-    "onDragItemClass": "drag-class-sample",
-    "rightClick": getContextMenuFolders,
     "lasso": true,
-    "selectAllShortcut": true,
-    "copyPaste": true,
+    "selectAllShortcut": false,
+    "copyPaste": false,
     "count": "mka-count-folders",
+    "deleteShortcut": deleteFolders
 });
-
 </code>
 </pre>
-
 
 </div>
 
@@ -207,152 +176,121 @@ document.getElementsByClassName('folders-container').item(0).mkaInit({
         </ul>
     </div>
 
-<script src="../../dist/mka.min.js"></script>
-<script src="../menu_accueil.js"></script>
-<style>
-    #itemsList {
-        padding: 50px;
-        background-color: #f8f8f8;
-        border: 1px solid #ededed;
-    }
-
-    #itemsList.grid {
-        column-count: 4;
-        column-gap: 1em;
-    }
-
-    #itemsList.grid li.list-group-item {
-        display: inline-block;
-        margin: 0 0 1em;
-        width: 100%;
-        height: 120px;
-    }
-
-    .folder {
-        text-align: center;
-    }
-
-    .mka-elt-selecting, .mka-elt-selecting .thumbnail {
-        background-color: #D1EEFF;
-    }
-
-    .mka-elt-selected, .mka-elt-selected .thumbnail {
-        background-color: #bebebe;
-    }
-
-    .on-drag {
-        background-color: #cbcbcb !important;
-        opacity: 0.7;
-    }
-
-    .folders-container {
-        background-color: #efefef;
-        border: 1px solid #afafaf;
-        padding: 15px 0;
-    }
-
-    #wrapper-drag {
-        position: relative;
-    }
-
-    .drag-class-sample {
-        /* Sample class for onDragItemClass*/
-        color: white;
-        background: #403A3E;
-        background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
-        background: linear-gradient(to right, #BE5869, #403A3E);
-        border: 1px solid #403A3E;
-        padding: 5px;
-        text-align: center;
-        width: 250px;
-    }
-
-    .drag-class-sample span {
-        /* Sample class for onDragItemClass span */
-        color: white;
-        background: #cc2b5e;
-        background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
-        background: linear-gradient(to right, #753a88, #cc2b5e);
-
-    }
-
-</style>
-
-<script type="text/javascript">
-    var switchMode = function () {
-        var list = document.getElementById("itemsList");
-        if (list.classList.contains("grid")) {
-            list.classList.remove("grid");
-        } else {
-            list.classList.add("grid");
+    <script src="../../dist/mka.min.js"></script>
+    <script src="../menu_accueil.js"></script>
+    <style>
+        #itemsList {
+            padding: 50px;
+            background-color: #f8f8f8;
+            border: 1px solid #ededed;
         }
-    }
 
-    var getContextMenuItems = function (selection) {
-        var menu = [];
+        #itemsList.grid {
+            column-count: 4;
+            column-gap: 1em;
+        }
 
-        menu.push({
-            title: "action 1",
-            action: function () {
-                alert("action 1");
+        #itemsList.grid li.list-group-item {
+            display: inline-block;
+            margin: 0 0 1em;
+            width: 100%;
+            height: 120px;
+        }
+
+        .folder {
+            text-align: center;
+        }
+
+        .mka-elt-selecting, .mka-elt-selecting .thumbnail {
+            background-color: #D1EEFF;
+        }
+
+        .mka-elt-selected, .mka-elt-selected .thumbnail {
+            background-color: #bebebe;
+        }
+
+        .on-drag {
+            background-color: #cbcbcb !important;
+            opacity: 0.7;
+        }
+
+        .folders-container {
+            background-color: #efefef;
+            border: 1px solid #afafaf;
+            padding: 15px 0;
+        }
+
+        #wrapper-drag {
+            position: relative;
+        }
+
+        .drag-class-sample {
+            /* Sample class for onDragItemClass*/
+            color: white;
+            background: #403A3E;
+            background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
+            background: linear-gradient(to right, #BE5869, #403A3E);
+            border: 1px solid #403A3E;
+            padding: 5px;
+            text-align: center;
+            width: 250px;
+        }
+
+        .drag-class-sample span {
+            /* Sample class for onDragItemClass span */
+            color: white;
+            background: #cc2b5e;
+            background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
+            background: linear-gradient(to right, #753a88, #cc2b5e);
+
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        var switchMode = function () {
+            var list = document.getElementById("itemsList");
+            if (list.classList.contains("grid")) {
+                list.classList.remove("grid");
+            } else {
+                list.classList.add("grid");
             }
-        });
-        menu.push({
-            title: "action 3",
-            action: function () {
-                alert("action 3");
-            }
-        });
-        if (selection.length > 1) {
-            menu.push({
-                title: "action multiple",
-                action: function () {
-                    alert("action multiple");
+        }
+
+        var deleteItems = function (elements) {
+            elements.forEach(function (elt) {
+                if (elt.parentNode) {
+                    elt.parentNode.removeChild(elt);
                 }
-            });
+            })
         }
 
-        var htmlMenu = document.createElement('ul');
+        var deleteFolders = function (elements) {
+            elements.forEach(function (elt) {
+                if (elt.parentNode && elt.parentNode.parentNode) {
+                    elt.parentNode.parentNode.removeChild(elt.parentNode);
+                }
+            })
+        }
 
-        menu.forEach(function (item) {
-            var li = document.createElement('li');
-            li.innerHTML = item.title;
-            li.onclick = item.action;
-            htmlMenu.appendChild(li);
+        document.getElementById('itemsList').mkaInit({
+            "eltsSelectable": "li",
+            "lasso": true,
+            "selectAllShortcut": false,
+            "copyPaste": false,
+            "count": "mka-count-items",
+            "deleteShortcut": deleteItems
         });
 
-        return htmlMenu;
-    }
-
-    var getContextMenuFolders = function (selection) {
-        var htmlMenu = '<ul>' +
-                '<li onclick="alert(\'action dossier 1\');">action dossier 1</li>' +
-                '<li onclick="alert(\'action dossier 3\');">action dossier 3</li>' +
-                '</ul>';
-
-        return htmlMenu;
-    }
-
-    document.getElementById('itemsList').mkaInit({
-        "eltsSelectable": "li",
-        "rightClick": getContextMenuItems,
-        "lasso": false,
-        "selectAllShortcut": false,
-        "copyPaste": false,
-        "count": "mka-count-items",
-    });
-
-    document.getElementsByClassName('folders-container').item(0).mkaInit({
-        "eltsSelectable": ".folder",
-        "onDragItemClass": "drag-class-sample",
-        "rightClick": getContextMenuFolders,
-        "lasso": true,
-        "selectAllShortcut": true,
-        "copyPaste": true,
-        "count": "mka-count-folders",
-    });
-
-</script>
+        document.getElementsByClassName('folders-container').item(0).mkaInit({
+            "eltsSelectable": ".folder",
+            "lasso": true,
+            "selectAllShortcut": false,
+            "copyPaste": false,
+            "count": "mka-count-folders",
+            "deleteShortcut": deleteFolders
+        });
+    </script>
 </div>
 <script src="../prism.js"></script>
 </body>

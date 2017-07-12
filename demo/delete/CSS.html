@@ -19,7 +19,7 @@
 <div id="menu_pages"></div>
 
 <div id="explication"></div>
-<script src="rightClick.js"></script>
+<script src="delete.js"></script>
 
 <div class="pull-left">
 
@@ -287,68 +287,38 @@
             }
         }
 
-        var getContextMenuItems = function (selection) {
-            var menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: function () {
-                    alert("action 1");
+        var deleteItems = function (elements) {
+            elements.forEach(function (elt) {
+                if (elt.parentNode) {
+                    elt.parentNode.removeChild(elt);
                 }
-            });
-            menu.push({
-                title: "action 3",
-                action: function () {
-                    alert("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: function () {
-                        alert("action multiple");
-                    }
-                });
-            }
-
-            var htmlMenu = document.createElement('ul');
-
-            menu.forEach(function (item) {
-                var li = document.createElement('li');
-                li.innerHTML = item.title;
-                li.onclick = item.action;
-                htmlMenu.appendChild(li);
-            });
-
-            return htmlMenu;
+            })
         }
 
-        var getContextMenuFolders = function (selection) {
-            var htmlMenu = '<ul>' +
-                    '<li onclick="alert(\'action dossier 1\');">action dossier 1</li>' +
-                    '<li onclick="alert(\'action dossier 3\');">action dossier 3</li>' +
-                    '</ul>';
-
-            return htmlMenu;
+        var deleteFolders = function (elements) {
+            elements.forEach(function (elt) {
+                if (elt.parentNode && elt.parentNode.parentNode) {
+                    elt.parentNode.parentNode.removeChild(elt.parentNode);
+                }
+            })
         }
 
         document.getElementById('itemsList').mkaInit({
             "eltsSelectable": "li",
-            "rightClick": getContextMenuItems,
-            "lasso": false,
+            "lasso": true,
             "selectAllShortcut": false,
             "copyPaste": false,
             "count": "mka-count-items",
+            "deleteShortcut": deleteItems
         });
 
         document.getElementsByClassName('folders-container').item(0).mkaInit({
             "eltsSelectable": ".folder",
-            "onDragItemClass": "drag-class-sample",
-            "rightClick": getContextMenuFolders,
             "lasso": true,
-            "selectAllShortcut": true,
-            "copyPaste": true,
+            "selectAllShortcut": false,
+            "copyPaste": false,
             "count": "mka-count-folders",
+            "deleteShortcut": deleteFolders
         });
 
     </script>

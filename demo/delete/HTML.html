@@ -12,91 +12,55 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
           crossorigin="anonymous">
+
     <link href="../prism.css" rel="stylesheet"/>
     <link href="../demo.css" rel="stylesheet"/>
+
 </head>
 <body>
 <div id="menu_pages"></div>
 
 <div id="explication"></div>
-<script src="rightClick.js"></script>
+<script src="delete.js"></script>
 
 <div class="pull-left">
-
     <div>
         <ul class="nav nav-tabs">
-            <li role="presentation"><a href="HTML.html">HTML</a></li>
-            <li role="presentation" class="active"><a href="CSS.html">CSS</a></li>
+            <li role="presentation" class="active"><a href="HTML.html">HTML</a></li>
+            <li role="presentation"><a href="CSS.html">CSS</a></li>
             <li role="presentation"><a href="JS.html">JS</a></li>
         </ul>
     </div>
     <pre class="line-numbers" data-start=0>
-<code class="language-css">
-#itemsList {
-    padding: 50px;
-    background-color: #f8f8f8;
-    border: 1px solid #ededed;
-}
+<code class="language-html">
+&lt;div class="container">
+    &lt;button type="button" class="btn btn-secondary" onclick="switchMode()">Switch mode&lt;/button>
+    &lt;h2>Folders (&lt;span id="mka-count-folders">0&lt;/span>)</h2>
+    &lt;div class="row folders-container">
+        &lt;div class="col-xs-6 col-sm-4 col-lg-3">
+            &lt;div class="folder">
+                &lt;div class="thumbnail">
+                    &lt;div class="caption">
+                        &lt;h3>Folder&lt;/h3>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/div>
 
-#itemsList.grid {
-    column-count: 4;
-    column-gap: 1em;
-}
-
-#itemsList.grid li.list-group-item {
-    display: inline-block;
-    margin: 0 0 1em;
-    width: 100%;
-    height: 120px;
-}
-
-.folder {
-    text-align: center;
-}
-
-.mka-elt-selecting, .mka-elt-selecting .thumbnail {
-    background-color: #D1EEFF;
-}
-
-.mka-elt-selected, .mka-elt-selected .thumbnail {
-    background-color: #bebebe;
-}
-
-.on-drag {
-    background-color: #cbcbcb !important;
-    opacity: 0.7;
-}
-
-.folders-container {
-    background-color: #efefef;
-    border: 1px solid #afafaf;
-    padding: 15px 0;
-}
-
-#wrapper-drag {
-    position: relative;
-}
-
-.drag-class-sample {
-    /* Sample class for onDragItemClass*/
-    color: white;
-    background: #403A3E;
-    background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
-    background: linear-gradient(to right, #BE5869, #403A3E);
-    border: 1px solid #403A3E;
-    padding: 5px;
-    text-align: center;
-    width: 250px;
-}
-
-.drag-class-sample span {
-    /* Sample class for onDragItemClass span */
-    color: white;
-    background: #cc2b5e;
-    background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
-    background: linear-gradient(to right, #753a88, #cc2b5e);
-
-}
+    &lt;h2>Items (&lt;span id="mka-count-items">0&lt;/span>)&lt;/h2>
+    &lt;ul id="itemsList" class="list-group">
+        &lt;li class="list-group-item" item-id="1">
+            &lt;div class="card">
+                &lt;div class="card-block">
+                    &lt;h4 class="card-title">Item 1</h4>
+                &lt;/div>
+            &lt;/div>
+        &lt;/li>
+    &lt;/ul>
+&lt;/div>
+&lt;!-- Link your mka.min.js -->
+&lt;script src="../dist/mka.min.js">&lt;/script>
 </code>
 </pre>
 </div>
@@ -287,70 +251,39 @@
             }
         }
 
-        var getContextMenuItems = function (selection) {
-            var menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: function () {
-                    alert("action 1");
+        var deleteItems = function (elements) {
+            elements.forEach(function (elt) {
+                if (elt.parentNode) {
+                    elt.parentNode.removeChild(elt);
                 }
-            });
-            menu.push({
-                title: "action 3",
-                action: function () {
-                    alert("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: function () {
-                        alert("action multiple");
-                    }
-                });
-            }
-
-            var htmlMenu = document.createElement('ul');
-
-            menu.forEach(function (item) {
-                var li = document.createElement('li');
-                li.innerHTML = item.title;
-                li.onclick = item.action;
-                htmlMenu.appendChild(li);
-            });
-
-            return htmlMenu;
+            })
         }
 
-        var getContextMenuFolders = function (selection) {
-            var htmlMenu = '<ul>' +
-                    '<li onclick="alert(\'action dossier 1\');">action dossier 1</li>' +
-                    '<li onclick="alert(\'action dossier 3\');">action dossier 3</li>' +
-                    '</ul>';
-
-            return htmlMenu;
+        var deleteFolders = function (elements) {
+            elements.forEach(function (elt) {
+                if (elt.parentNode && elt.parentNode.parentNode) {
+                    elt.parentNode.parentNode.removeChild(elt.parentNode);
+                }
+            })
         }
 
         document.getElementById('itemsList').mkaInit({
             "eltsSelectable": "li",
-            "rightClick": getContextMenuItems,
-            "lasso": false,
+            "lasso": true,
             "selectAllShortcut": false,
             "copyPaste": false,
             "count": "mka-count-items",
+            "deleteShortcut": deleteItems
         });
 
         document.getElementsByClassName('folders-container').item(0).mkaInit({
             "eltsSelectable": ".folder",
-            "onDragItemClass": "drag-class-sample",
-            "rightClick": getContextMenuFolders,
             "lasso": true,
-            "selectAllShortcut": true,
-            "copyPaste": true,
+            "selectAllShortcut": false,
+            "copyPaste": false,
             "count": "mka-count-folders",
+            "deleteShortcut": deleteFolders
         });
-
     </script>
 </div>
 <script src="../prism.js"></script>

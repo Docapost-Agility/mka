@@ -13,36 +13,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
           crossorigin="anonymous">
+
 </head>
 
 <body>
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="accueil.html">Librairie</a>
-        </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                <li><a href="select/HTML.html">SELECT</a></li>
-                <li><a href="selectAll/HTML.html">SELECT ALL</a></li>
-                <li><a href="rightClick/HTML.html">RIGHT CLICK</a></li>
-                <li><a href="copyPaste/HTML.html">COPY PASTE</a></li>
-                <li><a href="dragNDrop/HTML.html">DRAG AND DROP</a></li>
-                <li><a href="dbClick/HTML.html">DOUBLE CLICK</a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
+<div id="menu"></div>
 
 <div class="container">
-    <h2>Folders</h2>
+    <button type="button" class="btn btn-secondary" onclick="switchMode()">Switch mode</button>
+    <h2>Folders (<span id="mka-count-folders">0</span>)</h2>
     <div class="row folders-container">
         <div class="col-xs-6 col-sm-4 col-lg-3">
-            <div class="mka-dropzone">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -51,7 +34,7 @@
             </div>
         </div>
         <div class="col-xs-6 col-sm-4 col-lg-3">
-            <div class="mka-dropzone">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -60,7 +43,7 @@
             </div>
         </div>
         <div class="col-xs-6 col-sm-4 col-lg-3">
-            <div class="mka-dropzone">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -69,7 +52,7 @@
             </div>
         </div>
         <div class="col-xs-6 col-sm-4 col-lg-3">
-            <div class="mka-dropzone">
+            <div class="folder">
                 <div class="thumbnail">
                     <div class="caption">
                         <h3>Folder</h3>
@@ -79,10 +62,8 @@
         </div>
     </div>
 
-
-    <h3>Nombre d'element sélectionné <span id="mka-count">0</span></h3>
-
-    <ul id="itemsList" class="list-group" style="margin-top: 40px">
+    <h2>Items (<span id="mka-count-items">0</span>)</h2>
+    <ul id="itemsList" class="list-group">
         <li class="list-group-item" item-id="1">
             <div class="card">
                 <div class="card-block">
@@ -125,27 +106,53 @@
                 </div>
             </div>
         </li>
+        <li class="list-group-item" item-id="7">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Item 7</h4>
+                </div>
+            </div>
+        </li>
+        <li class="list-group-item" item-id="8">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Item 8</h4>
+                </div>
+            </div>
+        </li>
     </ul>
 </div>
 
-<script src="../build/mka.js"></script>
-
+<script src="../dist/mka.min.js"></script>
+<script src="menu_accueil.js"></script>
 <style>
-    #mka {
+    #itemsList {
         padding: 50px;
         background-color: #f8f8f8;
         border: 1px solid #ededed;
     }
 
-    .mka-dropzone {
+    #itemsList.grid {
+        column-count: 4;
+        column-gap: 1em;
+    }
+
+    #itemsList.grid li.list-group-item {
+        display: inline-block;
+        margin: 0 0 1em;
+        width: 100%;
+        height: 120px;
+    }
+
+    .folder {
         text-align: center;
     }
 
-    .mka-elt-selecting {
+    .mka-elt-selecting, .mka-elt-selecting .thumbnail {
         background-color: #D1EEFF;
     }
 
-    .mka-elt-selected {
+    .mka-elt-selected, .mka-elt-selected .thumbnail {
         background-color: #bebebe;
     }
 
@@ -188,51 +195,101 @@
 </style>
 
 <script type="text/javascript">
-    let getContextMenu = (selection) => {
-        let menu = [];
+    var switchMode = function () {
+        var list = document.getElementById("itemsList");
+        if (list.classList.contains("grid")) {
+            list.classList.remove("grid");
+        } else {
+            list.classList.add("grid");
+        }
+    }
+
+    var getContextMenuItems = function (selection) {
+        var menu = [];
 
         menu.push({
             title: "action 1",
-            action: () => {
+            action: function () {
                 alert("action 1");
             }
         });
         menu.push({
             title: "action 3",
-            action: () => {
+            action: function () {
                 alert("action 3");
             }
         });
         if (selection.length > 1) {
             menu.push({
                 title: "action multiple",
-                action: () => {
+                action: function () {
                     alert("action multiple");
                 }
             });
         }
-        return menu;
+
+        var htmlMenu = document.createElement('ul');
+
+        menu.forEach(function (item) {
+            var li = document.createElement('li');
+            li.innerHTML = item.title;
+            li.onclick = item.action;
+            htmlMenu.appendChild(li);
+        });
+
+        return htmlMenu;
     }
 
-    let dbClick = (elt) => {
-        alert('dbclick ' + elt.getAttribute("item-id"));
+    var getContextMenuFolders = function (selection) {
+        var htmlMenu = '<ul>' +
+                '<li onclick="alert(\'action dossier 1\');">action dossier 1</li>' +
+                '<li onclick="alert(\'action dossier 3\');">action dossier 3</li>' +
+                '</ul>';
+
+        return htmlMenu;
+    }
+
+    var dbClick = function (elt) {
+        alert('dbclick ' + elt);
+    }
+
+    var drop = function (elts, zone) {
+        alert('drop ' + elts + ' dropZone ' + zone);
+    }
+
+    var deleteItems = function (elements) {
+        elements.forEach(function (elt) {
+            if (elt.parentNode) {
+                elt.parentNode.removeChild(elt);
+            }
+        })
+    }
+
+    var deleteFolders = function (elements) {
+        elements.forEach(function (elt) {
+            if (elt.parentNode && elt.parentNode.parentNode) {
+                elt.parentNode.parentNode.removeChild(elt.parentNode);
+            }
+        })
     }
 
     document.getElementById('itemsList').mkaInit({
-        "eltsSelectable": document.getElementById('itemsList').getElementsByTagName('li'),
+        "eltsSelectable": "li",
         "onDragItemClass": "drag-class-sample",
-        "dragNdrop": true,
-        "rightClick": getContextMenu,
+        "dragNdrop": drop,
+        "droppableElements": ".folders-container .folder",
+        "rightClick": getContextMenuItems,
         "dbClick": dbClick,
         "lasso": true,
         "selectAllShortcut": true,
         "copyPaste": true,
-        "count": "mka-count",
+        "deleteShortcut": deleteItems,
+        "count": "mka-count-items",
         "pasteFunction": function (items) {
             console.log(items);
-            let data = [];
-            items.map((elt) => {
-                alert(elt.getAttribute("item-id"));
+            var data = [];
+            items.forEach(function (elt) {
+                console.log(elt.getAttribute("item-id"));
                 data.push(elt.getAttribute("item-id"));
             });
             console.group("Call WS with :");
@@ -244,6 +301,35 @@
         //     console.log("drop du client");
         // }
     });
+
+    document.getElementsByClassName('folders-container').item(0).mkaInit({
+        "eltsSelectable": ".folder",
+        "onDragItemClass": "drag-class-sample",
+        "dragNdrop": true,
+        "rightClick": getContextMenuFolders,
+        "dbClick": dbClick,
+        "lasso": true,
+        "selectAllShortcut": true,
+        "copyPaste": true,
+        "deleteShortcut": deleteFolders,
+        "count": "mka-count-folders",
+        "pasteFunction": function (items) {
+            console.log(items);
+            var data = [];
+            items.forEach(function (elt) {
+                console.log(elt.getAttribute("item-id"));
+                data.push(elt.getAttribute("item-id"));
+            });
+            console.group("Call WS with :");
+            console.group(data);
+            console.groupEnd();
+        }
+        // "dropFunction" : function(ids) {
+        //     console.log(ids);
+        //     console.log("drop du client");
+        // }
+    });
+
 </script>
 
 </body>
