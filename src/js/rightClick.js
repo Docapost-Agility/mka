@@ -8,6 +8,11 @@ document.head.insertBefore(customStyle, document.head.firstChild);
 
 export let init = (conf, parentFunctions) => {
     bindContextMenu(conf, parentFunctions);
+
+    if (conf.isMobileDevice) {
+        parentFunctions.setProperty('rightClick.startContextMenu', false);
+        bindMobileDevice(conf, parentFunctions);
+    }
 }
 
 export let windowEvents = {
@@ -88,15 +93,22 @@ let bindContextMenu = (conf, parentFunctions) => {
     // On désactive le click droit sur l'élément principal
     parentFunctions.getContainer().addEventListener('contextmenu', (event) => {
         event.preventDefault();
+        if (!parentFunctions.getProperty('rightClick.startContextMenu') && conf.isMobileDevice) {
+            return false;
+        }
+
         removeMkaRcMenu();
         const selectableElement = parentFunctions.getSelectableElement(event.target);
 
         if (selectableElement !== null) {
-            // Si l'élément n'est pas sélectionné, on restreint la sélection à ce seul élémentœ
             if (!parentFunctions.elementIsSelected(selectableElement)) {
-                parentFunctions.updateSelection([selectableElement]);
+                if (conf.isMobileDevice) {
+                    return false;
+                } else {
+                    // Si l'élément n'est pas sélectionné, on restreint la sélection à ce seul élémentœ
+                    parentFunctions.updateSelection([selectableElement]);
+                }
             }
-
         } else {
             parentFunctions.updateSelection([]);
         }
@@ -116,4 +128,19 @@ let bindContextMenu = (conf, parentFunctions) => {
         setMenuPosition(menu, event, selectableElement, parentFunctions);
     });
 
+}
+
+let bindMobileDevice = (conf, parentFunctions) => {
+    parentFunctions.getContainer().addEventListener('touchstart', (event) => {
+        parentFunctions.setProperty('rightClick.startContextMenu', parentFunctions.elementIsSelected(event.target));
+
+        if (!parentFunctions.elementIsSelected(event.target)) {
+            removeMkaRcMenu();
+        }
+
+    });
+
+    parentFunctions.getContainer().addEventListener('touchend', () => {
+        parentFunctions.setProperty('rightClick.startContextMenu', true);
+    });
 }
