@@ -447,7 +447,6 @@ let getScrollTotal = (elt, scrollType) => {
         scroll = scroll + elt[scrollType];
         elt = elt.parentNode;
     }
-    // scroll = scroll + document.body[scrollType];
     return scroll;
 }
 
