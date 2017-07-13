@@ -10,30 +10,11 @@
     text-align: center;
 }
 
-.pull-left {
-    margin-left:5%;
-    width: 44%;
-}
-
-.pull-right {
-    margin-right:5%;
-    width: 44%;
+.demo {
     border: 1px solid #ddd;
     border-radius: 4px;
 }
 
-.container {
-    max-width:750px;
-}
-
-.language-css {
-    overflow: scroll;
-    overflow-x: hidden;
-    max-height: 700px;
-}
-
-.language-javascript {
-    overflow: scroll;
-    overflow-x: hidden;
+.line-numbers {
     max-height: 700px;
 }
