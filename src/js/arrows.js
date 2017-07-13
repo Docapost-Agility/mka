@@ -42,9 +42,29 @@ export let windowEvents = {
             } else {
                 event.preventDefault();
                 let centerScroll = (elt) => {
-                    let scrollX = (elt.offsetBodyLeft() + elt.offsetWidth / 2) - (window.scrollX + window.innerWidth / 2);
-                    let scrollY = (elt.offsetBodyTop() + elt.offsetHeight / 2) - (window.scrollY + window.innerHeight / 2);
-                    window.scrollBy(scrollX, scrollY);
+                    let scrollableContainer = null;
+                    let currentElt = elt
+                    while (!!currentElt.parentNode && !scrollableContainer) {
+                        currentElt = currentElt.parentNode;
+                        if (currentElt.scrollHeight > currentElt.offsetHeight || currentElt.scrollWidth > currentElt.offsetWidth || currentElt === document.body) {
+                            scrollableContainer = currentElt;
+                        }
+                    }
+                    if (scrollableContainer) {
+                        if (scrollableContainer === document.body) {
+                            let scrollY = elt.offsetBodyTop() - scrollableContainer.offsetBodyTop() + (elt.offsetHeight - window.innerHeight) / 2;
+                            let scrollX = elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft() + (elt.offsetWidth - window.innerWidth) / 2;
+                            window.scrollTo(scrollX, scrollY);
+                        } else {
+                            let scrollY = elt.offsetBodyTop() - scrollableContainer.offsetBodyTop() + (elt.offsetHeight - scrollableContainer.offsetHeight) / 2;
+                            let scrollX = elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft() + (elt.offsetHeight - window.innerHeight) / 2;
+                            scrollableContainer.scrollTop = scrollY;
+                            scrollableContainer.scrollLeft = scrollX;
+                        }
+                        centerScroll(scrollableContainer);
+                    } else {
+                        return false;
+                    }
                 }
                 centerScroll(lastSelected);
 
@@ -94,78 +114,35 @@ export let windowEvents = {
 };
 
 let calculateNextElement = (fromElement, code, parentFunctions) => {
+    let selectablesElements = parentFunctions.getSelectablesElements();
+    let indexElt = selectablesElements.indexOf(fromElement);
+    if (indexElt === -1) {
+        return null;
+    } else if (code === 37) {
+        //left
+        return (selectablesElements[indexElt - 1]) ? selectablesElements[indexElt - 1] : null;
+    } else if (code === 39) {
+        //right
+        return (selectablesElements[indexElt + 1]) ? selectablesElements[indexElt + 1] : null;
+    }
+
     let interval = 10;
     let rect = fromElement.getBoundingClientRect();
-    let posX = 0;
-    let posY = 0;
-    let updateX = 0;
-    let updateY = 0;
-    // let updateLine = 0;
+    let posX = fromElement.offsetBodyLeft() + rect.width / 2 - fromElement.scrollLeftTotal();
+    let posY = fromElement.offsetBodyTop() + ((code === 40) ? rect.height : 0);
+    let updateY = (code === 40) ? interval : -interval;
 
-    switch (code) {
-        //left
-        case 37 :
-            posX = fromElement.offsetBodyLeft();
-            posY = fromElement.offsetBodyTop() + rect.height / 2;
-            updateX = -interval;
-            break;
-        //up
-        case 38 :
-            posX = fromElement.offsetBodyLeft() + rect.width / 2;
-            posY = fromElement.offsetBodyTop();
-            updateY = -interval;
-            break;
-        //right
-        case 39 :
-            posX = fromElement.offsetBodyLeft() + rect.width;
-            posY = fromElement.offsetBodyTop() + rect.height / 2;
-            updateX = interval;
-            break;
-        //down
-        case 40 :
-            posX = fromElement.offsetBodyLeft() + rect.width / 2;
-            posY = fromElement.offsetBodyTop() + rect.height;
-            updateY = interval;
-            break;
-    }
+    posY = posY + updateY - fromElement.scrollTopTotal();
 
-    posX = posX + updateX;
-    posY = posY + updateY - window.scrollY;
-    let lineChanged = false;
-    let container = parentFunctions.getContainer();
-
-    let isSameLineThanOrigin = (elt) => {
-        let eltCenterY = elt.offsetBodyTop() + elt.getBoundingClientRect().height / 2;
-        if (code === 37) {
-            return eltCenterY >= fromElement.offsetBodyTop();
-        } else if (code === 39) {
-            return eltCenterY <= fromElement.offsetBodyTop() + rect.height;
-        }
-    }
-
-
-    let getNextElement = (isNewLine) => {
-        lineChanged = lineChanged || isNewLine;
+    let getNextElement = () => {
         let target = document.elementFromPoint(posX, posY);
         let selectableElement = parentFunctions.getSelectableElement(target);
-        if (!selectableElement || lineChanged && isSameLineThanOrigin(selectableElement)) {
+        if (!selectableElement) {
             if (parentFunctions.isMkaContainerFocused(target)) {
-                posX = posX + updateX;
                 posY = posY + updateY;
                 return getNextElement();
             } else {
-                if (code === 38 || code === 40 || isNewLine) {
-                    return null;
-                } else {
-                    if (code === 37) {
-                        posY = (!lineChanged) ? fromElement.offsetBodyTop() - interval - window.scrollY : posY - interval;
-                        posX = container.offsetBodyLeft() + container.getBoundingClientRect().width - interval;
-                    } else {
-                        posY = (!lineChanged) ? fromElement.offsetBodyTop() + rect.height + interval - window.scrollY : posY + interval;
-                        posX = container.offsetBodyLeft() + interval;
-                    }
-                    return getNextElement(true);
-                }
+                return null;
             }
         }
         return selectableElement;

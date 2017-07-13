@@ -442,12 +442,12 @@ HTMLElement.prototype.offsetBodyBottom = function () {
 }
 
 let getScrollTotal = (elt, scrollType) => {
-    let scroll = elt[scrollType];
-    while (elt.parentNode && elt.parentNode !== document.body) {
-        elt = elt.parentNode;
+    let scroll = 0;
+    while (elt[scrollType] !== undefined) {
         scroll = scroll + elt[scrollType];
+        elt = elt.parentNode;
     }
-    scroll = scroll + document.body[scrollType];
+    // scroll = scroll + document.body[scrollType];
     return scroll;
 }
 
