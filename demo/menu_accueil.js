@@ -2,7 +2,7 @@ if(document.getElementById("menu") !==null){
     document.getElementById("menu").innerHTML ="<nav class=\"navbar navbar-default\">" +
                                                     "<div class=\"container-fluid\">" +
                                                         "<div class=\"navbar-header\">" +
-                                                            "<a class=\"navbar-brand\" href=\"accueil.html\">Librairie</a>" +
+                                                            "<a class=\"navbar-brand\" href=\"accueil.html\"><img src=\"Docapost-Aglity.png\" style=\"width:100px\"></a>" +
                                                         "</div>" +
                                                         "<div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">" +
                                                             "<ul class=\"nav navbar-nav\">" +
@@ -21,7 +21,7 @@ if(document.getElementById("menu") !==null){
     document.getElementById("menu_pages").innerHTML ="<nav class=\"navbar navbar-default\">" +
                                                     "<div class=\"container-fluid\">" +
                                                         "<div class=\"navbar-header\">" +
-                                                            "<a class=\"navbar-brand\" href=\"../accueil.html\">Librairie</a>" +
+                                                            "<a class=\"navbar-brand\" href=\"../accueil.html\"><img src=\"../Docapost-Aglity.png\" style=\"width:100px\"></a>" +
                                                         "</div>" +
                                                         "<div class=\"collapse navbar-collapse\" id=\"bs-example-navbar-collapse-1\">" +
                                                             "<ul class=\"nav navbar-nav\">" +
@@ -55,4 +55,12 @@ function openCode(evt, codeName) {
     evt.currentTarget.className += " active";
 }
 
+var switchMode = function () {
+    var list = document.getElementById("itemsList");
+    if (list.classList.contains("grid")) {
+        list.classList.remove("grid");
+    } else {
+        list.classList.add("grid");
+    }
+}
 
