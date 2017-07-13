@@ -12,25 +12,60 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
           crossorigin="anonymous">
+
     <link href="../prism.css" rel="stylesheet"/>
     <link href="../demo.css" rel="stylesheet"/>
+
 </head>
 <body>
 <div id="menu_pages"></div>
 
 <div id="explication"></div>
-<script src="rightClick.js"></script>
+<script src="select.js"></script>
 
 <div class="col-xs-12 col-sm-12 col-md-6 col-md-6">
-
-    <div>
-        <ul class="nav nav-tabs">
-            <li role="presentation"><a href="HTML.html">HTML</a></li>
-            <li role="presentation" class="active"><a href="CSS.html">CSS</a></li>
-            <li role="presentation"><a href="JS.html">JS</a></li>
-        </ul>
+    <div class="tab">
+        <button class="tablinks active" onClick="openCode(event, 'HTML')">HTML</button>
+        <button class="tablinks" onClick="openCode(event, 'CSS')">CSS</button>
+        <button class="tablinks" onClick="openCode(event, 'JS')">JS</button>
     </div>
-    <pre class="line-numbers" data-start=0>
+    <div id="HTML" class="tabcontent" style="display:block">
+<pre class="line-numbers" data-start=0>
+<code class="language-html">
+&lt;div class="container">
+    &lt;button type="button" class="btn btn-secondary" onclick="switchMode()">Switch mode&lt;/button>
+    &lt;h2>Folders (&lt;span id="mka-count-folders">0&lt;/span>)</h2>
+    &lt;div class="row folders-container">
+        &lt;div class="col-xs-6 col-sm-4 col-lg-3">
+            &lt;div class="folder">
+                &lt;div class="thumbnail">
+                    &lt;div class="caption">
+                        &lt;h3>Folder&lt;/h3>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/div>
+
+    &lt;h2>Items (&lt;span id="mka-count-items">0&lt;/span>)&lt;/h2>
+    &lt;ul id="itemsList" class="list-group">
+        &lt;li class="list-group-item" item-id="1">
+            &lt;div class="card">
+                &lt;div class="card-block">
+                    &lt;h4 class="card-title">Item 1</h4>
+                &lt;/div>
+            &lt;/div>
+        &lt;/li>
+    &lt;/ul>
+&lt;/div>
+&lt;!-- Link your mka.min.js -->
+&lt;script src="../dist/mka.min.js">&lt;/script>
+</code>
+</pre>
+    </div>
+
+    <div id="CSS" class="tabcontent">
+<pre class="line-numbers" data-start=0>
 <code class="language-css">
 #itemsList {
     padding: 50px;
@@ -99,11 +134,33 @@
 }
 </code>
 </pre>
+    </div>
+    <div id="JS" class="tabcontent">
+<pre class="line-numbers" data-start=0>
+<code class="language-javascript">
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-items",
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-folders",
+});
+</code>
+</pre>
+    </div>
 </div>
 
-<div class="demo col-xs-12 col-sm-12 col-md-6 col-md-6">
+<div class="demo col-xs-12 col-sm-12 col-md-6 col-lg-6">
 
-    <div class="container">
+    <div class="container col-xs-11 col-sm-11 col-md-12 col-lg-12">
         <button type="button" class="btn btn-secondary" onclick="switchMode()">Switch mode</button>
         <h4>Folders (<span id="mka-count-folders">0</span>)</h4>
         <div class="row folders-container">
@@ -286,68 +343,20 @@
             }
         }
 
-        var getContextMenuItems = function (selection) {
-            var menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: function () {
-                    alert("action 1");
-                }
-            });
-            menu.push({
-                title: "action 3",
-                action: function () {
-                    alert("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: function () {
-                        alert("action multiple");
-                    }
-                });
-            }
-
-            var htmlMenu = document.createElement('ul');
-
-            menu.forEach(function (item) {
-                var li = document.createElement('li');
-                li.innerHTML = item.title;
-                li.onclick = item.action;
-                htmlMenu.appendChild(li);
-            });
-
-            return htmlMenu;
-        }
-
-        var getContextMenuFolders = function (selection) {
-            var htmlMenu = '<ul>' +
-                    '<li onclick="alert(\'action dossier 1\');">action dossier 1</li>' +
-                    '<li onclick="alert(\'action dossier 3\');">action dossier 3</li>' +
-                    '</ul>';
-
-            return htmlMenu;
-        }
-
         document.getElementById('itemsList').mkaInit({
             "eltsSelectable": "li",
-            "rightClick": getContextMenuItems,
-            "lasso": false,
+            "lasso": true,
             "selectAllShortcut": false,
             "copyPaste": false,
-            "count": "mka-count-items",
+            "count": "mka-count-items"
         });
 
         document.getElementsByClassName('folders-container').item(0).mkaInit({
             "eltsSelectable": ".folder",
-            "onDragItemClass": "drag-class-sample",
-            "rightClick": getContextMenuFolders,
             "lasso": true,
-            "selectAllShortcut": true,
-            "copyPaste": true,
-            "count": "mka-count-folders",
+            "selectAllShortcut": false,
+            "copyPaste": false,
+            "count": "mka-count-folders"
         });
 
     </script>

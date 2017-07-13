@@ -20,18 +20,17 @@
 <div id="menu_pages"></div>
 
 <div id="explication"></div>
-<script src="rightClick.js"></script>
+<script src="dbClick.js"></script>
 
 <div class="col-xs-12 col-sm-12 col-md-6 col-md-6">
 
-    <div>
-        <ul class="nav nav-tabs">
-            <li role="presentation" class="active"><a href="HTML.html">HTML</a></li>
-            <li role="presentation"><a href="CSS.html">CSS</a></li>
-            <li role="presentation"><a href="JS.html">JS</a></li>
-        </ul>
+    <div class="tab">
+        <button class="tablinks active" onClick="openCode(event, 'HTML')">HTML</button>
+        <button class="tablinks" onClick="openCode(event, 'CSS')">CSS</button>
+        <button class="tablinks" onClick="openCode(event, 'JS')">JS</button>
     </div>
-    <pre class="line-numbers" data-start=0>
+    <div id="HTML" class="tabcontent" style="display:block">
+<pre class="line-numbers" data-start=0>
 <code class="language-html">
 &lt;div class="container">
     &lt;button type="button" class="btn btn-secondary" onclick="switchMode()">Switch mode&lt;/button>
@@ -63,6 +62,105 @@
 &lt;script src="../dist/mka.min.js">&lt;/script>
 </code>
 </pre>
+    </div>
+    <div id="CSS" class="tabcontent">
+<pre class="line-numbers" data-start=0>
+<code class="language-css">
+#itemsList {
+    padding: 50px;
+    background-color: #f8f8f8;
+    border: 1px solid #ededed;
+}
+
+#itemsList.grid {
+    column-count: 4;
+    column-gap: 1em;
+}
+
+#itemsList.grid li.list-group-item {
+    display: inline-block;
+    margin: 0 0 1em;
+    width: 100%;
+    height: 120px;
+}
+
+.folder {
+    text-align: center;
+}
+
+.mka-elt-selecting, .mka-elt-selecting .thumbnail {
+    background-color: #D1EEFF;
+}
+
+.mka-elt-selected, .mka-elt-selected .thumbnail {
+    background-color: #bebebe;
+}
+
+.on-drag {
+    background-color: #cbcbcb !important;
+    opacity: 0.7;
+}
+
+.folders-container {
+    background-color: #efefef;
+    border: 1px solid #afafaf;
+    padding: 15px 0;
+}
+
+#wrapper-drag {
+    position: relative;
+}
+
+.drag-class-sample {
+    /* Sample class for onDragItemClass*/
+    color: white;
+    background: #403A3E;
+    background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
+    background: linear-gradient(to right, #BE5869, #403A3E);
+    border: 1px solid #403A3E;
+    padding: 5px;
+    text-align: center;
+    width: 250px;
+}
+
+.drag-class-sample span {
+    /* Sample class for onDragItemClass span */
+    color: white;
+    background: #cc2b5e;
+    background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
+    background: linear-gradient(to right, #753a88, #cc2b5e);
+
+}
+</code>
+</pre>
+    </div>
+    <div id="JS" class="tabcontent">
+<pre class="line-numbers" data-start=0>
+<code class="language-javascript">
+var dbClick = function (elt) {
+    alert('dbclick ' + elt);
+}
+
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "dbClick": dbClick,
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-items"
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "dbClick": dbClick,
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-folders"
+});
+</code>
+</pre>
+    </div>
 </div>
 
 <div class="demo col-xs-12 col-sm-12 col-md-6 col-md-6">
@@ -250,68 +348,26 @@
             }
         }
 
-        var getContextMenuItems = function (selection) {
-            var menu = [];
-
-            menu.push({
-                title: "action 1",
-                action: function () {
-                    alert("action 1");
-                }
-            });
-            menu.push({
-                title: "action 3",
-                action: function () {
-                    alert("action 3");
-                }
-            });
-            if (selection.length > 1) {
-                menu.push({
-                    title: "action multiple",
-                    action: function () {
-                        alert("action multiple");
-                    }
-                });
-            }
-
-            var htmlMenu = document.createElement('ul');
-
-            menu.forEach(function (item) {
-                var li = document.createElement('li');
-                li.innerHTML = item.title;
-                li.onclick = item.action;
-                htmlMenu.appendChild(li);
-            });
-
-            return htmlMenu;
-        }
-
-        var getContextMenuFolders = function (selection) {
-            var htmlMenu = '<ul>' +
-                    '<li onclick="alert(\'action dossier 1\');">action dossier 1</li>' +
-                    '<li onclick="alert(\'action dossier 3\');">action dossier 3</li>' +
-                    '</ul>';
-
-            return htmlMenu;
+        var dbClick = function (elt) {
+            alert('dbclick ' + elt);
         }
 
         document.getElementById('itemsList').mkaInit({
             "eltsSelectable": "li",
-            "rightClick": getContextMenuItems,
+            "dbClick": dbClick,
             "lasso": false,
             "selectAllShortcut": false,
             "copyPaste": false,
-            "count": "mka-count-items",
+            "count": "mka-count-items"
         });
 
         document.getElementsByClassName('folders-container').item(0).mkaInit({
             "eltsSelectable": ".folder",
-            "onDragItemClass": "drag-class-sample",
-            "rightClick": getContextMenuFolders,
-            "lasso": true,
-            "selectAllShortcut": true,
-            "copyPaste": true,
-            "count": "mka-count-folders",
+            "dbClick": dbClick,
+            "lasso": false,
+            "selectAllShortcut": false,
+            "copyPaste": false,
+            "count": "mka-count-folders"
         });
 
     </script>

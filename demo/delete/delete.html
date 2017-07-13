@@ -12,25 +12,59 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
           crossorigin="anonymous">
+
     <link href="../prism.css" rel="stylesheet"/>
     <link href="../demo.css" rel="stylesheet"/>
+
 </head>
 <body>
 <div id="menu_pages"></div>
 
 <div id="explication"></div>
-<script src="copyPaste.js"></script>
+<script src="delete.js"></script>
 
 <div class="col-xs-12 col-sm-12 col-md-6 col-md-6">
-
-    <div>
-        <ul class="nav nav-tabs">
-            <li role="presentation"><a href="HTML.html">HTML</a></li>
-            <li role="presentation" class="active"><a href="CSS.html">CSS</a></li>
-            <li role="presentation"><a href="JS.html">JS</a></li>
-        </ul>
+    <div class="tab">
+        <button class="tablinks active" onClick="openCode(event, 'HTML')">HTML</button>
+        <button class="tablinks" onClick="openCode(event, 'CSS')">CSS</button>
+        <button class="tablinks" onClick="openCode(event, 'JS')">JS</button>
     </div>
-    <pre class="line-numbers" data-start=0>
+    <div id="HTML" class="tabcontent" style="display:block">
+<pre class="line-numbers" data-start=0>
+<code class="language-html">
+&lt;div class="container">
+    &lt;button type="button" class="btn btn-secondary" onclick="switchMode()">Switch mode&lt;/button>
+    &lt;h2>Folders (&lt;span id="mka-count-folders">0&lt;/span>)</h2>
+    &lt;div class="row folders-container">
+        &lt;div class="col-xs-6 col-sm-4 col-lg-3">
+            &lt;div class="folder">
+                &lt;div class="thumbnail">
+                    &lt;div class="caption">
+                        &lt;h3>Folder&lt;/h3>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/div>
+
+    &lt;h2>Items (&lt;span id="mka-count-items">0&lt;/span>)&lt;/h2>
+    &lt;ul id="itemsList" class="list-group">
+        &lt;li class="list-group-item" item-id="1">
+            &lt;div class="card">
+                &lt;div class="card-block">
+                    &lt;h4 class="card-title">Item 1</h4>
+                &lt;/div>
+            &lt;/div>
+        &lt;/li>
+    &lt;/ul>
+&lt;/div>
+&lt;!-- Link your mka.min.js -->
+&lt;script src="../dist/mka.min.js">&lt;/script>
+</code>
+</pre>
+    </div>
+    <div id="CSS" class="tabcontent">
+<pre class="line-numbers" data-start=0>
 <code class="language-css">
 #itemsList {
     padding: 50px;
@@ -99,6 +133,46 @@
 }
 </code>
 </pre>
+    </div>
+    <div id="JS" class="tabcontent">
+<pre class="line-numbers" data-start=0>
+<code class="language-javascript">
+var deleteItems = function (elements) {
+    elements.forEach(function (elt) {
+        if (elt.parentNode) {
+            elt.parentNode.removeChild(elt);
+        }
+    })
+}
+
+var deleteFolders = function (elements) {
+    elements.forEach(function (elt) {
+        if (elt.parentNode && elt.parentNode.parentNode) {
+            elt.parentNode.parentNode.removeChild(elt.parentNode);
+        }
+    })
+}
+
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "lasso": true,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-items",
+    "deleteShortcut": deleteItems
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "lasso": true,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-folders",
+    "deleteShortcut": deleteFolders
+});
+</code>
+</pre>
+    </div>
 </div>
 
 <div class="demo col-xs-12 col-sm-12 col-md-6 col-md-6">
@@ -286,28 +360,39 @@
             }
         }
 
+        var deleteItems = function (elements) {
+            elements.forEach(function (elt) {
+                if (elt.parentNode) {
+                    elt.parentNode.removeChild(elt);
+                }
+            })
+        }
+
+        var deleteFolders = function (elements) {
+            elements.forEach(function (elt) {
+                if (elt.parentNode && elt.parentNode.parentNode) {
+                    elt.parentNode.parentNode.removeChild(elt.parentNode);
+                }
+            })
+        }
+
         document.getElementById('itemsList').mkaInit({
             "eltsSelectable": "li",
-            "lasso": false,
+            "lasso": true,
             "selectAllShortcut": false,
-            "copyPaste": true,
+            "copyPaste": false,
             "count": "mka-count-items",
-            "pasteFunction": function (items) {
-                console.log(items);
-            }
+            "deleteShortcut": deleteItems
         });
 
         document.getElementsByClassName('folders-container').item(0).mkaInit({
             "eltsSelectable": ".folder",
-            "lasso": false,
+            "lasso": true,
             "selectAllShortcut": false,
-            "copyPaste": true,
+            "copyPaste": false,
             "count": "mka-count-folders",
-            "pasteFunction": function (items) {
-                console.log(items);
-            }
+            "deleteShortcut": deleteFolders
         });
-
     </script>
 </div>
 <script src="../prism.js"></script>
