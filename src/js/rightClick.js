@@ -1,13 +1,24 @@
 const mkarcmenuId = 'mkarcmenu';
+const menuContainerClass = "menu-container";
+
+let customStyle = document.createElement("style");
+customStyle.setAttribute('type', "text/css");
+customStyle.innerHTML = "." + menuContainerClass + "{position:relative;}";
+document.head.insertBefore(customStyle, document.head.firstChild);
 
 export let init = (conf, parentFunctions) => {
     bindContextMenu(conf, parentFunctions);
+
+    if (conf.isMobileDevice) {
+        parentFunctions.setProperty('rightClick.startContextMenu', false);
+        bindMobileDevice(conf, parentFunctions);
+    }
 }
 
 export let windowEvents = {
     onkeydown: (event) => {
         let code = event.which;
-        if ((code == 37 || code == 38 || code == 39 || code == 40) && !!document.getElementById(mkarcmenuId)) {
+        if ((code == 37 || code == 38 || code == 39 || code == 40) && menuIsOpen()) {
             event.preventDefault();
             return true;
         }
@@ -19,6 +30,10 @@ export let windowEvents = {
         }
         return false;
     }
+}
+
+let menuIsOpen = () => {
+    return !!document.getElementById(mkarcmenuId) && document.getElementById(mkarcmenuId).style.display !== 'none';
 }
 
 let removeMkaRcMenu = () => {
@@ -35,9 +50,46 @@ let getMkaRcMenu = () => {
     if (!menu) {
         menu = document.createElement('div');
         menu.setAttribute('id', mkarcmenuId);
-        document.body.appendChild(menu);
     }
     return menu;
+}
+
+let setMenuPosition = (menu, event, parentElement, parentFunctions) => {
+
+    if (!parentElement) {
+        parentElement = parentFunctions.getContainer();
+    }
+
+    if (!parentElement.classList.contains(menuContainerClass)) {
+        parentElement.classList.add(menuContainerClass);
+    }
+
+    let left = event.pageX - (parentElement.offsetBodyLeft() - parentElement.scrollLeftTotal() + document.body.scrollLeft);
+    let top = event.pageY - (parentElement.offsetBodyTop() - parentElement.scrollTopTotal() + document.body.scrollTop);
+
+    let parentWidth = parentElement.offsetWidth;
+    let parentHeight = parentElement.offsetHeight;
+
+    if (left < 3 * parentWidth / 4) {
+        menu.style.left = left + 'px';
+        menu.style.right = "auto";
+    } else {
+        menu.style.right = (parentWidth - left) + 'px';
+        menu.style.left = "auto";
+    }
+
+    if (top < 3 * parentHeight / 4) {
+        menu.style.top = top + 'px';
+        menu.style.bottom = "auto";
+    } else {
+        menu.style.bottom = (parentHeight - top) + 'px';
+        menu.style.top = "auto";
+    }
+
+    menu.style.position = 'absolute';
+    menu.style.display = 'block';
+
+    parentElement.appendChild(menu);
 }
 
 let bindContextMenu = (conf, parentFunctions) => {
@@ -45,15 +97,22 @@ let bindContextMenu = (conf, parentFunctions) => {
     // On désactive le click droit sur l'élément principal
     parentFunctions.getContainer().addEventListener('contextmenu', (event) => {
         event.preventDefault();
+        if (!parentFunctions.getProperty('rightClick.startContextMenu') && conf.isMobileDevice) {
+            return false;
+        }
+
         removeMkaRcMenu();
         const selectableElement = parentFunctions.getSelectableElement(event.target);
 
         if (selectableElement !== null) {
-            // Si l'élément n'est pas sélectionné, on restreint la sélection à ce seul élémentœ
             if (!parentFunctions.elementIsSelected(selectableElement)) {
-                parentFunctions.updateSelection([selectableElement]);
+                if (conf.isMobileDevice) {
+                    return false;
+                } else {
+                    // Si l'élément n'est pas sélectionné, on restreint la sélection à ce seul élémentœ
+                    parentFunctions.updateSelection([selectableElement]);
+                }
             }
-
         } else {
             parentFunctions.updateSelection([]);
         }
@@ -70,10 +129,22 @@ let bindContextMenu = (conf, parentFunctions) => {
             menu.innerHTML = htmlMenu;
         }
 
-        menu.style.position = 'absolute';
-        menu.style.left = event.pageX + 'px';
-        menu.style.top = event.pageY + 'px';
-        menu.style.display = 'block';
+        setMenuPosition(menu, event, selectableElement, parentFunctions);
     });
 
+}
+
+let bindMobileDevice = (conf, parentFunctions) => {
+    parentFunctions.getContainer().addEventListener('touchstart', (event) => {
+        parentFunctions.setProperty('rightClick.startContextMenu', parentFunctions.elementIsSelected(event.target));
+
+        if (!parentFunctions.elementIsSelected(event.target)) {
+            removeMkaRcMenu();
+        }
+
+    });
+
+    parentFunctions.getContainer().addEventListener('touchend', () => {
+        parentFunctions.setProperty('rightClick.startContextMenu', true);
+    });
 }

@@ -2,6 +2,11 @@ export let init = (conf, parentFunctions) => {
     parentFunctions.setProperty('focusedElementIndex', null);
     parentFunctions.setProperty('selecting', []);
 
+    if (conf.isMobileDevice) {
+        parentFunctions.setProperty('select.startLongPress', null);
+        bindMobileDevice(conf, parentFunctions);
+    }
+
     let squareId = "selection-square-" + Math.floor(Math.random() * 100000);
 
     let square = {
@@ -32,13 +37,16 @@ export let init = (conf, parentFunctions) => {
             squareElt.style.height = (square.y2 - square.y1) + "px";
         },
         remove: () => {
-            square.get().style.display = "none";
+            square.get().remove();
         },
         isVisble: () => {
             return square.get().style.display === "block";
         },
         isCrossingElt: (elt) => {
-            return elementIsCrossingZone(elt, square.x1, square.y1, square.x2, square.y2);
+            let container = parentFunctions.getContainer();
+            let scrollTop = container.scrollTopTotal() - document.body.scrollTop;
+            let scrollLeft = container.scrollLeftTotal() - document.body.scrollLeft;
+            return elementIsCrossingZone(elt, square.x1 + scrollLeft, square.y1 + scrollTop, square.x2 + scrollLeft, square.y2 + scrollTop);
         }
     };
     parentFunctions.setProperty('square', square);
@@ -141,7 +149,7 @@ export let windowEvents = {
                     let index = lastSelection.indexOf(selectableElt);
                     let newSelection = [selectableElt];
 
-                    if (event.ctrlKey) {
+                    if (event.ctrlKey || (conf.isMobileDevice && index !== -1)) {
                         newSelection = lastSelection;
                         if (index !== -1) {
                             newSelection.splice(index, 1);
@@ -171,6 +179,35 @@ export let windowEvents = {
         }
         return false;
     }
+};
+
+let bindMobileDevice = (conf, parentFunctions) => {
+    parentFunctions.getContainer().addEventListener('touchstart', (event) => {
+        let dateStart = new Date();
+        parentFunctions.setProperty('select.startLongPress', dateStart);
+        setTimeout(() => {
+            if (parentFunctions.getProperty('select.startLongPress') === dateStart) {
+                let selection = parentFunctions.getSelection();
+                let eltSelectable = parentFunctions.getSelectableElement(event.target);
+
+                if (eltSelectable) {
+                    const indexElt = selection.indexOf(eltSelectable);
+                    if (indexElt === -1) {
+                        selection.push(eltSelectable);
+                    }
+                    parentFunctions.updateSelection(selection);
+                }
+            }
+        }, conf.longPressDelay);
+    });
+
+    parentFunctions.getContainer().addEventListener('touchend', () => {
+        parentFunctions.setProperty('select.startLongPress', null);
+    });
+
+    parentFunctions.getContainer().addEventListener('touchmove', () => {
+        parentFunctions.setProperty('select.startLongPress', null);
+    });
 };
 
 let refreshLasso = (event, parentFunctions, conf) => {
