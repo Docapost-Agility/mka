@@ -37,13 +37,16 @@ export let init = (conf, parentFunctions) => {
             squareElt.style.height = (square.y2 - square.y1) + "px";
         },
         remove: () => {
-            square.get().style.display = "none";
+            square.get().remove();
         },
         isVisble: () => {
             return square.get().style.display === "block";
         },
         isCrossingElt: (elt) => {
-            return elementIsCrossingZone(elt, square.x1, square.y1, square.x2, square.y2);
+            let container = parentFunctions.getContainer();
+            let scrollTop = container.scrollTopTotal() - document.body.scrollTop;
+            let scrollLeft = container.scrollLeftTotal() - document.body.scrollLeft;
+            return elementIsCrossingZone(elt, square.x1 + scrollLeft, square.y1 + scrollTop, square.x2 + scrollLeft, square.y2 + scrollTop);
         }
     };
     parentFunctions.setProperty('square', square);
