@@ -18,7 +18,7 @@ export let init = (conf, parentFunctions) => {
 export let windowEvents = {
     onkeydown: (event) => {
         let code = event.which;
-        if ((code == 37 || code == 38 || code == 39 || code == 40) && !!document.getElementById(mkarcmenuId)) {
+        if ((code == 37 || code == 38 || code == 39 || code == 40) && menuIsOpen()) {
             event.preventDefault();
             return true;
         }
@@ -30,6 +30,10 @@ export let windowEvents = {
         }
         return false;
     }
+}
+
+let menuIsOpen = () => {
+    return !!document.getElementById(mkarcmenuId) && document.getElementById(mkarcmenuId).style.display !== 'none';
 }
 
 let removeMkaRcMenu = () => {
