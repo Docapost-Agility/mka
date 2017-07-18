@@ -1,4 +1,8 @@
-app.controller('homeCtrl', ['$scope', function ($scope) {
+app.controller('homeCtrl', [function () {
+
+    var vm = this;
+
+    vm.grid = false;
 
     var getContextMenuItems = function (selection) {
         var menu = [];

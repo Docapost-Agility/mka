@@ -1,5 +1,5 @@
 <div class="container">
-    <button type="button" class="btn btn-secondary" onclick="switchMode()">Switch mode</button>
+    <button type="button" class="btn btn-secondary" data-ng-click="homeCtrl.grid = !homeCtrl.grid">Switch mode</button>
     <h2>Folders (<span id="mka-count-folders">0</span>)</h2>
     <div class="row folders-container">
         <div class="col-xs-6 col-sm-4 col-lg-3">
@@ -41,7 +41,7 @@
     </div>
 
     <h2>Items (<span id="mka-count-items">0</span>)</h2>
-    <ul id="itemsList" class="list-group">
+    <ul id="itemsList" class="list-group" data-ng-class="{'grid': homeCtrl.grid}">
         <li class="list-group-item" item-id="1">
             <div class="card">
                 <div class="card-block">
