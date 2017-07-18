@@ -1,4 +1,3 @@
-console.log('app');
 var app = angular.module('app', ['ui.router']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
@@ -13,8 +12,4 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
                 }
             }
         })
-}]);
-
-app.controller('homeCtrl', ['$scope', function () {
-    console.log('homeCtrl');
 }]);
