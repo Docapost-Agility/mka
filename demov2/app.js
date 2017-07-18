@@ -1,14 +1,17 @@
 console.log('app');
-var app = angular.module('app', ['ngRoute']);
+var app = angular.module('app', ['ui.router']);
 
-app.config(['$routeProvider', function ($routeProvider) {
-    $routeProvider
-        .when('/home', {
-            templateUrl: "views/home.html",
-            controller: "homeCtrl as homeCtrl"
-        })
-        .otherwise({
-            redirectTo: '/home'
+app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/home');
+    $stateProvider
+        .state('home', {
+            url: '/home',
+            views: {
+                'mainView': {
+                    templateUrl: 'views/home.html',
+                    controller: 'homeCtrl as homeCtrl'
+                }
+            }
         })
 }]);
 
