@@ -3,6 +3,8 @@ app.controller('selectAllCtrl', ['$scope', function ($scope) {
     var vm = this;
 
     vm.grid = false;
+    vm.mkaCountFolders = 'mka-count-folders-select-all';
+    vm.mkaCountItems = 'mka-count-items-select-all';
 
     var getContextMenuItems = function (selection) {
         var menu = [];
@@ -85,7 +87,7 @@ app.controller('selectAllCtrl', ['$scope', function ($scope) {
             "selectAllShortcut": true,
             "copyPaste": true,
             "deleteShortcut": deleteItems,
-            "count": "mka-count-items",
+            "count": vm.mkaCountItems,
             "pasteFunction": function (items) {
                 console.log(items);
                 var data = [];
@@ -113,7 +115,7 @@ app.controller('selectAllCtrl', ['$scope', function ($scope) {
             "selectAllShortcut": true,
             "copyPaste": true,
             "deleteShortcut": deleteFolders,
-            "count": "mka-count-folders",
+            "count": vm.mkaCountFolders,
             "pasteFunction": function (items) {
                 console.log(items);
                 var data = [];
