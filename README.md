@@ -1,32 +1,17 @@
-# MOUSE AND KEYBOARD ACTIONS LIBRARY POC
-Proof Of Concept for Docapost Agility
+# MOUSE AND KEYBOARD ACTIONS LIBRARY
 
-Librairie pouvant faire cohabiter divers éléments comme :
+> Lib to bind Mouse and Keyboard Events easily
 
-* L'utilisation du click droit
-* L'utilisation de Ctrl + click
-* Le fait de pouvoir Drag'n'Drop
-* Le fait de pouvoir gérer la sélection multiple
+Install with npm
 
-## Dev Install
+```shell
+npm install mka
+```
 
-### requirement
+Install with bower
 
-- node & npm
+```shell
+bower install mka
+```
 
-### Install
-
-- clone or dowload 
-- npm install
-
-### Lib utilisé
-- babel-cli 
-- babel-core
-- babel-preset-es2015
-- babel-loader
-- webpack
-
-## Launch
-
-- npm run dev
-- npm run prod
+See the [Online Demo](http://ws.digiposte.eco6.tech/demo/accueil.html) for more information.
