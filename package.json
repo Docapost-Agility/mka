@@ -1,14 +1,17 @@
 {
-  "name": "mka-test",
-  "version": "0.0.1",
-  "description": "Library POC for Docapost Agility",
+  "name": "@docapost-agility/mka",
+  "version": "0.0.6",
+  "description": "Mouse keyboard action",
   "main": "index.html",
   "scripts": {
     "dev": "webpack --env dev --watch --progress",
     "prod": "webpack --env prod --optimize-minimize"
   },
-  "repository": "git@gitlab.smartpanda-network.fr:sandbox/mouseAndKeyboardActions.git",
-  "author": "Smartpanda",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Docapost-Agility/mka.git"
+  },
+  "author": "Docapost agility",
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -16,5 +19,16 @@
     "babel-loader": "^7.1.0",
     "babel-preset-es2015": "^6.24.1",
     "webpack": "^3.0.0"
-  }
+  },
+  "dependencies": {},
+  "keywords": [
+    "Mouse",
+    "events",
+    "keyboard",
+    "events"
+  ],
+  "bugs": {
+    "url": "https://github.com/Docapost-Agility/mka/issues"
+  },
+  "homepage": "https://github.com/Docapost-Agility/mka#readme"
 }
