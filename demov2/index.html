@@ -19,10 +19,16 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
 
     <script src="../dist/mka.min.js"></script>
 
     <script src="app.js"></script>
+
+    <script src="directives/scrollToElement.js"></script>
+
     <script src="controllers/homeCtrl.js"></script>
     <script src="controllers/select/selectCtrl.js"></script>
     <script src="controllers/select/selectCodeCtrl.js"></script>
@@ -39,13 +45,13 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a ui-sref="select">SELECT</a></li>
-                <li><a ui-sref="selectAll">SELECT ALL</a></li>
-                <li><a ui-sref="rightClick">RIGHT CLICK</a></li>
-                <li><a ui-sref="copyPaste">COPY PASTE</a></li>
-                <li><a ui-sref="dragNdrop">DRAG AND DROP</a></li>
-                <li><a ui-sref="dbClick">DOUBLE CLICK</a></li>
-                <li><a ui-sref="delete">DELETE</a></li>
+                <li><a scroll-to-item scroll-to="#select">SELECT</a></li>
+                <li><a scroll-to-item scroll-to="#selectAll">SELECT ALL</a></li>
+                <li><a scroll-to-item scroll-to="#rightClick">RIGHT CLICK</a></li>
+                <li><a scroll-to-item scroll-to="#copyPaste">COPY PASTE</a></li>
+                <li><a scroll-to-item scroll-to="#dragNdrop">DRAG AND DROP</a></li>
+                <li><a scroll-to-item scroll-to="#dbClick">DOUBLE CLICK</a></li>
+                <li><a scroll-to-item scroll-to="#delete">DELETE</a></li>
             </ul>
         </div>
     </div>
