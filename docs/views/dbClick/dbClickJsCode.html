@@ -1,0 +1,21 @@
+var dbClick = function (elt) {
+    alert('dbclick ' + elt);
+}
+
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "dbClick": dbClick,
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-items"
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "dbClick": dbClick,
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-folders"
+});
