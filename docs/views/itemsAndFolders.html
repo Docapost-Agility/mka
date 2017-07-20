@@ -1,0 +1,179 @@
+<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" style="position: inherit;">
+    <div class="tab">
+        <button class="tablinks" data-ng-click="itemsAndFoldersCtrl.grid = !itemsAndFoldersCtrl.grid">SWITCH MODE</button>
+    </div>
+    <div class="tabcontents" style="display:block">
+        <div class="container">
+            <h4>Folders (<span id="{{itemsAndFoldersCtrl.mkaCountFolders}}">0</span>)</h4>
+            <div class="row folders-container">
+                <div class="col-xs-6 col-sm-4 col-lg-3">
+                    <div class="folder">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h5>Folder</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-lg-3">
+                    <div class="folder">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h5>Folder</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-lg-3">
+                    <div class="folder">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h5>Folder</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-6 col-sm-4 col-lg-3">
+                    <div class="folder">
+                        <div class="thumbnail">
+                            <div class="caption">
+                                <h5>Folder</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Items (<span id="{{itemsAndFoldersCtrl.mkaCountItems}}">0</span>)</h4>
+            <ul class="itemsList" class="list-group" data-ng-class="{'grid': itemsAndFoldersCtrl.grid}">
+                <li class="list-group-item" item-id="1">
+                    <div class="card">
+                        <div class="card-block">
+                            <h6 class="card-title">Item 1</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item" item-id="2">
+                    <div class="card">
+                        <div class="card-block">
+                            <h6 class="card-title">Item 2</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item" item-id="3">
+                    <div class="card">
+                        <div class="card-block">
+                            <h6 class="card-title">Item 3</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item" item-id="4">
+                    <div class="card">
+                        <div class="card-block">
+                            <h6 class="card-title">Item 4</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item" item-id="5">
+                    <div class="card">
+                        <div class="card-block">
+                            <h6 class="card-title">Item 5</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item" item-id="6">
+                    <div class="card">
+                        <div class="card-block">
+                            <h6 class="card-title">Item 6</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item" item-id="7">
+                    <div class="card">
+                        <div class="card-block">
+                            <h6 class="card-title">Item 7</h6>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-group-item" item-id="8">
+                    <div class="card">
+                        <div class="card-block">
+                            <h6 class="card-title">Item 8</h6>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        max-width: 100%;
+    }
+
+    .itemsList {
+        padding: 20px;
+        background-color: #f8f8f8;
+        border: 1px solid #ededed;
+    }
+
+    .itemsList.grid {
+        column-count: 4;
+        column-gap: 1em;
+    }
+
+    .itemsList.grid li.list-group-item {
+        display: inline-block;
+        margin: 0 0 1em;
+        width: 100%;
+    }
+
+    .folder {
+        text-align: center;
+    }
+
+    .mka-elt-selecting, .mka-elt-selecting .thumbnail {
+        background-color: #D1EEFF;
+    }
+
+    .mka-elt-selected, .mka-elt-selected .thumbnail {
+        background-color: #bebebe;
+    }
+
+    .on-drag {
+        background-color: #cbcbcb !important;
+        opacity: 0.7;
+    }
+
+    .folders-container {
+        background-color: #efefef;
+        border: 1px solid #afafaf;
+        padding: 15px 0;
+    }
+
+    #wrapper-drag {
+        position: relative;
+    }
+
+    .drag-class-sample {
+        /* Sample class for onDragItemClass*/
+        color: white;
+        background: #403A3E;
+        background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
+        background: linear-gradient(to right, #BE5869, #403A3E);
+        border: 1px solid #403A3E;
+        padding: 5px;
+        text-align: center;
+        width: 250px;
+    }
+
+    .drag-class-sample span {
+        /* Sample class for onDragItemClass span */
+        color: white;
+        background: #cc2b5e;
+        background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
+        background: linear-gradient(to right, #753a88, #cc2b5e);
+
+    }
+</style>

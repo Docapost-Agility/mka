@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mouse and Keyboard Actions</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          crossorigin="anonymous">
+
+    <link rel="stylesheet" href="css/prism.css">
+    <link rel="stylesheet" href="css/main.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.3/angular-ui-router.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+    <script src="../dist/mka.min.js"></script>
+
+    <script src="app.js"></script>
+
+    <script src="directives/scrollToElement.js"></script>
+
+    <script src="controllers/homeCtrl.js"></script>
+
+    <script src="controllers/select/selectCtrl.js"></script>
+    <script src="controllers/select/selectCodeCtrl.js"></script>
+    <script src="controllers/select/selectExplicationCtrl.js"></script>
+
+    <script src="controllers/selectAll/selectAllCtrl.js"></script>
+    <script src="controllers/selectAll/selectAllCodeCtrl.js"></script>
+    <script src="controllers/selectAll/selectAllExplicationCtrl.js"></script>
+
+    <script src="controllers/rightClick/rightClickExplicationCtrl.js"></script>
+
+    <script src="controllers/dragNDrop/dragNDropExplicationCtrl.js"></script>
+
+    <script src="controllers/delete/deleteExplicationCtrl.js"></script>
+
+    <script src="controllers/dbClick/dbClickExplicationCtrl.js"></script>
+
+    <script src="controllers/copyPaste/copyPasteExplicationCtrl.js"></script>
+</head>
+
+<body data-ng-app="app">
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" ui-sref="home"><img src="img/Docapost-Aglity.png" style="width:100px"></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a scroll-to-item scroll-to="#select">SELECT</a></li>
+                <li><a scroll-to-item scroll-to="#selectAll">SELECT ALL</a></li>
+                <li><a scroll-to-item scroll-to="#rightClick">RIGHT CLICK</a></li>
+                <li><a scroll-to-item scroll-to="#copyPaste">COPY PASTE</a></li>
+                <li><a scroll-to-item scroll-to="#dragNdrop">DRAG AND DROP</a></li>
+                <li><a scroll-to-item scroll-to="#dbClick">DOUBLE CLICK</a></li>
+                <li><a scroll-to-item scroll-to="#delete">DELETE</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div ui-view="mainView"></div>
+
+</body>
+
+</html>
