@@ -1,0 +1,17 @@
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "lasso": false,
+    // To activate selectAll for items
+    "selectAllShortcut": true,
+    "copyPaste": false,
+    "count": "mka-count-items"
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "lasso": false,
+    // To activate selectAll for folders
+    "selectAllShortcut": true,
+    "copyPaste": false,
+    "count": "mka-count-folders"
+});
