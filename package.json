@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "webpack --env dev --watch --progress",
-    "prod": "webpack --env prod --optimize-minimize"
+    "prod": "webpack --env prod --optimize-minimize && cp dist/mka.min.js docs"
   },
   "repository": {
     "type": "git",
