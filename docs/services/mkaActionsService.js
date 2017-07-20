@@ -1,9 +1,13 @@
-app.factory('mkaService', [function () {
+app.factory('mkaActionsService', [function () {
 
     var service = {
+        dbClick: dbClick,
+        deleteFolders: deleteFolders,
+        deleteItems: deleteItems,
+        drop: drop,
+        getContextMenuFolders: getContextMenuFolders,
         getContextMenuItems: getContextMenuItems
     }
-
 
     function getContextMenuItems(selection) {
         var menu = [];
@@ -41,7 +45,7 @@ app.factory('mkaService', [function () {
         return htmlMenu;
     }
 
-    var getContextMenuFolders = function (selection) {
+    function getContextMenuFolders(selection) {
         var htmlMenu = '<ul>' +
             '<li onclick="alert(\'action dossier 1\');">action dossier 1</li>' +
             '<li onclick="alert(\'action dossier 3\');">action dossier 3</li>' +
@@ -50,15 +54,15 @@ app.factory('mkaService', [function () {
         return htmlMenu;
     }
 
-    var dbClick = function (elt) {
+    function dbClick(elt) {
         alert('dbclick ' + elt);
     }
 
-    var drop = function (elts, zone) {
+    function drop(elts, zone) {
         alert('drop ' + elts + ' dropZone ' + zone);
     }
 
-    var deleteItems = function (elements) {
+    function deleteItems(elements) {
         elements.forEach(function (elt) {
             if (elt.parentNode) {
                 elt.parentNode.removeChild(elt);
@@ -66,7 +70,7 @@ app.factory('mkaService', [function () {
         })
     }
 
-    var deleteFolders = function (elements) {
+    function deleteFolders(elements) {
         elements.forEach(function (elt) {
             if (elt.parentNode && elt.parentNode.parentNode) {
                 elt.parentNode.parentNode.removeChild(elt.parentNode);

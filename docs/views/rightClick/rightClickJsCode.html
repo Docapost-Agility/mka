@@ -1,0 +1,63 @@
+var getContextMenuItems = function (selection) {
+    var menu = [];
+
+    menu.push({
+        title: "action 1",
+        action: function () {
+            alert("action 1");
+        }
+    });
+    menu.push({
+        title: "action 3",
+        action: function () {
+            alert("action 3");
+        }
+    });
+    if (selection.length > 1) {
+        menu.push({
+            title: "action multiple",
+            action: function () {
+                alert("action multiple");
+            }
+        });
+    }
+
+    var htmlMenu = document.createElement('ul');
+
+    menu.forEach(function (item) {
+        var li = document.createElement('li');
+        li.innerHTML = item.title;
+        li.onclick = item.action;
+        htmlMenu.appendChild(li);
+    });
+
+    return htmlMenu;
+}
+
+var getContextMenuFolders = function (selection) {
+    var htmlMenu = '&lt;ul>' +
+    '&lt;li onclick="alert('action dossier 1');">action dossier 1&lt;/li>' +
+    '&lt;li onclick="alert('action dossier 3');">action dossier 3&lt;/li>' +
+    '&lt;/ul>';
+
+    return htmlMenu;
+}
+
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "rightClick": getContextMenuItems,
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-items",
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "onDragItemClass": "drag-class-sample",
+    "rightClick": getContextMenuFolders,
+    "lasso": true,
+    "selectAllShortcut": true,
+    "copyPaste": true,
+    "count": "mka-count-folders",
+});
