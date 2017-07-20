@@ -1,3 +1,7 @@
+body {
+    padding-top: 60px;
+}
+
 .panel-default {
     margin: 0 5% 1% 5%;
 }
@@ -52,6 +56,7 @@ div.tab button.active {
     border: 1px solid #ccc;
     border-top: none;
 }
+
 .tabcontents {
     padding: 6px 12px;
     border: 1px solid #ccc;
