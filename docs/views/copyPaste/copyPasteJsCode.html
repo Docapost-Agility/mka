@@ -1,0 +1,21 @@
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": true,
+    "count": "mka-count-items",
+    "pasteFunction": function (items) {
+        console.log(items);
+    }
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": true,
+    "count": "mka-count-folders",
+    "pasteFunction": function (items) {
+        console.log(items);
+    }
+});
