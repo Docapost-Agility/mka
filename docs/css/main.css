@@ -90,3 +90,53 @@ div.tab button.active {
 #selectAll, #rightClick, #copyPaste, #dragNDrop, #dbClick, #delete {
     margin-top: 70px;
 }
+
+.container {
+    max-width: 100%;
+}
+
+.itemsList {
+    padding-left: 0;
+}
+
+.folder {
+    text-align: center;
+}
+
+.mka-elt-selecting, .mka-elt-selecting .thumbnail {
+    background-color: #D1EEFF;
+}
+
+.mka-elt-selected, .mka-elt-selected .thumbnail {
+    background-color: #bebebe;
+}
+
+.on-drag {
+    background-color: #cbcbcb !important;
+    opacity: 0.7;
+}
+
+#wrapper-drag {
+    position: relative;
+}
+
+.drag-class-sample {
+    /* Sample class for onDragItemClass*/
+    color: white;
+    background: #403A3E;
+    background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
+    background: linear-gradient(to right, #BE5869, #403A3E);
+    border: 1px solid #403A3E;
+    padding: 5px;
+    text-align: center;
+    width: 250px;
+}
+
+.drag-class-sample span {
+    /* Sample class for onDragItemClass span */
+    color: white;
+    background: #cc2b5e;
+    background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
+    background: linear-gradient(to right, #753a88, #cc2b5e);
+
+}
