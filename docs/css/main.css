@@ -65,3 +65,8 @@ div.tab button.active {
     border: 1px solid #ccc;
     border-top: none;
 }
+
+/* Cursor for menu because no href but directive */
+.navbar-nav > li > a {
+    cursor: pointer;
+}
