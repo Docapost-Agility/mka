@@ -5,7 +5,7 @@
 Install with npm
 
 ```shell
-npm install mka
+npm i @docapost-agility/mka
 ```
 
 Install with bower
@@ -14,4 +14,4 @@ Install with bower
 bower install mka
 ```
 
-See the [Online Demo](http://ws.digiposte.eco6.tech/demo/accueil.html) for more information.
+See the [Online Demo](https://docapost-agility.github.io/mka/) for more information.
