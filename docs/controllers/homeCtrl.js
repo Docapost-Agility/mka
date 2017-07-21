@@ -1,24 +1,7 @@
-app.controller('homeCtrl', ['$scope', function ($scope) {
-    function loadjscssfile(filename, filetype) {
-        if (filetype == "js") {
-            // if filename is a external JavaScript file
-            var fileref = document.createElement('script');
-            fileref.setAttribute("type", "text/javascript");
-            fileref.setAttribute("src", filename);
-        }
-        else if (filetype == "css") {
-            //if filename is an external CSS file
-            var fileref = document.createElement("link");
-            fileref.setAttribute("rel", "stylesheet");
-            fileref.setAttribute("type", "text/css")
-            fileref.setAttribute("href", filename)
-        }
-        if (typeof fileref != "undefined") {
-            document.getElementsByTagName("head")[0].appendChild(fileref)
-        }
-    }
+app.controller('homeCtrl', ['$scope', 'angularLoad', function ($scope, angularLoad) {
 
     $scope.$on('$includeContentLoaded', function () {
-        loadjscssfile("js/prism.js", "js");
+        angularLoad.loadScript('js/prism.js');
     });
+
 }]);
