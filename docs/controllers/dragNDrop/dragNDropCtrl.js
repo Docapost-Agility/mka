@@ -4,6 +4,7 @@ app.controller('dragNDropCtrl', ['$scope', 'mkaActionsService', function ($scope
 
     vm.mkaCountFolders = 'mka-count-folders-dragNDrop';
     vm.mkaCountItems = 'mka-count-items-dragNDrop';
+    vm.showFolders = true;
 
     $scope.$on('$includeContentLoaded', function () {
 

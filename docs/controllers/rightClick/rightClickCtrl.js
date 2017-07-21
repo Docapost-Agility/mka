@@ -4,6 +4,7 @@ app.controller('rightClickCtrl', ['$scope', 'mkaActionsService', function ($scop
 
     vm.mkaCountFolders = 'mka-count-folders-rightClick';
     vm.mkaCountItems = 'mka-count-items-rightClick';
+    vm.showFolders = false;
 
     $scope.$on('$includeContentLoaded', function () {
 
@@ -14,16 +15,6 @@ app.controller('rightClickCtrl', ['$scope', 'mkaActionsService', function ($scop
             "selectAllShortcut": false,
             "copyPaste": false,
             "count": vm.mkaCountItems
-        });
-
-        document.getElementById('rightClick').getElementsByClassName('folders-container').item(0).mkaInit({
-            "eltsSelectable": ".folder",
-            "onDragItemClass": "drag-class-sample",
-            "rightClick": mkaActionsService.getContextMenuFolders,
-            "lasso": true,
-            "selectAllShortcut": true,
-            "copyPaste": true,
-            "count": vm.mkaCountFolders
         });
 
     });

@@ -4,6 +4,7 @@ app.controller('deleteCtrl', ['$scope', 'mkaActionsService', function ($scope, m
 
     vm.mkaCountFolders = 'mka-count-folders-delete';
     vm.mkaCountItems = 'mka-count-items-delete';
+    vm.showFolders = true;
 
     $scope.$on('$includeContentLoaded', function () {
 

@@ -4,6 +4,7 @@ app.controller('selectCtrl', ['$scope', function ($scope) {
 
     vm.mkaCountFolders = 'mka-count-folders-select';
     vm.mkaCountItems = 'mka-count-items-select';
+    vm.showFolders = false;
 
     $scope.$on('$includeContentLoaded', function () {
 
@@ -13,14 +14,6 @@ app.controller('selectCtrl', ['$scope', function ($scope) {
             "selectAllShortcut": false,
             "copyPaste": false,
             "count": vm.mkaCountItems,
-        });
-
-        document.getElementById('select').getElementsByClassName('folders-container').item(0).mkaInit({
-            "eltsSelectable": ".folder",
-            "lasso": true,
-            "selectAllShortcut": false,
-            "copyPaste": false,
-            "count": vm.mkaCountFolders,
         });
 
     });

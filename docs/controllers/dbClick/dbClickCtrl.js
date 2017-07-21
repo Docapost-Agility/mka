@@ -4,6 +4,7 @@ app.controller('dbClickCtrl', ['$scope', 'mkaActionsService', function ($scope, 
 
     vm.mkaCountFolders = 'mka-count-folders-dbClick';
     vm.mkaCountItems = 'mka-count-items-dbClick';
+    vm.showFolders = false;
 
     $scope.$on('$includeContentLoaded', function () {
 
@@ -14,15 +15,6 @@ app.controller('dbClickCtrl', ['$scope', 'mkaActionsService', function ($scope, 
             "selectAllShortcut": false,
             "copyPaste": false,
             "count": vm.mkaCountItems
-        });
-
-        document.getElementById('dbClick').getElementsByClassName('folders-container').item(0).mkaInit({
-            "eltsSelectable": ".folder",
-            "dbClick": mkaActionsService.dbClick,
-            "lasso": false,
-            "selectAllShortcut": false,
-            "copyPaste": false,
-            "count": vm.mkaCountFolders
         });
 
     });
