@@ -70,3 +70,23 @@ div.tab button.active {
 .navbar-nav > li > a {
     cursor: pointer;
 }
+
+.itemsAndFoldersContainer {
+    position: inherit;
+}
+
+.itemsAndFoldersContainer, .code {
+    height: 650px;
+}
+
+.code .tabcontents .codeElement {
+    height: 624px;
+}
+
+.itemsAndFoldersContainer .tabcontents, .code .tabcontents, .code .tabcontents .codeElement pre {
+    height: 100%;
+}
+
+#selectAll, #rightClick, #copyPaste, #dragNDrop, #dbClick, #delete {
+    margin-top: 70px;
+}
