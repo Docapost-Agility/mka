@@ -2,7 +2,6 @@ app.controller('rightClickCtrl', ['$scope', 'mkaActionsService', function ($scop
 
     var vm = this;
 
-    vm.grid = false;
     vm.mkaCountFolders = 'mka-count-folders-rightClick';
     vm.mkaCountItems = 'mka-count-items-rightClick';
 

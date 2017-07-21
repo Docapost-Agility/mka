@@ -2,7 +2,6 @@ app.controller('copyPasteCtrl', ['$scope', 'mkaActionsService', function ($scope
 
     var vm = this;
 
-    vm.grid = false;
     vm.mkaCountFolders = 'mka-count-folders-dragNDrop';
     vm.mkaCountItems = 'mka-count-items-dragNDrop';
 

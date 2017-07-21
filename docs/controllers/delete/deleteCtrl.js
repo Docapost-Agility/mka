@@ -2,7 +2,6 @@ app.controller('deleteCtrl', ['$scope', 'mkaActionsService', function ($scope, m
 
     var vm = this;
 
-    vm.grid = false;
     vm.mkaCountFolders = 'mka-count-folders-delete';
     vm.mkaCountItems = 'mka-count-items-delete';
 

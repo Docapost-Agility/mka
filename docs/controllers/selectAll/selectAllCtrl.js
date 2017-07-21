@@ -2,7 +2,6 @@ app.controller('selectAllCtrl', ['$scope', function ($scope) {
 
     var vm = this;
 
-    vm.grid = false;
     vm.mkaCountFolders = 'mka-count-folders-select-all';
     vm.mkaCountItems = 'mka-count-items-select-all';
 
