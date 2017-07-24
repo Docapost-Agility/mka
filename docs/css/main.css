@@ -140,3 +140,13 @@ div.tab button.active {
     background: linear-gradient(to right, #753a88, #cc2b5e);
 
 }
+
+#home {
+    padding-top: 2%;
+}
+
+#back-top {
+    position: fixed;
+    bottom:20px;
+    right: 2%;
+    z-index: 100; }

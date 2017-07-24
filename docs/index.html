@@ -68,7 +68,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" ui-sref="home"><img src="img/Docapost-Aglity.png" style="width:100px"></a>
+            <a scroll-to-item scroll-to="#home" class="navbar-brand" ui-sref="home"><img src="img/Docapost-Aglity.png" style="width:100px"></a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -83,10 +83,15 @@
         </div>
     </div>
 </nav>
-
-<h1 class="text-center">Mouse and Keyboard Actions</h1>
+<div id="home" class="container-fluid">
+    <h1 class="text-center">Mouse and Keyboard Actions</h1>
+</div>
 
 <div ui-view="mainView"></div>
+
+<div id="back-top">
+    <a scroll-to-item scroll-to="#home">BACK TO TOP</a>
+</div>
 
 </body>
 
