@@ -8,13 +8,17 @@ app.controller('dbClickCtrl', ['$scope', 'mkaActionsService', function ($scope, 
 
     $scope.$on('$includeContentLoaded', function () {
 
-        document.getElementById('dbClick').getElementsByClassName('itemsList').item(0).mkaInit({
-            "eltsSelectable": "li",
-            "dbClick": mkaActionsService.dbClick,
-            "lasso": false,
-            "selectAllShortcut": false,
-            "copyPaste": false,
-            "count": vm.mkaCountItems
+        $scope.$on('ngRepeatFilesCompleted', function () {
+
+            document.getElementById('dbClick').getElementsByClassName('itemsList').item(0).mkaInit({
+                "eltsSelectable": "li",
+                "dbClick": mkaActionsService.dbClick,
+                "lasso": false,
+                "selectAllShortcut": false,
+                "copyPaste": false,
+                "count": vm.mkaCountItems
+            });
+
         });
 
     });

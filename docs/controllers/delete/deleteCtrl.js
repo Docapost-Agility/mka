@@ -8,22 +8,30 @@ app.controller('deleteCtrl', ['$scope', 'mkaActionsService', function ($scope, m
 
     $scope.$on('$includeContentLoaded', function () {
 
-        document.getElementById('delete').getElementsByClassName('itemsList').item(0).mkaInit({
-            "eltsSelectable": "li",
-            "lasso": true,
-            "selectAllShortcut": false,
-            "copyPaste": false,
-            "count": vm.mkaCountItems,
-            "deleteShortcut": mkaActionsService.deleteItems
+        $scope.$on('ngRepeatFilesCompleted', function () {
+
+            document.getElementById('delete').getElementsByClassName('itemsList').item(0).mkaInit({
+                "eltsSelectable": "li",
+                "lasso": true,
+                "selectAllShortcut": false,
+                "copyPaste": false,
+                "count": vm.mkaCountItems,
+                "deleteShortcut": mkaActionsService.deleteItems
+            });
+
         });
 
-        document.getElementById('delete').getElementsByClassName('folders-container').item(0).mkaInit({
-            "eltsSelectable": ".folder",
-            "lasso": true,
-            "selectAllShortcut": false,
-            "copyPaste": false,
-            "count": vm.mkaCountFolders,
-            "deleteShortcut": mkaActionsService.deleteFolders
+        $scope.$on('ngRepeatFoldersCompleted', function () {
+
+            document.getElementById('delete').getElementsByClassName('folders-container').item(0).mkaInit({
+                "eltsSelectable": ".folder",
+                "lasso": true,
+                "selectAllShortcut": false,
+                "copyPaste": false,
+                "count": vm.mkaCountFolders,
+                "deleteShortcut": mkaActionsService.deleteFolders
+            });
+
         });
 
     });

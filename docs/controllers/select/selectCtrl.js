@@ -8,12 +8,16 @@ app.controller('selectCtrl', ['$scope', function ($scope) {
 
     $scope.$on('$includeContentLoaded', function () {
 
-        document.getElementById('select').getElementsByClassName('itemsList').item(0).mkaInit({
-            "eltsSelectable": "li",
-            "lasso": true,
-            "selectAllShortcut": false,
-            "copyPaste": false,
-            "count": vm.mkaCountItems,
+        $scope.$on('ngRepeatFilesCompleted', function () {
+
+            document.getElementById('select').getElementsByClassName('itemsList').item(0).mkaInit({
+                "eltsSelectable": "li",
+                "lasso": true,
+                "selectAllShortcut": false,
+                "copyPaste": false,
+                "count": vm.mkaCountItems,
+            });
+
         });
 
     });

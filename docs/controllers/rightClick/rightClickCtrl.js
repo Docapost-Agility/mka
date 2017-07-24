@@ -8,13 +8,17 @@ app.controller('rightClickCtrl', ['$scope', 'mkaActionsService', function ($scop
 
     $scope.$on('$includeContentLoaded', function () {
 
-        document.getElementById('rightClick').getElementsByClassName('itemsList').item(0).mkaInit({
-            "eltsSelectable": "li",
-            "rightClick": mkaActionsService.getContextMenuItems,
-            "lasso": false,
-            "selectAllShortcut": false,
-            "copyPaste": false,
-            "count": vm.mkaCountItems
+        $scope.$on('ngRepeatFilesCompleted', function () {
+
+            document.getElementById('rightClick').getElementsByClassName('itemsList').item(0).mkaInit({
+                "eltsSelectable": "li",
+                "rightClick": mkaActionsService.getContextMenuItems,
+                "lasso": false,
+                "selectAllShortcut": false,
+                "copyPaste": false,
+                "count": vm.mkaCountItems
+            });
+
         });
 
     });

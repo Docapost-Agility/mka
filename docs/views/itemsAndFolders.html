@@ -7,7 +7,7 @@
             <div data-ng-controller="foldersCtrl as foldersCtrl">
                 <h4 data-ng-show="itemsAndFoldersCtrl.showFolders">Folders (<span id="{{itemsAndFoldersCtrl.mkaCountFolders}}">0</span>)</h4>
                 <div data-ng-show="itemsAndFoldersCtrl.showFolders" class="row folders-container">
-                    <div data-ng-repeat="folder in foldersCtrl.folders"
+                    <div data-ng-repeat="folder in foldersCtrl.folders" on-finish-render="ngRepeatFoldersCompleted"
                          class="col-xs-6 col-sm-4 col-lg-3">
                         <div class="folder">
                             <div class="thumbnail">
@@ -24,7 +24,8 @@
             <div data-ng-controller="filesCtrl as filesCtrl">
                 <h4>Files (<span id="{{itemsAndFoldersCtrl.mkaCountItems}}">0</span>)</h4>
                 <ul class="itemsList" class="list-group">
-                    <li data-ng-repeat="file in filesCtrl.files" class="list-group-item" item-id="{{file.id}}" title="{{file.name}}">
+                    <li data-ng-repeat="file in filesCtrl.files" on-finish-render="ngRepeatFilesCompleted"
+                        class="list-group-item" item-id="{{file.id}}" title="{{file.name}}">
                         <div class="file-icon"></div>
                         <h6 class="file-text">{{file.name}}</h6>
                     </li>
