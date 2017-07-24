@@ -11,7 +11,7 @@ app.controller('copyPasteCtrl', ['$scope', 'mkaActionsService', function ($scope
         $scope.$on('ngRepeatFilesCompleted', function () {
 
             document.getElementById('copyPaste').getElementsByClassName('itemsList').item(0).mkaInit({
-                "eltsSelectable": "li",
+                "eltsSelectable": "#copyPaste li",
                 "lasso": false,
                 "selectAllShortcut": false,
                 "copyPaste": true,
@@ -24,7 +24,7 @@ app.controller('copyPasteCtrl', ['$scope', 'mkaActionsService', function ($scope
         $scope.$on('ngRepeatFoldersCompleted', function () {
 
             document.getElementById('copyPaste').getElementsByClassName('folders-container').item(0).mkaInit({
-                "eltsSelectable": ".folder",
+                "eltsSelectable": "#copyPaste .folder",
                 "lasso": false,
                 "selectAllShortcut": false,
                 "copyPaste": true,
