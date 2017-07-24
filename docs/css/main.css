@@ -1,3 +1,7 @@
+body {
+    padding-top: 60px;
+}
+
 .panel-default {
     margin: 0 5% 1% 5%;
 }
@@ -26,14 +30,17 @@ div.tab {
 }
 
 /* Style the buttons inside the tab */
-div.tab button {
+div.tab button, div.tab span {
     background-color: inherit;
     float: left;
     border: none;
     outline: none;
-    cursor: pointer;
     padding: 14px 16px;
     transition: 0.3s;
+}
+
+div.tab button {
+    cursor: pointer;
 }
 
 /* Change background color of buttons on hover */
@@ -52,8 +59,182 @@ div.tab button.active {
     border: 1px solid #ccc;
     border-top: none;
 }
+
 .tabcontents {
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
 }
+
+/* Cursor for menu because no href but directive */
+.navbar-nav > li > a {
+    cursor: pointer;
+}
+
+@media (max-width: 991px) {
+    .code {
+        margin-top: 10px;
+    }
+}
+
+.itemsAndFoldersContainer {
+    position: inherit;
+}
+
+.itemsAndFoldersContainer .tabcontents, .code .tabcontents {
+    height: 600px;
+    display: block;
+    overflow: auto;
+}
+
+.code .tabcontents .codeElement pre {
+    height: 100%;
+}
+
+.code .tabcontents .codeElement {
+    height: 98%;
+}
+
+.demoContainer {
+    margin-bottom: 30px;
+}
+
+.container {
+    max-width: 100%;
+}
+
+.itemsList {
+    padding-left: 0;
+}
+
+.mka-elt-selecting, .mka-elt-selecting .thumbnail {
+    background-color: #D1EEFF;
+}
+
+.mka-elt-selected, .mka-elt-selected .thumbnail {
+    background-color: #bebebe;
+}
+
+.on-drag {
+    background-color: #cbcbcb !important;
+    opacity: 0.7;
+}
+
+.drag-class-sample {
+    /* Sample class for onDragItemClass*/
+    color: white;
+    background: #403A3E;
+    background: -webkit-linear-gradient(to right, #BE5869, #403A3E);
+    background: linear-gradient(to right, #BE5869, #403A3E);
+    border: 1px solid #403A3E;
+    padding: 5px;
+    text-align: center;
+    width: 250px;
+}
+
+.drag-class-sample span {
+    /* Sample class for onDragItemClass span */
+    color: white;
+    background: #cc2b5e;
+    background: -webkit-linear-gradient(to right, #753a88, #cc2b5e);
+    background: linear-gradient(to right, #753a88, #cc2b5e);
+
+}
+
+.folder-text, .file-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.file-icon {
+    background: #eee;
+    background: -moz-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
+    background: -webkit-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
+    border: 1px solid #ccc;
+    -moz-border-radius: 3px 15px 3px 3px;
+    -webkit-border-radius: 3px 15px 3px 3px;
+    border-radius: 3px 15px 3px 3px;
+    -moz-box-shadow: inset rgba(255, 255, 255, 0.8) 0 1px 1px;
+    -webkit-box-shadow: inset rgba(255, 255, 255, 0.8) 0 1px 1px;
+    box-shadow: inset rgba(255, 255, 255, 0.8) 0 1px 1px;
+    display: inline-block;
+    width: 20px;
+    height: 25px;
+    position: relative;
+    text-indent: -9999em;
+    margin-bottom: -8px;
+    margin-top: 3px;
+    float: left;
+}
+
+.file-icon:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: #ccc;
+    background: -moz-linear-gradient(45deg, #fff 0, #eee 50%, #ccc 100%);
+    background: -webkit-linear-gradient(45deg, #fff 0, #eee 50%, #ccc 100%);
+    box-shadow: rgba(0, 0, 0, 0.05) -1px 1px 1px, inset white 0 0 1px;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    -moz-border-radius: 0 14px 0 0;
+    -webkit-border-radius: 0 14px 0 0;
+    border-radius: 0 10px 0 0;
+}
+
+.file-icon:after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 40%;
+    margin: 10px 20% 0;
+    background: #ccc;
+    background: -moz-linear-gradient(top, #ccc 0, #ccc 20%, #fff 20%, #fff 40%, #ccc 40%, #ccc 60%, #fff 60%, #fff 80%, #ccc 80%, #ccc 100%);
+    background: -webkit-linear-gradient(top, #ccc 0, #ccc 20%, #fff 20%, #fff 40%, #ccc 40%, #ccc 60%, #fff 60%, #fff 80%, #ccc 80%, #ccc 100%);
+    height: 8px;
+}
+
+.folder-icon {
+    width: 25px;
+    height: 20px;
+    position: relative;
+    background-color: #708090;
+    border-radius: 0 3px 3px 3px;
+    margin-top: 8px;
+    float: left;
+}
+
+.folder-icon:before {
+    content: '';
+    width: 50%;
+    height: 0.2em;
+    border-radius: 0 20px 0 0;
+    background-color: #708090;
+    position: absolute;
+    top: -0.2em;
+    left: 0px;
+}
+
+.folder-text, .file-text {
+    text-align: left;
+    padding-left: 5px;
+}
+
+#home {
+    padding-top: 2%;
+}
+
+#back-top {
+    position: fixed;
+    bottom: 20px;
+    right: 2%;
+    z-index: 100;
+}
+ .dropdown-menu {
+     cursor: pointer;
+ }

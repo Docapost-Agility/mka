@@ -1,0 +1,33 @@
+var deleteItems = function (elements) {
+    elements.forEach(function (elt) {
+        if (elt.parentNode) {
+            elt.parentNode.removeChild(elt);
+        }
+    })
+}
+
+var deleteFolders = function (elements) {
+    elements.forEach(function (elt) {
+        if (elt.parentNode && elt.parentNode.parentNode) {
+            elt.parentNode.parentNode.removeChild(elt.parentNode);
+        }
+    })
+}
+
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "lasso": true,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-items",
+    "deleteShortcut": deleteItems
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "lasso": true,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-folders",
+    "deleteShortcut": deleteFolders
+});

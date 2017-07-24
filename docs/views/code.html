@@ -1,37 +1,40 @@
-<div class="col-xs-12 col-sm-12 col-md-6 col-md-6">
+<div class="code col-xs-12 col-sm-12 col-md-6 col-md-6">
     <div class="tab">
         <button class="tablinks" data-ng-class="{'active': codeCtrl.activeTab === 'HTML'}"
                 data-ng-click="codeCtrl.activeTab = 'HTML'">HTML
         </button>
-        <button class="tablinks" data-ng-class="{'active': codeCtrl.activeTab === 'CSS'}"
-                data-ng-click="codeCtrl.activeTab = 'CSS'">CSS
-        </button>
         <button class="tablinks" data-ng-class="{'active': codeCtrl.activeTab === 'JS'}"
                 data-ng-click="codeCtrl.activeTab = 'JS'">JS
         </button>
+        <button class="tablinks" data-ng-class="{'active': codeCtrl.activeTab === 'CSS'}"
+                data-ng-click="codeCtrl.activeTab = 'CSS'">CSS
+        </button>
     </div>
 
-    <div data-ng-show="codeCtrl.activeTab === 'HTML'" class="tabcontent">
+    <div class="tabcontents">
+
+        <div data-ng-show="codeCtrl.activeTab === 'HTML'" class="codeElement">
 <pre class="line-numbers" data-start=0>
 <code class="language-html">
 <div ng-include src="codeCtrl.codeHtml"></div>
 </code>
 </pre>
-    </div>
+        </div>
 
-    <div data-ng-show="codeCtrl.activeTab === 'CSS'" class="tabcontent">
-<pre class="line-numbers" data-start=0>
-<code class="language-css">
-<div ng-include src="codeCtrl.codeCss"></div>
-</code>
-</pre>
-    </div>
-
-    <div data-ng-show="codeCtrl.activeTab === 'JS'" class="tabcontent">
+        <div data-ng-show="codeCtrl.activeTab === 'JS'" class="codeElement">
 <pre class="line-numbers" data-start=0>
 <code class="language-javascript">
 <div ng-include src="codeCtrl.codeJs"></div>
 </code>
 </pre>
+        </div>
+
+        <div data-ng-show="codeCtrl.activeTab === 'CSS'" class="codeElement">
+<pre class="line-numbers" data-start=0>
+<code class="language-css">
+<div ng-include src="codeCtrl.codeCss"></div>
+</code>
+</pre>
+        </div>
     </div>
 </div>

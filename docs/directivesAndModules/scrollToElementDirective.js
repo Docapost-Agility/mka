@@ -4,10 +4,9 @@ app.directive('scrollToItem', function () {
         scope: {
             scrollTo: "@"
         },
-        link: function (scope, $elm, attr) {
-
+        link: function (scope, $elm) {
             $elm.on('click', function () {
-                $('html,body').animate({scrollTop: $(scope.scrollTo).offset().top}, "slow");
+                $('html,body').animate({scrollTop: $(scope.scrollTo).offset().top - 30}, "slow");
             });
         }
     }

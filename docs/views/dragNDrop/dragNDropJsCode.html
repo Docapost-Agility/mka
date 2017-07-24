@@ -1,0 +1,24 @@
+var drop = function (elts, zone) {
+    alert('drop ' + elts + ' dropZone ' + zone);
+}
+
+document.getElementById('itemsList').mkaInit({
+    "eltsSelectable": "li",
+    "onDragItemClass": "drag-class-sample",
+    "dragNdrop": drop,
+    "droppableElements": ".folders-container .folder",
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-items",
+});
+
+document.getElementsByClassName('folders-container').item(0).mkaInit({
+    "eltsSelectable": ".folder",
+    "onDragItemClass": "drag-class-sample",
+    "dragNdrop": true,
+    "lasso": false,
+    "selectAllShortcut": false,
+    "copyPaste": false,
+    "count": "mka-count-folders",
+});

@@ -6,7 +6,8 @@ app.factory('mkaActionsService', [function () {
         deleteItems: deleteItems,
         drop: drop,
         getContextMenuFolders: getContextMenuFolders,
-        getContextMenuItems: getContextMenuItems
+        getContextMenuItems: getContextMenuItems,
+        pasteFunction: pasteFunction
     }
 
     function getContextMenuItems(selection) {
@@ -76,6 +77,10 @@ app.factory('mkaActionsService', [function () {
                 elt.parentNode.parentNode.removeChild(elt.parentNode);
             }
         })
+    }
+    
+    function pasteFunction(items) {
+        console.log(items);
     }
 
     return service;
