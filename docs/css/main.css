@@ -107,10 +107,6 @@ div.tab button.active {
     padding-left: 0;
 }
 
-.folder {
-    text-align: center;
-}
-
 .mka-elt-selecting, .mka-elt-selecting .thumbnail {
     background-color: #D1EEFF;
 }
@@ -122,10 +118,6 @@ div.tab button.active {
 .on-drag {
     background-color: #cbcbcb !important;
     opacity: 0.7;
-}
-
-#wrapper-drag {
-    position: relative;
 }
 
 .drag-class-sample {
