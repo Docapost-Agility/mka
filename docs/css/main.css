@@ -71,24 +71,32 @@ div.tab button.active {
     cursor: pointer;
 }
 
+@media (max-width: 991px) {
+    .code {
+        margin-top: 10px;
+    }
+}
+
 .itemsAndFoldersContainer {
     position: inherit;
 }
 
-.itemsAndFoldersContainer, .code {
-    height: 650px;
+.itemsAndFoldersContainer .tabcontents, .code .tabcontents {
+    height: 600px;
+    display: block;
+    overflow: auto;
 }
 
-.code .tabcontents .codeElement {
-    height: 624px;
-}
-
-.itemsAndFoldersContainer .tabcontents, .code .tabcontents, .code .tabcontents .codeElement pre {
+.code .tabcontents .codeElement pre {
     height: 100%;
 }
 
-#selectAll, #rightClick, #copyPaste, #dragNDrop, #dbClick, #delete {
-    margin-top: 70px;
+.code .tabcontents .codeElement {
+    height: 98%;
+}
+
+.demoContainer {
+    margin-bottom: 30px;
 }
 
 .container {
@@ -141,12 +149,97 @@ div.tab button.active {
 
 }
 
+.folder-text, .file-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.file-icon {
+    background: #eee;
+    background: -moz-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
+    background: -webkit-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
+    border: 1px solid #ccc;
+    -moz-border-radius: 3px 15px 3px 3px;
+    -webkit-border-radius: 3px 15px 3px 3px;
+    border-radius: 3px 15px 3px 3px;
+    -moz-box-shadow: inset rgba(255, 255, 255, 0.8) 0 1px 1px;
+    -webkit-box-shadow: inset rgba(255, 255, 255, 0.8) 0 1px 1px;
+    box-shadow: inset rgba(255, 255, 255, 0.8) 0 1px 1px;
+    display: inline-block;
+    width: 20px;
+    height: 25px;
+    position: relative;
+    text-indent: -9999em;
+    margin-bottom: -8px;
+    margin-top: 3px;
+    float: left;
+}
+
+.file-icon:before {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    background: #ccc;
+    background: -moz-linear-gradient(45deg, #fff 0, #eee 50%, #ccc 100%);
+    background: -webkit-linear-gradient(45deg, #fff 0, #eee 50%, #ccc 100%);
+    box-shadow: rgba(0, 0, 0, 0.05) -1px 1px 1px, inset white 0 0 1px;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    -moz-border-radius: 0 14px 0 0;
+    -webkit-border-radius: 0 14px 0 0;
+    border-radius: 0 10px 0 0;
+}
+
+.file-icon:after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 40%;
+    margin: 10px 20% 0;
+    background: #ccc;
+    background: -moz-linear-gradient(top, #ccc 0, #ccc 20%, #fff 20%, #fff 40%, #ccc 40%, #ccc 60%, #fff 60%, #fff 80%, #ccc 80%, #ccc 100%);
+    background: -webkit-linear-gradient(top, #ccc 0, #ccc 20%, #fff 20%, #fff 40%, #ccc 40%, #ccc 60%, #fff 60%, #fff 80%, #ccc 80%, #ccc 100%);
+    height: 8px;
+}
+
+.folder-icon {
+    width: 25px;
+    height: 20px;
+    position: relative;
+    background-color: #708090;
+    border-radius: 0 3px 3px 3px;
+    margin-top: 8px;
+    float: left;
+}
+
+.folder-icon:before {
+    content: '';
+    width: 50%;
+    height: 0.2em;
+    border-radius: 0 20px 0 0;
+    background-color: #708090;
+    position: absolute;
+    top: -0.2em;
+    left: 0px;
+}
+
+.folder-text, .file-text {
+    text-align: left;
+    padding-left: 5px;
+}
+
 #home {
     padding-top: 2%;
 }
 
 #back-top {
     position: fixed;
-    bottom:20px;
+    bottom: 20px;
     right: 2%;
-    z-index: 100; }
+    z-index: 100;
+}
