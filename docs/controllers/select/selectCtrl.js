@@ -11,7 +11,7 @@ app.controller('selectCtrl', ['$scope', function ($scope) {
         $scope.$on('ngRepeatFilesCompleted', function () {
 
             document.getElementById('select').getElementsByClassName('itemsList').item(0).mkaInit({
-                "eltsSelectable": "li",
+                "eltsSelectable": "#select li",
                 "lasso": true,
                 "selectAllShortcut": false,
                 "copyPaste": false,

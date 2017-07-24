@@ -11,10 +11,10 @@ app.controller('dragNDropCtrl', ['$scope', 'mkaActionsService', function ($scope
         $scope.$on('ngRepeatFilesCompleted', function () {
 
             document.getElementById('dragNDrop').getElementsByClassName('itemsList').item(0).mkaInit({
-                "eltsSelectable": "li",
+                "eltsSelectable": "#dragNDrop li",
                 "onDragItemClass": "drag-class-sample",
                 "dragNdrop": mkaActionsService.drop,
-                "droppableElements": ".folders-container .folder",
+                "droppableElements": "#dragNDrop .folders-container .folder",
                 "lasso": false,
                 "selectAllShortcut": false,
                 "copyPaste": false,
@@ -26,7 +26,7 @@ app.controller('dragNDropCtrl', ['$scope', 'mkaActionsService', function ($scope
         $scope.$on('ngRepeatFoldersCompleted', function () {
 
             document.getElementById('dragNDrop').getElementsByClassName('folders-container').item(0).mkaInit({
-                "eltsSelectable": ".folder",
+                "eltsSelectable": "#dragNDrop .folder",
                 "onDragItemClass": "drag-class-sample",
                 "dragNdrop": true,
                 "lasso": false,

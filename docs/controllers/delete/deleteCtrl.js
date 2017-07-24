@@ -11,7 +11,7 @@ app.controller('deleteCtrl', ['$scope', 'mkaActionsService', function ($scope, m
         $scope.$on('ngRepeatFilesCompleted', function () {
 
             document.getElementById('delete').getElementsByClassName('itemsList').item(0).mkaInit({
-                "eltsSelectable": "li",
+                "eltsSelectable": "#delete li",
                 "lasso": true,
                 "selectAllShortcut": false,
                 "copyPaste": false,
@@ -24,7 +24,7 @@ app.controller('deleteCtrl', ['$scope', 'mkaActionsService', function ($scope, m
         $scope.$on('ngRepeatFoldersCompleted', function () {
 
             document.getElementById('delete').getElementsByClassName('folders-container').item(0).mkaInit({
-                "eltsSelectable": ".folder",
+                "eltsSelectable": "#delete .folder",
                 "lasso": true,
                 "selectAllShortcut": false,
                 "copyPaste": false,
