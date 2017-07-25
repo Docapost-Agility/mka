@@ -235,6 +235,11 @@ div.tab button.active {
     right: 2%;
     z-index: 100;
 }
- .dropdown-menu {
-     cursor: pointer;
- }
+
+.dropdown-menu {
+    cursor: pointer;
+}
+
+#mkarcmenu {
+    z-index: 10;
+}
