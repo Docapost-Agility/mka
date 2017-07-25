@@ -242,4 +242,20 @@ div.tab button.active {
 
 #mkarcmenu {
     z-index: 10;
+    border: solid 1px black;
+    border-radius: 10px;
+    min-width:110px;
+    background-color: #D1EEFF;
+}
+
+#mkarcmenu ul {
+    padding:8%;
+}
+
+#mkarcmenu ul li {
+    list-style: none;
+    border-bottom: dotted 1px black;
+}
+#mkarcmenu ul li:last-child {
+    border-bottom: none;
 }
