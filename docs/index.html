@@ -66,6 +66,14 @@
     <script src="controllers/delete/deleteCtrl.js"></script>
     <script src="controllers/delete/deleteCodeCtrl.js"></script>
 
+    <script src="controllers/longPress/longPressExplicationCtrl.js"></script>
+    <script src="controllers/longPress/longPressCtrl.js"></script>
+    <script src="controllers/longPress/longPressCodeCtrl.js"></script>
+
+    <script src="controllers/doublePress/doublePressExplicationCtrl.js"></script>
+    <script src="controllers/doublePress/doublePressCtrl.js"></script>
+    <script src="controllers/doublePress/doublePressCodeCtrl.js"></script>
+
     <script src="controllers/install/installCtrl.js"></script></head>
 
 <body data-ng-app="app">
@@ -92,6 +100,13 @@
                         <li><a scroll-to-item scroll-to="#selectAll">SELECT ALL</a></li>
                         <li><a scroll-to-item scroll-to="#copyPaste">COPY PASTE</a></li>
                         <li><a scroll-to-item scroll-to="#delete">DELETE</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ON TOUCH <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a scroll-to-item scroll-to="#longPress">LONG PRESS</a></li>
+                        <li><a scroll-to-item scroll-to="#doublePress">DOUBLE PRESS</a></li>
                     </ul>
                 </li>
                 <li><a scroll-to-item scroll-to="#install">INSTALL</a></li>
