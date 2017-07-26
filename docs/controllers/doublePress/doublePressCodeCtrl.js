@@ -4,8 +4,8 @@ app.controller('doublePressCodeCtrl', [function () {
 
     vm.activeTab = 'HTML';
 
-    vm.codeCss = 'views/doublePress/doublePressCssCode.html';
-    vm.codeHtml = 'views/doublePress/doublePressHtmlCode.html';
-    vm.codeJs = 'views/doublePress/doublePressJsCode.html';
+    vm.codeCss = 'doublePressCode.css';
+    vm.codeHtml = 'doublePressCode.html';
+    vm.codeJs = 'doublePressCode.js';
 
 }]);

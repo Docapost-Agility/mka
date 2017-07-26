@@ -4,8 +4,8 @@ app.controller('dragNDropCodeCtrl', [function () {
 
     vm.activeTab = 'HTML';
 
-    vm.codeCss = 'views/dragNDrop/dragNDropCssCode.html';
-    vm.codeHtml = 'views/dragNDrop/dragNDropHtmlCode.html';
-    vm.codeJs = 'views/dragNDrop/dragNDropJsCode.html';
+    vm.codeCss = 'dragNDropCode.css';
+    vm.codeHtml = 'dragNDropCode.html';
+    vm.codeJs = 'dragNDropCode.js';
 
 }]);

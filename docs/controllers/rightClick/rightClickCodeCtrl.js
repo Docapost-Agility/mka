@@ -4,8 +4,8 @@ app.controller('rightClickCodeCtrl', [function () {
 
     vm.activeTab = 'HTML';
 
-    vm.codeCss = 'views/rightClick/rightClickCssCode.html';
-    vm.codeHtml = 'views/rightClick/rightClickHtmlCode.html';
-    vm.codeJs = 'views/rightClick/rightClickJsCode.html';
+    vm.codeCss = 'rightClickCode.css';
+    vm.codeHtml = 'rightClickCode.html';
+    vm.codeJs = 'rightClickCode.js';
 
 }]);
