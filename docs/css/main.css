@@ -53,17 +53,11 @@ div.tab button.active {
     background-color: #ccc;
 }
 
-/* Style the tab content */
-.tabcontent {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-}
-
 .tabcontents {
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+    border-radius: 0 0 2px 2px;
 }
 
 /* Cursor for menu because no href but directive */
@@ -86,10 +80,8 @@ div.tab button.active {
     margin: -4px -4px 0px -4px;
 }
 
-.code .codeElement {
-    max-height: 500px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+.code .codeElement code .gist-data {
+    height: 462px;
 }
 
 .demoContainer {
