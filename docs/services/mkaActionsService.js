@@ -14,22 +14,22 @@ app.factory('mkaActionsService', [function () {
         var menu = [];
 
         menu.push({
-            title: "action 1",
+            title: "Action file 1",
             action: function () {
-                alert("action 1");
+                alert("Action file 1");
             }
         });
         menu.push({
-            title: "action 3",
+            title: "Action file 3",
             action: function () {
-                alert("action 3");
+                alert("Action file 3");
             }
         });
         if (selection.length > 1) {
             menu.push({
-                title: "action multiple",
+                title: "Multiple action for files",
                 action: function () {
-                    alert("action multiple");
+                    alert("Multiple action for files");
                 }
             });
         }
@@ -46,13 +46,11 @@ app.factory('mkaActionsService', [function () {
         return htmlMenu;
     }
 
-    function getContextMenuFolders(selection) {
-        var htmlMenu = '<ul>' +
-            '<li onclick="alert(\'action dossier 1\');">action dossier 1</li>' +
-            '<li onclick="alert(\'action dossier 3\');">action dossier 3</li>' +
+    function getContextMenuFolders() {
+        return '<ul>' +
+            '<li onclick="alert(\'Action folder 1\');">Action folder 1</li>' +
+            '<li onclick="alert(\'Action folder 3\');">Action folder 3</li>' +
             '</ul>';
-
-        return htmlMenu;
     }
 
     function dbClick(elt) {
