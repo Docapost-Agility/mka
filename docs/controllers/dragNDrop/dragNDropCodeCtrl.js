@@ -8,4 +8,6 @@ app.controller('dragNDropCodeCtrl', [function () {
     vm.codeHtml = 'dragNDropCode.html';
     vm.codeJs = 'dragNDropCode.js';
 
+    vm.fileWithoutExtension = 'dragNdrop';
+
 }]);

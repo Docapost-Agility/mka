@@ -8,4 +8,6 @@ app.controller('copyPasteCodeCtrl', [function () {
     vm.codeHtml = 'copyPasteCode.html';
     vm.codeJs = 'copyPasteCode.js';
 
+    vm.fileWithoutExtension = 'copyPaste';
+
 }]);

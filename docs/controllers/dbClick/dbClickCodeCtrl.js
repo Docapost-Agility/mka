@@ -8,4 +8,6 @@ app.controller('dbClickCodeCtrl', [function () {
     vm.codeHtml = 'dbClickCode.html';
     vm.codeJs = 'dbClickCode.js';
 
+    vm.fileWithoutExtension = 'dbClick';
+
 }]);

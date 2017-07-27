@@ -8,4 +8,6 @@ app.controller('longPressCodeCtrl', [function () {
     vm.codeHtml = 'longPressCode.html';
     vm.codeJs = 'longPressCode.js';
 
+    vm.fileWithoutExtension = 'longPress';
+
 }]);

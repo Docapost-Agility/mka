@@ -8,4 +8,6 @@ app.controller('doublePressCodeCtrl', [function () {
     vm.codeHtml = 'doublePressCode.html';
     vm.codeJs = 'doublePressCode.js';
 
+    vm.fileWithoutExtension = 'doublePress';
+
 }]);

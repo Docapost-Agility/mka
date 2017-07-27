@@ -8,4 +8,6 @@ app.controller('deleteCodeCtrl', [function () {
     vm.codeHtml = 'deleteCode.html';
     vm.codeJs = 'deleteCode.js';
 
+    vm.fileWithoutExtension = 'delete';
+
 }]);

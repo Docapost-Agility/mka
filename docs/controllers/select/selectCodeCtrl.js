@@ -8,4 +8,6 @@ app.controller('selectCodeCtrl', [function () {
     vm.codeHtml = 'selectCode.html';
     vm.codeJs = 'selectCode.js';
 
+    vm.fileWithoutExtension = 'selectCode';
+
 }]);

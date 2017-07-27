@@ -8,4 +8,6 @@ app.controller('rightClickCodeCtrl', [function () {
     vm.codeHtml = 'rightClickCode.html';
     vm.codeJs = 'rightClickCode.js';
 
+    vm.fileWithoutExtension = 'rightClick';
+
 }]);
