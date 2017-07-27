@@ -84,6 +84,12 @@ div.tab button.active {
     height: 462px;
 }
 
+#dragNDrop .code .codeElement code .gist-data,
+#copyPaste .code .codeElement code .gist-data,
+#delete .code .codeElement code .gist-data {
+    height: 565px !important;
+}
+
 .demoContainer {
     margin-bottom: 30px;
 }
