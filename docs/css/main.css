@@ -81,22 +81,14 @@ div.tab button.active {
     position: inherit;
 }
 
-.itemsAndFoldersContainer .tabcontents, .code .tabcontents {
-    height: 600px;
-    display: block;
-    overflow: auto;
-}
-
 .codeElement code {
     background-color: transparent;
 }
 
-.code .tabcontents .codeElement pre {
-    height: 100%;
-}
-
-.code .tabcontents .codeElement {
-    height: 98%;
+.code .codeElement {
+    max-height: 500px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .demoContainer {
