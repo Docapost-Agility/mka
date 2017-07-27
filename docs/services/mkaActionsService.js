@@ -60,7 +60,13 @@ app.factory('mkaActionsService', [function () {
     }
 
     function drop(elts, zone) {
-        alert('drop ' + elts + ' dropZone ' + zone);
+        var alertMessage = 'You have drop on "' + zone.getElementsByTagName('h5')[0]['innerText'] + '" folder:\n';
+
+        elts.forEach(function (elt) {
+            alertMessage += '- ' + elt.getElementsByTagName('h6')[0]['innerText'] + '\n';
+        })
+
+        alert(alertMessage);
     }
 
     function deleteItems(elements) {
@@ -78,7 +84,7 @@ app.factory('mkaActionsService', [function () {
             }
         })
     }
-    
+
     function pasteFunction(items) {
         console.log(items);
     }
