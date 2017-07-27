@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ui.router', 'angularLoad']);
+var app = angular.module('app', ['ui.router', 'gist-embed']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');

@@ -53,17 +53,11 @@ div.tab button.active {
     background-color: #ccc;
 }
 
-/* Style the tab content */
-.tabcontent {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-top: none;
-}
-
 .tabcontents {
     padding: 6px 12px;
     border: 1px solid #ccc;
     border-top: none;
+    border-radius: 0 0 2px 2px;
 }
 
 /* Cursor for menu because no href but directive */
@@ -81,18 +75,19 @@ div.tab button.active {
     position: inherit;
 }
 
-.itemsAndFoldersContainer .tabcontents, .code .tabcontents {
-    height: 600px;
-    display: block;
-    overflow: auto;
+.codeElement code {
+    background-color: transparent;
+    margin: -4px -4px 0px -4px;
 }
 
-.code .tabcontents .codeElement pre {
-    height: 100%;
+.code .codeElement code .gist-data {
+    height: 462px;
 }
 
-.code .tabcontents .codeElement {
-    height: 98%;
+#dragNDrop .code .codeElement code .gist-data,
+#copyPaste .code .codeElement code .gist-data,
+#delete .code .codeElement code .gist-data {
+    height: 565px !important;
 }
 
 .demoContainer {
@@ -244,18 +239,19 @@ div.tab button.active {
     z-index: 10;
     border: solid 1px black;
     border-radius: 10px;
-    min-width:110px;
+    min-width: 110px;
     background-color: #D1EEFF;
 }
 
 #mkarcmenu ul {
-    padding:8%;
+    padding: 8%;
 }
 
 #mkarcmenu ul li {
     list-style: none;
     border-bottom: dotted 1px black;
 }
+
 #mkarcmenu ul li:last-child {
     border-bottom: none;
 }

@@ -4,8 +4,10 @@ app.controller('selectAllCodeCtrl', [function () {
 
     vm.activeTab = 'HTML';
 
-    vm.codeCss = 'views/selectAll/selectAllCssCode.html';
-    vm.codeHtml = 'views/selectAll/selectAllHtmlCode.html';
-    vm.codeJs = 'views/selectAll/selectAllJsCode.html';
+    vm.codeCss = 'selectAllCode.css';
+    vm.codeHtml = 'selectAllCode.html';
+    vm.codeJs = 'selectAllCode.js';
+
+    vm.fileWithoutExtension = 'selectAllCode';
 
 }]);

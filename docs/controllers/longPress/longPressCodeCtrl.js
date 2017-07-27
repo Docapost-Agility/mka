@@ -4,8 +4,10 @@ app.controller('longPressCodeCtrl', [function () {
 
     vm.activeTab = 'HTML';
 
-    vm.codeCss = 'views/longPress/longPressCssCode.html';
-    vm.codeHtml = 'views/longPress/longPressHtmlCode.html';
-    vm.codeJs = 'views/longPress/longPressJsCode.html';
+    vm.codeCss = 'longPressCode.css';
+    vm.codeHtml = 'longPressCode.html';
+    vm.codeJs = 'longPressCode.js';
+
+    vm.fileWithoutExtension = 'longPress';
 
 }]);

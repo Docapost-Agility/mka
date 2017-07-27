@@ -4,8 +4,10 @@ app.controller('copyPasteCodeCtrl', [function () {
 
     vm.activeTab = 'HTML';
 
-    vm.codeCss = 'views/copyPaste/copyPasteCssCode.html';
-    vm.codeHtml = 'views/copyPaste/copyPasteHtmlCode.html';
-    vm.codeJs = 'views/copyPaste/copyPasteJsCode.html';
+    vm.codeCss = 'copyPasteCode.css';
+    vm.codeHtml = 'copyPasteCode.html';
+    vm.codeJs = 'copyPasteCode.js';
+
+    vm.fileWithoutExtension = 'copyPaste';
 
 }]);

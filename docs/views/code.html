@@ -4,37 +4,21 @@
                 data-ng-click="codeCtrl.activeTab = 'HTML'">HTML
         </button>
         <button class="tablinks" data-ng-class="{'active': codeCtrl.activeTab === 'JS'}"
-                data-ng-click="codeCtrl.activeTab = 'JS'">JS
+                data-ng-click="codeCtrl.activeTab = 'JS'; homeCtrl.addCodeToHtml('JS', codeCtrl.codeJs, codeCtrl.fileWithoutExtension)">JS
         </button>
         <button class="tablinks" data-ng-class="{'active': codeCtrl.activeTab === 'CSS'}"
-                data-ng-click="codeCtrl.activeTab = 'CSS'">CSS
+                data-ng-click="codeCtrl.activeTab = 'CSS'; homeCtrl.addCodeToHtml('CSS', codeCtrl.codeCss, codeCtrl.fileWithoutExtension)">CSS
         </button>
     </div>
 
-    <div class="tabcontents">
-
-        <div data-ng-show="codeCtrl.activeTab === 'HTML'" class="codeElement">
-<pre class="line-numbers" data-start=0>
-<code class="language-html">
-<div ng-include src="codeCtrl.codeHtml"></div>
-</code>
-</pre>
-        </div>
-
-        <div data-ng-show="codeCtrl.activeTab === 'JS'" class="codeElement">
-<pre class="line-numbers" data-start=0>
-<code class="language-javascript">
-<div ng-include src="codeCtrl.codeJs"></div>
-</code>
-</pre>
-        </div>
-
-        <div data-ng-show="codeCtrl.activeTab === 'CSS'" class="codeElement">
-<pre class="line-numbers" data-start=0>
-<code class="language-css">
-<div ng-include src="codeCtrl.codeCss"></div>
-</code>
-</pre>
-        </div>
+    <div data-ng-show="codeCtrl.activeTab === 'HTML'" class="codeElement">
+        <code data-gist-id="b676384d5400470e84f0a6719d054368" data-gist-file="{{codeCtrl.codeHtml}}" data-gist-show-spinner="true"></code>
     </div>
+
+    <div data-ng-show="codeCtrl.activeTab === 'JS'" class="codeElement" id="codeElementJS{{codeCtrl.fileWithoutExtension}}">
+    </div>
+
+    <div data-ng-show="codeCtrl.activeTab === 'CSS'" class="codeElement" id="codeElementCSS{{codeCtrl.fileWithoutExtension}}">
+    </div>
+
 </div>

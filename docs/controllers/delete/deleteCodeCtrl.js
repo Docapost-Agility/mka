@@ -4,8 +4,10 @@ app.controller('deleteCodeCtrl', [function () {
 
     vm.activeTab = 'HTML';
 
-    vm.codeCss = 'views/delete/deleteCssCode.html';
-    vm.codeHtml = 'views/delete/deleteHtmlCode.html';
-    vm.codeJs = 'views/delete/deleteJsCode.html';
+    vm.codeCss = 'deleteCode.css';
+    vm.codeHtml = 'deleteCode.html';
+    vm.codeJs = 'deleteCode.js';
+
+    vm.fileWithoutExtension = 'delete';
 
 }]);

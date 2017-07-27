@@ -4,8 +4,10 @@ app.controller('dbClickCodeCtrl', [function () {
 
     vm.activeTab = 'HTML';
 
-    vm.codeCss = 'views/dbClick/dbClickCssCode.html';
-    vm.codeHtml = 'views/dbClick/dbClickHtmlCode.html';
-    vm.codeJs = 'views/dbClick/dbClickJsCode.html';
+    vm.codeCss = 'dbClickCode.css';
+    vm.codeHtml = 'dbClickCode.html';
+    vm.codeJs = 'dbClickCode.js';
+
+    vm.fileWithoutExtension = 'dbClick';
 
 }]);
