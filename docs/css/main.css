@@ -87,6 +87,10 @@ div.tab button.active {
     overflow: auto;
 }
 
+.codeElement code {
+    background-color: transparent;
+}
+
 .code .tabcontents .codeElement pre {
     height: 100%;
 }
