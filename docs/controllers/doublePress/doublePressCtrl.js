@@ -10,12 +10,13 @@ app.controller('doublePressCtrl', ['$scope', function ($scope) {
 
         $scope.$on('ngRepeatFilesCompleted', function () {
 
-            document.getElementById('select').getElementsByClassName('itemsList').item(0).mkaInit({
-                "eltsSelectable": "#select li",
+            document.getElementById('doublePress').getElementsByClassName('files-container').item(0).mkaInit({
+                "eltsSelectable": "#doublePress li",
                 "lasso": true,
                 "selectAllShortcut": false,
                 "copyPaste": false,
-                "count": vm.mkaCountItems
+                "count": vm.mkaCountItems,
+                "dbClickDelay": 400
             });
 
         });
