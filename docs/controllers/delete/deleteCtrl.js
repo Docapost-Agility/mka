@@ -3,7 +3,7 @@ app.controller('deleteCtrl', ['$scope', 'mkaActionsService', function ($scope, m
     var vm = this;
 
     vm.mkaCountFolders = 'mka-count-folders-delete';
-    vm.mkaCountItems = 'mka-count-items-delete';
+    vm.mkaCountFiles = 'mka-count-files-delete';
     vm.showFolders = true;
 
     $scope.$on('$includeContentLoaded', function () {
@@ -15,7 +15,7 @@ app.controller('deleteCtrl', ['$scope', 'mkaActionsService', function ($scope, m
                 "lasso": true,
                 "selectAllShortcut": false,
                 "copyPaste": false,
-                "count": vm.mkaCountItems,
+                "count": vm.mkaCountFiles,
                 "deleteShortcut": mkaActionsService.deleteItems
             });
 

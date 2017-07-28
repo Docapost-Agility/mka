@@ -3,7 +3,7 @@ app.controller('doublePressCtrl', ['$scope', function ($scope) {
     var vm = this;
 
     vm.mkaCountFolders = 'mka-count-folders-doublePress';
-    vm.mkaCountItems = 'mka-count-items-doublePress';
+    vm.mkaCountFiles = 'mka-count-files-doublePress';
     vm.showFolders = false;
 
     $scope.$on('$includeContentLoaded', function () {
@@ -15,7 +15,7 @@ app.controller('doublePressCtrl', ['$scope', function ($scope) {
                 "lasso": true,
                 "selectAllShortcut": false,
                 "copyPaste": false,
-                "count": vm.mkaCountItems,
+                "count": vm.mkaCountFiles,
                 "dbClickDelay": 400
             });
 

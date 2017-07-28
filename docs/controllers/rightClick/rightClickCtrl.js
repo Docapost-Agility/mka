@@ -3,7 +3,7 @@ app.controller('rightClickCtrl', ['$scope', 'mkaActionsService', function ($scop
     var vm = this;
 
     vm.mkaCountFolders = 'mka-count-folders-rightClick';
-    vm.mkaCountItems = 'mka-count-items-rightClick';
+    vm.mkaCountFiles = 'mka-count-files-rightClick';
     vm.showFolders = true;
 
     $scope.$on('$includeContentLoaded', function () {
@@ -16,7 +16,7 @@ app.controller('rightClickCtrl', ['$scope', 'mkaActionsService', function ($scop
                 "lasso": false,
                 "selectAllShortcut": false,
                 "copyPaste": false,
-                "count": vm.mkaCountItems
+                "count": vm.mkaCountFiles
             });
 
         });

@@ -3,7 +3,7 @@ app.controller('dbClickCtrl', ['$scope', 'mkaActionsService', function ($scope, 
     var vm = this;
 
     vm.mkaCountFolders = 'mka-count-folders-dbClick';
-    vm.mkaCountItems = 'mka-count-items-dbClick';
+    vm.mkaCountFiles = 'mka-count-files-dbClick';
     vm.showFolders = false;
 
     $scope.$on('$includeContentLoaded', function () {
@@ -16,7 +16,7 @@ app.controller('dbClickCtrl', ['$scope', 'mkaActionsService', function ($scope, 
                 "lasso": false,
                 "selectAllShortcut": false,
                 "copyPaste": false,
-                "count": vm.mkaCountItems
+                "count": vm.mkaCountFiles
             });
 
         });

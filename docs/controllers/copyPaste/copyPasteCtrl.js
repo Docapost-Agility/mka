@@ -2,8 +2,8 @@ app.controller('copyPasteCtrl', ['$scope', 'mkaActionsService', function ($scope
 
     var vm = this;
 
-    vm.mkaCountFolders = 'mka-count-folders-dragNDrop';
-    vm.mkaCountItems = 'mka-count-items-dragNDrop';
+    vm.mkaCountFolders = 'mka-count-folders-copyPaste';
+    vm.mkaCountFiles = 'mka-count-files-copyPaste';
     vm.showFolders = true;
 
     $scope.$on('$includeContentLoaded', function () {
@@ -15,7 +15,7 @@ app.controller('copyPasteCtrl', ['$scope', 'mkaActionsService', function ($scope
                 "lasso": false,
                 "selectAllShortcut": false,
                 "copyPaste": true,
-                "count": vm.mkaCountItems,
+                "count": vm.mkaCountFiles,
                 "pasteFunction": mkaActionsService.pasteFunction
             });
 
