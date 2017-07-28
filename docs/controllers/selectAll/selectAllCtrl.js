@@ -10,7 +10,7 @@ app.controller('selectAllCtrl', ['$scope', function ($scope) {
 
         $scope.$on('ngRepeatFilesCompleted', function () {
 
-            document.getElementById('selectAll').getElementsByClassName('itemsList').item(0).mkaInit({
+            document.getElementById('selectAll').getElementsByClassName('files-container').item(0).mkaInit({
                 "eltsSelectable": "#selectAll li",
                 "lasso": false,
                 "selectAllShortcut": true,

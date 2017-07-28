@@ -10,7 +10,7 @@ app.controller('dbClickCtrl', ['$scope', 'mkaActionsService', function ($scope, 
 
         $scope.$on('ngRepeatFilesCompleted', function () {
 
-            document.getElementById('dbClick').getElementsByClassName('itemsList').item(0).mkaInit({
+            document.getElementById('dbClick').getElementsByClassName('files-container').item(0).mkaInit({
                 "eltsSelectable": "#dbClick li",
                 "dbClick": mkaActionsService.dbClick,
                 "lasso": false,

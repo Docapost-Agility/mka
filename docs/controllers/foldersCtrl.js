@@ -7,7 +7,7 @@ app.controller('foldersCtrl', [function () {
             name: 'Invoices'
         },
         {
-            name: 'Mouse and Keyborad Actions'
+            name: 'Mouse and Keyboard Actions'
         },
         {
             name: 'Documentations'

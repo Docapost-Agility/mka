@@ -10,12 +10,13 @@ app.controller('longPressCtrl', ['$scope', function ($scope) {
 
         $scope.$on('ngRepeatFilesCompleted', function () {
 
-            document.getElementById('select').getElementsByClassName('itemsList').item(0).mkaInit({
-                "eltsSelectable": "#select li",
+            document.getElementById('longPress').getElementsByClassName('files-container').item(0).mkaInit({
+                "eltsSelectable": "#longPress li",
                 "lasso": true,
                 "selectAllShortcut": false,
                 "copyPaste": false,
-                "count": vm.mkaCountItems
+                "count": vm.mkaCountItems,
+                "longPressDelay": 550
             });
 
         });
