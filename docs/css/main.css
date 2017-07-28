@@ -86,7 +86,8 @@ div.tab button.active {
 
 #dragNDrop .code .codeElement code .gist-data,
 #copyPaste .code .codeElement code .gist-data,
-#delete .code .codeElement code .gist-data {
+#delete .code .codeElement code .gist-data,
+#rightClick .code .codeElement code .gist-data {
     height: 565px !important;
 }
 
