@@ -10,7 +10,7 @@ app.controller('dragNDropCtrl', ['$scope', 'mkaActionsService', function ($scope
 
         $scope.$on('ngRepeatFilesCompleted', function () {
 
-            document.getElementById('dragNDrop').getElementsByClassName('itemsList').item(0).mkaInit({
+            document.getElementById('dragNDrop').getElementsByClassName('files-container').item(0).mkaInit({
                 "eltsSelectable": "#dragNDrop li",
                 "onDragItemClass": "drag-class-sample",
                 "dragNdrop": mkaActionsService.drop,

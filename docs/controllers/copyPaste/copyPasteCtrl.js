@@ -10,7 +10,7 @@ app.controller('copyPasteCtrl', ['$scope', 'mkaActionsService', function ($scope
 
         $scope.$on('ngRepeatFilesCompleted', function () {
 
-            document.getElementById('copyPaste').getElementsByClassName('itemsList').item(0).mkaInit({
+            document.getElementById('copyPaste').getElementsByClassName('files-container').item(0).mkaInit({
                 "eltsSelectable": "#copyPaste li",
                 "lasso": false,
                 "selectAllShortcut": false,

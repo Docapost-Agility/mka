@@ -10,7 +10,7 @@ app.controller('deleteCtrl', ['$scope', 'mkaActionsService', function ($scope, m
 
         $scope.$on('ngRepeatFilesCompleted', function () {
 
-            document.getElementById('delete').getElementsByClassName('itemsList').item(0).mkaInit({
+            document.getElementById('delete').getElementsByClassName('files-container').item(0).mkaInit({
                 "eltsSelectable": "#delete li",
                 "lasso": true,
                 "selectAllShortcut": false,

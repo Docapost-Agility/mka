@@ -10,7 +10,7 @@ app.controller('rightClickCtrl', ['$scope', 'mkaActionsService', function ($scop
 
         $scope.$on('ngRepeatFilesCompleted', function () {
 
-            document.getElementById('rightClick').getElementsByClassName('itemsList').item(0).mkaInit({
+            document.getElementById('rightClick').getElementsByClassName('files-container').item(0).mkaInit({
                 "eltsSelectable": "#rightClick li",
                 "rightClick": mkaActionsService.getContextMenuItems,
                 "lasso": false,
