@@ -2,7 +2,6 @@ app.controller('doublePressCtrl', ['$scope', function ($scope) {
 
     var vm = this;
 
-    vm.mkaCountFolders = 'mka-count-folders-doublePress';
     vm.mkaCountFiles = 'mka-count-files-doublePress';
     vm.showFolders = false;
 
