@@ -2,7 +2,6 @@ app.controller('longPressCtrl', ['$scope', function ($scope) {
 
     var vm = this;
 
-    vm.mkaCountFolders = 'mka-count-folders-longPress';
     vm.mkaCountFiles = 'mka-count-files-longPress';
     vm.showFolders = false;
 

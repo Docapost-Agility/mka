@@ -2,7 +2,6 @@ app.controller('dbClickCtrl', ['$scope', 'mkaActionsService', function ($scope, 
 
     var vm = this;
 
-    vm.mkaCountFolders = 'mka-count-folders-dbClick';
     vm.mkaCountFiles = 'mka-count-files-dbClick';
     vm.showFolders = false;
 
