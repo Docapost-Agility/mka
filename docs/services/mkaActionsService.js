@@ -84,7 +84,20 @@ app.factory('mkaActionsService', [function () {
     }
 
     function pasteFunction(items) {
-        console.log(items);
+        var alertMessage = 'You have drop:\n';
+
+        if (items.length > 0) {
+
+            items.forEach(function (item) {
+                if (item.classList.contains('folder')) {
+                    alertMessage += '- "' + item.getElementsByTagName('h5')[0]['innerText'] + '" folder\n';
+                } else {
+                    alertMessage += '- "' + item.getElementsByTagName('h6')[0]['innerText'] + '" file\n';
+                }
+            })
+
+            alert(alertMessage);
+        }
     }
 
     return service;
