@@ -3,7 +3,7 @@ app.controller('dragNDropCtrl', ['$scope', 'mkaActionsService', function ($scope
     var vm = this;
 
     vm.mkaCountFolders = 'mka-count-folders-dragNDrop';
-    vm.mkaCountItems = 'mka-count-items-dragNDrop';
+    vm.mkaCountFiles = 'mka-count-files-dragNDrop';
     vm.showFolders = true;
 
     $scope.$on('$includeContentLoaded', function () {
@@ -18,7 +18,7 @@ app.controller('dragNDropCtrl', ['$scope', 'mkaActionsService', function ($scope
                 "lasso": false,
                 "selectAllShortcut": false,
                 "copyPaste": false,
-                "count": vm.mkaCountItems
+                "count": vm.mkaCountFiles
             });
 
         });

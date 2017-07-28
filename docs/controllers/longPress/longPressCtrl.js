@@ -3,7 +3,7 @@ app.controller('longPressCtrl', ['$scope', function ($scope) {
     var vm = this;
 
     vm.mkaCountFolders = 'mka-count-folders-longPress';
-    vm.mkaCountItems = 'mka-count-items-longPress';
+    vm.mkaCountFiles = 'mka-count-files-longPress';
     vm.showFolders = false;
 
     $scope.$on('$includeContentLoaded', function () {
@@ -15,7 +15,7 @@ app.controller('longPressCtrl', ['$scope', function ($scope) {
                 "lasso": true,
                 "selectAllShortcut": false,
                 "copyPaste": false,
-                "count": vm.mkaCountItems,
+                "count": vm.mkaCountFiles,
                 "longPressDelay": 550
             });
 

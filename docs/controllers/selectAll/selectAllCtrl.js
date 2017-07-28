@@ -3,7 +3,7 @@ app.controller('selectAllCtrl', ['$scope', function ($scope) {
     var vm = this;
 
     vm.mkaCountFolders = 'mka-count-folders-select-all';
-    vm.mkaCountItems = 'mka-count-items-select-all';
+    vm.mkaCountFiles = 'mka-count-files-select-all';
     vm.showFolders = false;
 
     $scope.$on('$includeContentLoaded', function () {
@@ -15,7 +15,7 @@ app.controller('selectAllCtrl', ['$scope', function ($scope) {
                 "lasso": false,
                 "selectAllShortcut": true,
                 "copyPaste": false,
-                "count": vm.mkaCountItems
+                "count": vm.mkaCountFiles
             });
 
         });
