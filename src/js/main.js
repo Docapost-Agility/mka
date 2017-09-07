@@ -28,7 +28,8 @@ let defaultConfigs = {
         console.log("Default past function, think to implement this function");
     },
     "longPressDelay": 500,
-    "dbClickDelay": 350
+    "dbClickDelay": 350,
+    "onSelectionUpdate": false
 }
 
 let updateSelection = (container, newSelection, actionId) => {
@@ -63,6 +64,8 @@ let updateSelection = (container, newSelection, actionId) => {
         components.forEach(component => {
             component.onSelectionUpdate && component.onSelectionUpdate(params);
         });
+
+        container.mkaParams.configs.onSelectionUpdate && container.mkaParams.configs.onSelectionUpdate(container.mkaParams.selection);
     }
 }
 
