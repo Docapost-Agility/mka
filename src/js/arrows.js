@@ -46,7 +46,7 @@ export let windowEvents = {
                     let currentElt = elt
                     while (!!currentElt.parentNode && !scrollableContainer) {
                         currentElt = currentElt.parentNode;
-                        if (currentElt.scrollHeight > currentElt.offsetHeight || currentElt.scrollWidth > currentElt.offsetWidth || currentElt === document.body) {
+                        if (currentElt.scrollHeight > currentElt.offsetHeight+30 || currentElt.scrollWidth > currentElt.offsetWidth || currentElt === document.body) {
                             scrollableContainer = currentElt;
                         }
                     }
@@ -57,7 +57,7 @@ export let windowEvents = {
                             window.scrollTo(scrollX, scrollY);
                         } else {
                             let scrollY = elt.offsetBodyTop() - scrollableContainer.offsetBodyTop() + (elt.offsetHeight - scrollableContainer.offsetHeight) / 2;
-                            let scrollX = elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft() + (elt.offsetHeight - window.innerHeight) / 2;
+                            let scrollX = elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft() + (elt.offsetWidth - scrollableContainer.offsetWidth) / 2;
                             scrollableContainer.scrollTop = scrollY;
                             scrollableContainer.scrollLeft = scrollX;
                         }
@@ -136,6 +136,9 @@ let calculateNextElement = (fromElement, code, parentFunctions) => {
 
     let getNextElement = () => {
         let target = document.elementFromPoint(posX, posY);
+        if(!target){
+            return null;
+        }
         let selectableElement = parentFunctions.getSelectableElement(target);
         if (!selectableElement) {
             if (parentFunctions.isMkaContainerFocused(target)) {
