@@ -1,5 +1,5 @@
 {
-  "name": "mka",
+  "name": "@docapost-agility/mka",
   "version": "0.0.9",
   "description": "Mouse keyboard action",
   "main": "index.html",
