@@ -56,35 +56,41 @@ let getMkaRcMenu = () => {
 
 let setMenuPosition = (menu, event, parentFunctions) => {
     
-    let parentElement = parentFunctions.getScrollableContainer(event.target);
+    let scrollableContainer = parentFunctions.getScrollableContainer(event.target);
+    let selectableParent = parentFunctions.getSelectableElement(event.target);
     
-    if (!parentElement) {
-        parentElement = parentFunctions.getContainer();
+    if (!scrollableContainer) {
+        scrollableContainer = parentFunctions.getContainer();
     }
 
-    if (!parentElement.classList.contains(menuContainerClass)) {
-        parentElement.classList.add(menuContainerClass);
+    if (!scrollableContainer.classList.contains(menuContainerClass)) {
+        scrollableContainer.classList.add(menuContainerClass);
     }
 
-    let left = event.pageX - (parentElement.offsetBodyLeft() - parentElement.scrollLeftTotal() + document.body.scrollLeft);
-    let top = event.pageY - (parentElement.offsetBodyTop() - parentElement.scrollTopTotal() + document.body.scrollTop);
+    let containerWidth = scrollableContainer.offsetWidth;
+    let containerHeight = scrollableContainer.offsetHeight;
+    let left = event.pageX - (scrollableContainer.offsetBodyLeft() - scrollableContainer.scrollLeftTotal() + document.body.scrollLeftTotal());
+    let top = event.pageY - (scrollableContainer.offsetBodyTop() - scrollableContainer.scrollTopTotal() + document.body.scrollTopTotal());
 
-    let parentWidth = parentElement.offsetWidth;
-    let parentHeight = parentElement.offsetHeight;
+    let parentWidth = selectableParent.offsetWidth;
+    let parentHeight = selectableParent.offsetHeight;
+    let leftDiffToParent = event.pageX - (selectableParent.offsetBodyLeft() - selectableParent.scrollLeftTotal() + document.body.scrollLeftTotal());
+    let topDiffToParent = event.pageY - (selectableParent.offsetBodyTop() - selectableParent.scrollTopTotal() + document.body.scrollTopTotal());
+    
 
-    if (left < 3 * parentWidth / 4) {
+    if (leftDiffToParent < 3 * parentWidth / 4) {
         menu.style.left = left + 'px';
         menu.style.right = "auto";
     } else {
-        menu.style.right = (parentWidth - left) + 'px';
+        menu.style.right = (containerWidth - left) + 'px';
         menu.style.left = "auto";
     }
 
-    if (top < 3 * parentHeight / 4) {
+    if (topDiffToParent < 3 * parentHeight / 4) {
         menu.style.top = top + 'px';
         menu.style.bottom = "auto";
     } else {
-        menu.style.bottom = (parentHeight - top) + 'px';
+        menu.style.bottom = (containerHeight - top) + 'px';
         menu.style.top = "auto";
     }
 
@@ -92,7 +98,7 @@ let setMenuPosition = (menu, event, parentFunctions) => {
     menu.style.display = 'block';
     menu.style.zIndex = '20000';
 
-    parentElement.appendChild(menu);
+    scrollableContainer.appendChild(menu);
 }
 
 let bindContextMenu = (conf, parentFunctions) => {
