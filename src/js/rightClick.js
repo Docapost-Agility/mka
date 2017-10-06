@@ -54,8 +54,10 @@ let getMkaRcMenu = () => {
     return menu;
 }
 
-let setMenuPosition = (menu, event, parentElement, parentFunctions) => {
-
+let setMenuPosition = (menu, event, parentFunctions) => {
+    
+    let parentElement = parentFunctions.getScrollableContainer(event.target);
+    
     if (!parentElement) {
         parentElement = parentFunctions.getContainer();
     }
@@ -88,6 +90,7 @@ let setMenuPosition = (menu, event, parentElement, parentFunctions) => {
 
     menu.style.position = 'absolute';
     menu.style.display = 'block';
+    menu.style.zIndex = '20000';
 
     parentElement.appendChild(menu);
 }
@@ -129,7 +132,7 @@ let bindContextMenu = (conf, parentFunctions) => {
             menu.innerHTML = htmlMenu;
         }
 
-        setMenuPosition(menu, event, selectableElement, parentFunctions);
+        setMenuPosition(menu, event, parentFunctions);
     });
 
 }

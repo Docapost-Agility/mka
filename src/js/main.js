@@ -200,16 +200,24 @@ let getPublicFunctions = (container) => {
             if (target === container) {
                 return true;
             }
-
             while (target.parentNode) {
                 target = target.parentNode;
-
                 if (target === container) {
                     return true;
                 }
             }
-
             return false;
+        },
+        getScrollableContainer: (childElement) => {
+            let scrollableContainer = null;
+            let currentElt = childElement;
+            while (!!currentElt.parentNode && !scrollableContainer) {
+                currentElt = currentElt.parentNode;
+                if (currentElt.scrollHeight > currentElt.offsetHeight || currentElt.scrollWidth > currentElt.offsetWidth || currentElt === document.body) {
+                    scrollableContainer = currentElt;
+                }
+            }
+            return scrollableContainer;
         }
     }
 }
