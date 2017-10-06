@@ -42,14 +42,7 @@ export let windowEvents = {
             } else {
                 event.preventDefault();
                 let centerScroll = (elt) => {
-                    let scrollableContainer = null;
-                    let currentElt = elt
-                    while (!!currentElt.parentNode && !scrollableContainer) {
-                        currentElt = currentElt.parentNode;
-                        if (currentElt.scrollHeight > currentElt.offsetHeight+30 || currentElt.scrollWidth > currentElt.offsetWidth || currentElt === document.body) {
-                            scrollableContainer = currentElt;
-                        }
-                    }
+                    let scrollableContainer = parentFunctions.getScrollableContainer(elt);
                     if (scrollableContainer) {
                         if (scrollableContainer === document.body) {
                             let scrollY = elt.offsetBodyTop() - scrollableContainer.offsetBodyTop() + (elt.offsetHeight - window.innerHeight) / 2;
