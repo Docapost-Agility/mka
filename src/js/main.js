@@ -133,10 +133,10 @@ let getPublicFunctions = (container) => {
             return container.mkaParams.customProperties[key];
         },
         elementIsSelected: (elt) => {
-            if (elt.classList && elt.classList.contains(configs.eltSelectedClass)) {
+            if (elt && elt.classList && elt.classList.contains(configs.eltSelectedClass)) {
                 return true;
             }
-            while (elt.parentNode) {
+            while (elt && elt.parentNode) {
                 elt = elt.parentNode;
                 if (elt.classList && elt.classList.contains(configs.eltSelectedClass)) {
                     return true;
@@ -146,10 +146,10 @@ let getPublicFunctions = (container) => {
         },
         getSelectableElement: (elt) => {
             let selectables = container.mkaParams.selectables;
-            if (elt.classList && selectables.indexOf(elt) !== -1) {
+            if (elt && elt.classList && selectables.indexOf(elt) !== -1) {
                 return elt;
             }
-            while (elt.parentNode) {
+            while (elt && elt.parentNode) {
                 elt = elt.parentNode;
                 if (elt.classList && selectables.indexOf(elt) !== -1) {
                     return elt;
@@ -213,7 +213,7 @@ let getPublicFunctions = (container) => {
             let currentElt = childElement;
             while (!!currentElt.parentNode && !scrollableContainer) {
                 currentElt = currentElt.parentNode;
-                if (currentElt.scrollHeight > currentElt.offsetHeight || currentElt.scrollWidth > currentElt.offsetWidth || currentElt === document.body) {
+                if (currentElt.scrollHeight > currentElt.offsetHeight+30 || currentElt.scrollWidth > currentElt.offsetWidth || currentElt === document.body) {
                     scrollableContainer = currentElt;
                 }
             }
