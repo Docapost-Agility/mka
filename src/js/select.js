@@ -44,8 +44,8 @@ export let init = (conf, parentFunctions) => {
         },
         isCrossingElt: (elt) => {
             let container = parentFunctions.getContainer();
-            let scrollTop = container.scrollTopTotal() - document.body.scrollTop;
-            let scrollLeft = container.scrollLeftTotal() - document.body.scrollLeft;
+            let scrollTop = container.scrollTopTotal() - document.body.scrollTopTotal();
+            let scrollLeft = container.scrollLeftTotal() - document.body.scrollLeftTotal();
             return elementIsCrossingZone(elt, square.x1 + scrollLeft, square.y1 + scrollTop, square.x2 + scrollLeft, square.y2 + scrollTop);
         }
     };
