@@ -1,3 +1,10 @@
+const lassoContainerClass = "lasso-container";
+
+let customStyle = document.createElement("style");
+customStyle.setAttribute('type', "text/css");
+customStyle.innerHTML = "." + lassoContainerClass + "{position:relative;}";
+document.head.insertBefore(customStyle, document.head.firstChild);
+
 export let init = (conf, parentFunctions) => {
     parentFunctions.setProperty('focusedElementIndex', null);
     parentFunctions.setProperty('selecting', []);
@@ -46,7 +53,7 @@ export let init = (conf, parentFunctions) => {
             let container = parentFunctions.getContainer();
             let scrollTop = container.scrollTopTotal() - document.body.scrollTopTotal();
             let scrollLeft = container.scrollLeftTotal() - document.body.scrollLeftTotal();
-            return elementIsCrossingZone(elt, square.x1 + scrollLeft, square.y1 + scrollTop, square.x2 + scrollLeft, square.y2 + scrollTop);
+            return elementIsCrossingZone(elt, square.x1 + scrollLeft, square.y1, square.x2 + scrollLeft, square.y2 + scrollTop,parentFunctions);
         }
     };
     parentFunctions.setProperty('square', square);
@@ -60,11 +67,20 @@ export let mkaEvents = {
                 parentFunctions.setProperty('focusedElementIndex', null);
 
                 let square = parentFunctions.getProperty('square');
+                let scrollableContainer = parentFunctions.getScrollableContainer(event.target) || parentFunctions.getContainer();
+                
+                if (!scrollableContainer.classList.contains(lassoContainerClass)) {
+                    scrollableContainer.classList.add(lassoContainerClass);
+                }
+                
+                let left = event.pageX - (scrollableContainer.offsetBodyLeft() - scrollableContainer.scrollLeftTotal() + document.body.scrollLeftTotal());
+                let top = event.pageY - (scrollableContainer.offsetBodyTop() - scrollableContainer.scrollTopTotal() + document.body.scrollTopTotal());
+                
                 // zone du click
-                square.downX = event.pageX + 0;
-                square.downY = event.pageY + 0;
-                square.upX = event.pageX + 0;
-                square.upY = event.pageY + 0;
+                square.downX = +left;
+                square.downY = +top;
+                square.upX = +left;
+                square.upY = +top;
                 parentFunctions.setProperty('square', square);
 
                 parentFunctions.setProperty('canStartLasso', true);
@@ -212,8 +228,15 @@ let bindMobileDevice = (conf, parentFunctions) => {
 
 let refreshLasso = (event, parentFunctions, conf) => {
     let square = parentFunctions.getProperty('square');
-    square.upX = event.pageX + 0;
-    square.upY = event.pageY + 0;
+    let scrollableContainer = parentFunctions.getScrollableContainer(event.target) || parentFunctions.getContainer();
+    if (!scrollableContainer.classList.contains(lassoContainerClass)) {
+        scrollableContainer.classList.add(lassoContainerClass);
+    }
+    let left = event.pageX - (scrollableContainer.offsetBodyLeft() - scrollableContainer.scrollLeftTotal() + document.body.scrollLeftTotal());
+    let top = event.pageY - (scrollableContainer.offsetBodyTop() - scrollableContainer.scrollTopTotal() + document.body.scrollTopTotal());
+    
+    square.upX = +left;
+    square.upY = +top;
     parentFunctions.setProperty('square', square);
 
     orderCoordinate(square);
@@ -282,13 +305,17 @@ let selectLassoItems = (ctrlKey, square, parentFunctions, conf) => {
     parentFunctions.setProperty('selecting', selecting);
 }
 
-let elementIsCrossingZone = (elt, x1, y1, x2, y2) => {
+let elementIsCrossingZone = (elt, x1, y1, x2, y2,parentFunctions) => {
     let rect = elt.getBoundingClientRect();
+    let scrollableContainer = parentFunctions.getScrollableContainer(elt) || parentFunctions.getContainer();
+    if (!scrollableContainer.classList.contains(lassoContainerClass)) {
+        scrollableContainer.classList.add(lassoContainerClass);
+    }
     let zoneElt = {
-        x1: elt.offsetBodyLeft(),
-        x2: (elt.offsetBodyLeft() + rect.width),
-        y1: elt.offsetBodyTop(),
-        y2: (elt.offsetBodyTop() + rect.height)
+        x1: elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft(),
+        x2: (elt.offsetBodyLeft() + rect.width - scrollableContainer.offsetBodyLeft()),
+        y1: elt.offsetBodyTop() - scrollableContainer.offsetBodyTop(),
+        y2: (elt.offsetBodyTop() + rect.height - scrollableContainer.offsetBodyTop())
     };
     return zoneElt.x2 > x1 && x2 > zoneElt.x1 && zoneElt.y2 > y1 && y2 > zoneElt.y1;
 };
