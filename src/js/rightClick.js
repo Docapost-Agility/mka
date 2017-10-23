@@ -62,6 +62,10 @@ let setMenuPosition = (menu, event, parentFunctions) => {
     if (!scrollableContainer) {
         scrollableContainer = parentFunctions.getContainer();
     }
+    
+    if (!selectableParent) {
+        selectableParent = parentFunctions.getContainer();
+    }
 
     if (!scrollableContainer.classList.contains(menuContainerClass)) {
         scrollableContainer.classList.add(menuContainerClass);
