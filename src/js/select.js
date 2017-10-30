@@ -30,7 +30,6 @@ export let init = (conf, parentFunctions) => {
                 squareElt.style.backgroundColor = "rgba(255,0,0,0.5)";
                 squareElt.style.border = "1px solid rgba(255,0,0,0.8)";
                 squareElt.style.display = "none";
-                parentFunctions.getContainer().appendChild(squareElt);
             }
             return squareElt;
         },
@@ -81,6 +80,7 @@ export let mkaEvents = {
                 square.downY = +top;
                 square.upX = +left;
                 square.upY = +top;
+                scrollableContainer.appendChild(square.get());
                 parentFunctions.setProperty('square', square);
 
                 parentFunctions.setProperty('canStartLasso', true);
