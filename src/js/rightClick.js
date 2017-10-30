@@ -56,53 +56,50 @@ let getMkaRcMenu = () => {
 
 let setMenuPosition = (menu, event, parentFunctions) => {
     
-    let scrollableContainer = parentFunctions.getScrollableContainer(event.target);
-    let selectableParent = parentFunctions.getSelectableElement(event.target);
+    menu.style.position = 'absolute';
+    menu.style.display = 'block';
+    menu.style.zIndex = '20000';
+    menu.style.opacity = '0';
     
-    if (!scrollableContainer) {
-        scrollableContainer = parentFunctions.getContainer();
-    }
+    let scrollableContainer = parentFunctions.getScrollableContainer(event.target) || parentFunctions.getContainer();
     
-    if (!selectableParent) {
-        selectableParent = parentFunctions.getContainer();
-    }
-
     if (!scrollableContainer.classList.contains(menuContainerClass)) {
         scrollableContainer.classList.add(menuContainerClass);
     }
-
+    
+    scrollableContainer.appendChild(menu);
+    
+    const menuHeight = menu.offsetHeight;
+    const menuWidth = menu.offsetWidth;
+    
     let containerWidth = scrollableContainer.offsetWidth;
     let containerHeight = scrollableContainer.offsetHeight;
     let left = event.pageX - (scrollableContainer.offsetBodyLeft() - scrollableContainer.scrollLeftTotal() + document.body.scrollLeftTotal());
     let top = event.pageY - (scrollableContainer.offsetBodyTop() - scrollableContainer.scrollTopTotal() + document.body.scrollTopTotal());
-
-    let parentWidth = selectableParent.offsetWidth;
-    let parentHeight = selectableParent.offsetHeight;
-    let leftDiffToParent = event.pageX - (selectableParent.offsetBodyLeft() - selectableParent.scrollLeftTotal() + document.body.scrollLeftTotal());
-    let topDiffToParent = event.pageY - (selectableParent.offsetBodyTop() - selectableParent.scrollTopTotal() + document.body.scrollTopTotal());
     
-
-    if (leftDiffToParent < 3 * parentWidth / 4) {
+    let displayAbove = event.pageY + menuHeight - document.body.scrollTopTotal() > window.innerHeight;
+    displayAbove = displayAbove || top + menuHeight > scrollableContainer.offsetHeight;
+    
+    let displayLeft = event.pageX + menuWidth - document.body.scrollLeftTotal() > window.innerWidth;
+    displayLeft = displayLeft || left + menuWidth > scrollableContainer.offsetWidth;
+    
+    if (!displayLeft) {
         menu.style.left = left + 'px';
         menu.style.right = "auto";
     } else {
         menu.style.right = (containerWidth - left) + 'px';
         menu.style.left = "auto";
     }
-
-    if (topDiffToParent < 3 * parentHeight / 4) {
+    
+    if (!displayAbove) {
         menu.style.top = top + 'px';
         menu.style.bottom = "auto";
     } else {
         menu.style.bottom = (containerHeight - top) + 'px';
         menu.style.top = "auto";
     }
-
-    menu.style.position = 'absolute';
-    menu.style.display = 'block';
-    menu.style.zIndex = '20000';
-
-    scrollableContainer.appendChild(menu);
+    
+    menu.style.opacity = '1';
 }
 
 let bindContextMenu = (conf, parentFunctions) => {
