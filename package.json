@@ -1,6 +1,6 @@
 {
   "name": "mka",
-  "version": "0.0.13",
+  "version": "1.0.0",
   "description": "Mouse keyboard action",
   "main": "index.html",
   "scripts": {
