@@ -49,10 +49,10 @@ export let init = (conf, parentFunctions) => {
             return square.get().style.display === "block";
         },
         isCrossingElt: (elt) => {
-            let container = parentFunctions.getContainer();
-            let scrollTop = container.scrollTopTotal() - document.body.scrollTopTotal();
-            let scrollLeft = container.scrollLeftTotal() - document.body.scrollLeftTotal();
-            return elementIsCrossingZone(elt, square.x1 + scrollLeft, square.y1, square.x2 + scrollLeft, square.y2 + scrollTop,parentFunctions);
+//            let container = parentFunctions.getContainer();
+//            let scrollTop = container.scrollTopTotal() - document.body.scrollTopTotal();
+//            let scrollLeft = container.scrollLeftTotal() - document.body.scrollLeftTotal();
+            return elementIsCrossingZone(elt, square.x1, square.y1, square.x2, square.y2,parentFunctions);
         }
     };
     parentFunctions.setProperty('square', square);
