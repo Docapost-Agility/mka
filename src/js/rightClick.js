@@ -69,35 +69,26 @@ let setMenuPosition = (menu, event, parentFunctions) => {
     
     scrollableContainer.appendChild(menu);
     
-    const menuHeight = menu.offsetHeight;
-    const menuWidth = menu.offsetWidth;
+    const menuHeight = menu.scrollHeight;
+    const menuWidth = menu.scrollWidth;
     
-    let containerWidth = scrollableContainer.offsetWidth;
-    let containerHeight = scrollableContainer.offsetHeight;
-    let left = event.pageX - (scrollableContainer.offsetBodyLeft() - scrollableContainer.scrollLeftTotal() + document.body.scrollLeftTotal());
-    let top = event.pageY - (scrollableContainer.offsetBodyTop() - scrollableContainer.scrollTopTotal() + document.body.scrollTopTotal());
+    let left = event.pageX;
+    let top = event.pageY;
     
-    let displayAbove = event.pageY + menuHeight - document.body.scrollTopTotal() > window.innerHeight;
-    displayAbove = displayAbove || top + menuHeight > scrollableContainer.offsetHeight;
+    let displayAbove = event.pageY - document.body.scrollTopTotal() + menuHeight > window.innerHeight;
+    let displayLeft = event.pageX - document.body.scrollLeftTotal() + menuWidth > window.innerWidth;
     
-    let displayLeft = event.pageX + menuWidth - document.body.scrollLeftTotal() > window.innerWidth;
-    displayLeft = displayLeft || left + menuWidth > scrollableContainer.offsetWidth;
-    
-    if (!displayLeft) {
-        menu.style.left = left + 'px';
-        menu.style.right = "auto";
-    } else {
-        menu.style.right = (containerWidth - left) + 'px';
-        menu.style.left = "auto";
+    if(scrollableContainer !== document.body) {
+        left -= scrollableContainer.offsetBodyLeft() - scrollableContainer.scrollLeftTotal() + document.body.scrollLeftTotal();
+        top -= scrollableContainer.offsetBodyTop() - scrollableContainer.scrollTopTotal() + document.body.scrollTopTotal();
+        displayAbove = displayAbove || top + menuHeight > scrollableContainer.offsetHeight;
+        displayLeft = displayLeft || left + menuWidth > scrollableContainer.offsetWidth;
     }
     
-    if (!displayAbove) {
-        menu.style.top = top + 'px';
-        menu.style.bottom = "auto";
-    } else {
-        menu.style.bottom = (containerHeight - top) + 'px';
-        menu.style.top = "auto";
-    }
+    menu.style.left = (left - (displayLeft?menuWidth:0)) + 'px';
+    menu.style.right = "auto";
+    menu.style.top = (top - (displayAbove?menuHeight:0)) + 'px';
+    menu.style.bottom = "auto";
     
     menu.style.opacity = '1';
 }
