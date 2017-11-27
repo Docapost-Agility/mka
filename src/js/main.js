@@ -275,7 +275,7 @@ let refreshComponents = (container) => {
     let components = container.mkaParams.components;
 
     components.forEach(component => {
-        component.refresh && component.refresh(container.mkaParams.selectables, container.mkaParams.configs);
+        component.refresh && component.refresh(container.mkaParams.selectables, container.mkaParams.configs, getPublicFunctions(container));
     });
 }
 
