@@ -92,9 +92,9 @@ let bindDragEvents = (element, parentFunctions, conf) => {
     });
 
     element.addEventListener('dragend', function (e) {
-       /* let selection = parentFunctions.getSelection();
+       let selection = parentFunctions.getSelection();
         // On supprime la div avec l'id wrapper-drag
-        document.getElementById("wrapper-drag").outerHTML = "";
+/*        document.getElementById("wrapper-drag").outerHTML = "";
 */
         // on retire la class
         selection.forEach((elt) => elt.classList.remove("on-drag"));
