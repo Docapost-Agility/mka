@@ -17,6 +17,10 @@ export let init = (conf, parentFunctions) => {
     }
 }
 
+export let refresh = (selectables, conf, parentFunctions) => {
+    init(conf, parentFunctions);
+};
+
 export let onSelectionUpdate = (params) => {
     params.selectables.forEach(elt => {
         elt.draggable = false;
@@ -57,7 +61,7 @@ let bindDragEvents = (element, parentFunctions, conf) => {
 
         // on ajoute une class pour modifier le style de la selection
         selection.forEach((elt) => elt.classList.add("on-drag"));
-
+/*
         let innerCode = "";
         let wrapper = document.createElement('div');
         const wrapperSize = selection[0].scrollWidth;
@@ -84,14 +88,14 @@ let bindDragEvents = (element, parentFunctions, conf) => {
         e.dataTransfer.setDragImage(wrapper, 0, 0);
 
         e.dataTransfer.setData('text/plain', '');
-
+*/
     });
 
     element.addEventListener('dragend', function (e) {
-        let selection = parentFunctions.getSelection();
+       let selection = parentFunctions.getSelection();
         // On supprime la div avec l'id wrapper-drag
-        document.getElementById("wrapper-drag").outerHTML = "";
-
+/*        document.getElementById("wrapper-drag").outerHTML = "";
+*/
         // on retire la class
         selection.forEach((elt) => elt.classList.remove("on-drag"));
     });
