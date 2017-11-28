@@ -101,7 +101,7 @@ export let mkaEvents = {
                         let elementIndex = selectableElements.indexOf(element);
                         let firstIndex = Math.min(focusedElementIndex, elementIndex);
                         let lastIndex = Math.max(focusedElementIndex, elementIndex);
-                        if (event.ctrlKey) {
+                        if (event.ctrlKey || event.metaKey) {
                             selection.forEach(elt => {
                                 let eltIndex = selectableElements.indexOf(elt);
                                 if (eltIndex < firstIndex) {
@@ -140,7 +140,7 @@ export let documentEvents = {
             let isInLasso = conf.lasso && event.which === 1;
             parentFunctions.setProperty('isInLasso', isInLasso);
             if (isInLasso) {
-                if (!event.ctrlKey && !parentFunctions.getProperty('square').isVisble()) {
+                if (!event.ctrlKey && !event.metaKey && !parentFunctions.getProperty('square').isVisble()) {
                     parentFunctions.updateSelection([]);
                     parentFunctions.setProperty('focusedElementIndex', null);
                 }
@@ -165,7 +165,7 @@ export let windowEvents = {
                     let index = lastSelection.indexOf(selectableElt);
                     let newSelection = [selectableElt];
 
-                    if (event.ctrlKey || (conf.isMobileDevice && index !== -1)) {
+                    if (event.ctrlKey || event.metaKey || (conf.isMobileDevice && index !== -1)) {
                         newSelection = lastSelection;
                         if (index !== -1) {
                             newSelection.splice(index, 1);
@@ -181,7 +181,7 @@ export let windowEvents = {
                     });
                     parentFunctions.setProperty('selecting', selecting);
 
-                } else if (!event.ctrlKey) {
+                } else if (!event.ctrlKey && !event.metaKey) {
                     parentFunctions.updateSelection([]);
                 }
             }
@@ -241,7 +241,7 @@ let refreshLasso = (event, parentFunctions, conf) => {
 
     orderCoordinate(square);
 
-    selectLassoItems(event.ctrlKey, square, parentFunctions, conf);
+    selectLassoItems(event.ctrlKey || event.metaKey, square, parentFunctions, conf);
     square.refresh();
 
 };
