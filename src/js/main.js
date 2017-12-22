@@ -18,6 +18,9 @@ let defaultConfigs = {
     "rightClick": false,
     "dbClick": false,
     "lasso": true,
+    "lassoBorder": "1px solid rgba(255,0,0,0.8)",
+    "lassoOpacity": "0.5",
+    "lassoBackground": "rgba(255,0,0,0.5)",
     "selectAllShortcut": true,
     "copyPaste": true,
     "arrows": true,
@@ -425,6 +428,10 @@ HTMLElement.prototype.mkaRefresh = function () {
 
     mkaRefresh(container);
 
+}
+
+HTMLElement.prototype.mkaReset = function () {
+    updateSelection(this, []);
 }
 
 let getOffsetBody = (elt, offsetType) => {
