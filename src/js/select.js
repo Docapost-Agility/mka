@@ -27,8 +27,9 @@ export let init = (conf, parentFunctions) => {
                 squareElt = document.createElement("div");
                 squareElt.id = squareId;
                 squareElt.style.position = "absolute";
-                squareElt.style.backgroundColor = "rgba(255,0,0,0.5)";
-                squareElt.style.border = "1px solid rgba(255,0,0,0.8)";
+                squareElt.style.background = conf.lassoBackground;
+                squareElt.style.border = conf.lassoBorder;
+                squareElt.style.opacity = conf.lassoOpacity;
                 squareElt.style.display = "none";
             }
             return squareElt;
@@ -181,8 +182,6 @@ export let windowEvents = {
                     });
                     parentFunctions.setProperty('selecting', selecting);
 
-                } else if (!event.ctrlKey) {
-                    parentFunctions.updateSelection([]);
                 }
             }
         }
