@@ -213,7 +213,7 @@ let getPublicFunctions = (container) => {
             let currentElt = childElement;
             while (!!currentElt.parentNode && !scrollableContainer) {
                 currentElt = currentElt.parentNode;
-                if (currentElt.scrollHeight > currentElt.offsetHeight+30 || currentElt.scrollWidth > currentElt.offsetWidth || currentElt === document.body) {
+                if (currentElt.scrollHeight > currentElt.offsetHeight+30 || currentElt.scrollWidth > currentElt.offsetWidth+30 || currentElt === document.body) {
                     scrollableContainer = currentElt;
                 }
             }
