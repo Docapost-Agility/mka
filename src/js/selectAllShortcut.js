@@ -4,7 +4,7 @@ export let init = (conf, parentFunctions) => {
 
 export let windowEvents = {
     onkeydown: (e, parentFunctions) => {
-        if (e.ctrlKey) {
+        if (e.ctrlKey || e.metaKey) {
             let code = e.which;
 
             if ((code === 65 || code === 97) && parentFunctions.getProperty('isMkaContainerFocused')) {

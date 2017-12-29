@@ -17,6 +17,7 @@ let defaultConfigs = {
     "droppableElements": '',
     "rightClick": false,
     "dbClick": false,
+    "multipleSelection": true,
     "lasso": true,
     "lassoBorder": "1px solid rgba(255,0,0,0.8)",
     "lassoOpacity": "0.5",
