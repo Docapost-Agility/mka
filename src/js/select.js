@@ -165,26 +165,29 @@ export let windowEvents = {
             if (!event.shiftKey) {
                 let selectableElt = parentFunctions.getSelectableElement(event.target);
                 if (selectableElt) {
-                    let lastSelection = parentFunctions.getSelection();
-                    let index = lastSelection.indexOf(selectableElt);
-                    let newSelection = [selectableElt];
+                    if(conf.multipleSelection) {
+                        let lastSelection = parentFunctions.getSelection();
+                        let index = lastSelection.indexOf(selectableElt);
+                        let newSelection = [selectableElt];
 
-                    if (event.ctrlKey || event.metaKey || (conf.isMobileDevice && index !== -1)) {
-                        newSelection = lastSelection;
-                        if (index !== -1) {
-                            newSelection.splice(index, 1);
-                        } else {
-                            newSelection.push(selectableElt);
+                        if (event.ctrlKey || event.metaKey || (conf.isMobileDevice && index !== -1)) {
+                            newSelection = lastSelection;
+                            if (index !== -1) {
+                                newSelection.splice(index, 1);
+                            } else {
+                                newSelection.push(selectableElt);
+                            }
                         }
+
+                        let selecting = [];
+                        newSelection.forEach(elt => {
+                            selecting.push(elt);
+                            elt.classList.add(conf.eltSelectingClass);
+                        });
+                        parentFunctions.setProperty('selecting', selecting);
+                    } else {
+                        parentFunctions.updateSelection([selectableElt]);
                     }
-
-                    let selecting = [];
-                    newSelection.forEach(elt => {
-                        selecting.push(elt);
-                        elt.classList.add(conf.eltSelectingClass);
-                    });
-                    parentFunctions.setProperty('selecting', selecting);
-
                 }
             }
         }
