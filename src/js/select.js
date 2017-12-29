@@ -44,7 +44,10 @@ export let init = (conf, parentFunctions) => {
             squareElt.style.height = (square.y2 - square.y1) + "px";
         },
         remove: () => {
-            square.get().remove();
+            const lasso = square.get();
+            if(lasso && lasso.parentNode) {
+                lasso.parentNode.removeChild(lasso);
+            }
         },
         isVisble: () => {
             return square.get().style.display === "block";
