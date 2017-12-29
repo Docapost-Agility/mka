@@ -26,7 +26,7 @@ export let windowEvents = {
         parentFunctions.setProperty('arrows.isContainerFocused', parentFunctions.isMkaContainerFocused(e.target));
         return false;
     },
-    onkeydown: (event, parentFunctions) => {
+    onkeydown: (event, parentFunctions, config) => {
         let code = event.which;
         //37=left , 38=top , 39=right , 40=bottom
         if (code == 37 || code == 38 || code == 39 || code == 40) {
@@ -66,7 +66,7 @@ export let windowEvents = {
                 if (!!nextElement) {
                     let newSelection = [];
 
-                    if (event.shiftKey && parentFunctions.getProperty('arrows.currentFocus')) {
+                    if (event.shiftKey && parentFunctions.getProperty('arrows.currentFocus') && config.multipleSelection) {
                         newSelection = parentFunctions.getSelection();
                         let index = newSelection.indexOf(nextElement);
                         if (code == 37 || code == 39) {

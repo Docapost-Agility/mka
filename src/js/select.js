@@ -60,9 +60,9 @@ export let init = (conf, parentFunctions) => {
 }
 
 export let mkaEvents = {
-    onmousedown: (event, parentFunctions) => {
+    onmousedown: (event, parentFunctions, config) => {
         // On démarre la sélection si on utilise le bouton gauche de la souris
-        if (event.which === 1) {
+        if (event.which === 1 && config.multipleSelection) {
             if (!event.shiftKey) {
                 parentFunctions.setProperty('focusedElementIndex', null);
 
@@ -102,7 +102,7 @@ export let mkaEvents = {
                         let elementIndex = selectableElements.indexOf(element);
                         let firstIndex = Math.min(focusedElementIndex, elementIndex);
                         let lastIndex = Math.max(focusedElementIndex, elementIndex);
-                        if (event.ctrlKey) {
+                        if (event.ctrlKey || event.metaKey) {
                             selection.forEach(elt => {
                                 let eltIndex = selectableElements.indexOf(elt);
                                 if (eltIndex < firstIndex) {
@@ -141,7 +141,7 @@ export let documentEvents = {
             let isInLasso = conf.lasso && event.which === 1;
             parentFunctions.setProperty('isInLasso', isInLasso);
             if (isInLasso) {
-                if (!event.ctrlKey && !parentFunctions.getProperty('square').isVisble()) {
+                if (!event.ctrlKey && !event.metaKey && !parentFunctions.getProperty('square').isVisble()) {
                     parentFunctions.updateSelection([]);
                     parentFunctions.setProperty('focusedElementIndex', null);
                 }
@@ -166,7 +166,7 @@ export let windowEvents = {
                     let index = lastSelection.indexOf(selectableElt);
                     let newSelection = [selectableElt];
 
-                    if (event.ctrlKey || (conf.isMobileDevice && index !== -1)) {
+                    if (event.ctrlKey || event.metaKey || (conf.isMobileDevice && index !== -1)) {
                         newSelection = lastSelection;
                         if (index !== -1) {
                             newSelection.splice(index, 1);
@@ -197,32 +197,34 @@ export let windowEvents = {
 };
 
 let bindMobileDevice = (conf, parentFunctions) => {
-    parentFunctions.getContainer().addEventListener('touchstart', (event) => {
-        let dateStart = new Date();
-        parentFunctions.setProperty('select.startLongPress', dateStart);
-        setTimeout(() => {
-            if (parentFunctions.getProperty('select.startLongPress') === dateStart) {
-                let selection = parentFunctions.getSelection();
-                let eltSelectable = parentFunctions.getSelectableElement(event.target);
+    if(conf.multipleSelection) {
+        parentFunctions.getContainer().addEventListener('touchstart', (event) => {
+            let dateStart = new Date();
+            parentFunctions.setProperty('select.startLongPress', dateStart);
+            setTimeout(() => {
+                if (parentFunctions.getProperty('select.startLongPress') === dateStart) {
+                    let selection = parentFunctions.getSelection();
+                    let eltSelectable = parentFunctions.getSelectableElement(event.target);
 
-                if (eltSelectable) {
-                    const indexElt = selection.indexOf(eltSelectable);
-                    if (indexElt === -1) {
-                        selection.push(eltSelectable);
+                    if (eltSelectable) {
+                        const indexElt = selection.indexOf(eltSelectable);
+                        if (indexElt === -1) {
+                            selection.push(eltSelectable);
+                        }
+                        parentFunctions.updateSelection(selection);
                     }
-                    parentFunctions.updateSelection(selection);
                 }
-            }
-        }, conf.longPressDelay);
-    });
+            }, conf.longPressDelay);
+        });
 
-    parentFunctions.getContainer().addEventListener('touchend', () => {
-        parentFunctions.setProperty('select.startLongPress', null);
-    });
+        parentFunctions.getContainer().addEventListener('touchend', () => {
+            parentFunctions.setProperty('select.startLongPress', null);
+        });
 
-    parentFunctions.getContainer().addEventListener('touchmove', () => {
-        parentFunctions.setProperty('select.startLongPress', null);
-    });
+        parentFunctions.getContainer().addEventListener('touchmove', () => {
+            parentFunctions.setProperty('select.startLongPress', null);
+        });
+    }
 };
 
 let refreshLasso = (event, parentFunctions, conf) => {
@@ -240,7 +242,7 @@ let refreshLasso = (event, parentFunctions, conf) => {
 
     orderCoordinate(square);
 
-    selectLassoItems(event.ctrlKey, square, parentFunctions, conf);
+    selectLassoItems(event.ctrlKey || event.metaKey, square, parentFunctions, conf);
     square.refresh();
 
 };
