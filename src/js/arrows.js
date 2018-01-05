@@ -27,78 +27,78 @@ export let windowEvents = {
         return false;
     },
     onkeydown: (event, parentFunctions, config) => {
-        let code = event.which;
-        //37=left , 38=top , 39=right , 40=bottom
-        if (code == 37 || code == 38 || code == 39 || code == 40) {
-            let lastSelected = parentFunctions.getProperty('arrows.lastSelected');
+        if (parentFunctions.getProperty('arrows.isContainerFocused')) {
+            let code = event.which;
+            //37=left , 38=top , 39=right , 40=bottom
+            if (code == 37 || code == 38 || code == 39 || code == 40) {
+                let lastSelected = parentFunctions.getProperty('arrows.lastSelected');
 
-            if (!lastSelected) {
-                if (parentFunctions.getProperty('arrows.isContainerFocused')) {
-                    let firstElement = parentFunctions.getSelectablesElements()[0];
-                    if (firstElement) {
-                        parentFunctions.updateSelection([firstElement]);
-                    }
-                }
-            } else {
-                event.preventDefault();
-                let centerScroll = (elt) => {
-                    let scrollableContainer = parentFunctions.getScrollableContainer(elt);
-                    if (scrollableContainer) {
-                        if (scrollableContainer === document.body) {
-                            let scrollY = elt.offsetBodyTop() - scrollableContainer.offsetBodyTop() + (elt.offsetHeight - window.innerHeight) / 2;
-                            let scrollX = elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft() + (elt.offsetWidth - window.innerWidth) / 2;
-                            window.scrollTo(scrollX, scrollY);
-                        } else {
-                            let scrollY = elt.offsetBodyTop() - scrollableContainer.offsetBodyTop() + (elt.offsetHeight - scrollableContainer.offsetHeight) / 2;
-                            let scrollX = elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft() + (elt.offsetWidth - scrollableContainer.offsetWidth) / 2;
-                            scrollableContainer.scrollTop = scrollY;
-                            scrollableContainer.scrollLeft = scrollX;
+                if (!lastSelected) {
+                        let firstElement = parentFunctions.getSelectablesElements()[0];
+                        if (firstElement) {
+                            parentFunctions.updateSelection([firstElement]);
                         }
-                        centerScroll(scrollableContainer);
-                    } else {
-                        return false;
-                    }
-                }
-                centerScroll(lastSelected);
-
-                let nextElement = calculateNextElement(lastSelected, code, parentFunctions);
-
-                if (!!nextElement) {
-                    let newSelection = [];
-
-                    if (event.shiftKey && parentFunctions.getProperty('arrows.currentFocus') && config.multipleSelection) {
-                        newSelection = parentFunctions.getSelection();
-                        let index = newSelection.indexOf(nextElement);
-                        if (code == 37 || code == 39) {
-                            if (index === -1) {
-                                newSelection.push(nextElement);
+                } else {
+                    event.preventDefault();
+                    let centerScroll = (elt) => {
+                        let scrollableContainer = parentFunctions.getScrollableContainer(elt);
+                        if (scrollableContainer) {
+                            if (scrollableContainer === document.body) {
+                                let scrollY = elt.offsetBodyTop() - scrollableContainer.offsetBodyTop() + (elt.offsetHeight - window.innerHeight) / 2;
+                                let scrollX = elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft() + (elt.offsetWidth - window.innerWidth) / 2;
+                                window.scrollTo(scrollX, scrollY);
                             } else {
-                                newSelection.splice(newSelection.length - 1, 1);
+                                let scrollY = elt.offsetBodyTop() - scrollableContainer.offsetBodyTop() + (elt.offsetHeight - scrollableContainer.offsetHeight) / 2;
+                                let scrollX = elt.offsetBodyLeft() - scrollableContainer.offsetBodyLeft() + (elt.offsetWidth - scrollableContainer.offsetWidth) / 2;
+                                scrollableContainer.scrollTop = scrollY;
+                                scrollableContainer.scrollLeft = scrollX;
                             }
+                            centerScroll(scrollableContainer);
                         } else {
-                            let newElements = [];
-                            let searchNextElement = lastSelected;
-                            while (searchNextElement && searchNextElement !== nextElement) {
-                                searchNextElement = calculateNextElement(searchNextElement, (code == 38) ? 37 : 39, parentFunctions);
-                                if (searchNextElement) {
-                                    newElements.push(searchNextElement);
+                            return false;
+                        }
+                    }
+                    centerScroll(lastSelected);
+
+                    let nextElement = calculateNextElement(lastSelected, code, parentFunctions);
+
+                    if (!!nextElement) {
+                        let newSelection = [];
+
+                        if (event.shiftKey && parentFunctions.getProperty('arrows.currentFocus') && config.multipleSelection) {
+                            newSelection = parentFunctions.getSelection();
+                            let index = newSelection.indexOf(nextElement);
+                            if (code == 37 || code == 39) {
+                                if (index === -1) {
+                                    newSelection.push(nextElement);
+                                } else {
+                                    newSelection.splice(newSelection.length - 1, 1);
                                 }
-                            }
-                            if (index === -1) {
-                                newSelection = newSelection.concat(newElements);
                             } else {
-                                newSelection.splice(index + 1);
+                                let newElements = [];
+                                let searchNextElement = lastSelected;
+                                while (searchNextElement && searchNextElement !== nextElement) {
+                                    searchNextElement = calculateNextElement(searchNextElement, (code == 38) ? 37 : 39, parentFunctions);
+                                    if (searchNextElement) {
+                                        newElements.push(searchNextElement);
+                                    }
+                                }
+                                if (index === -1) {
+                                    newSelection = newSelection.concat(newElements);
+                                } else {
+                                    newSelection.splice(index + 1);
+                                }
+
                             }
-
+                            parentFunctions.updateSelection(newSelection, 'arrows.shift');
+                        } else {
+                            newSelection = [nextElement];
+                            parentFunctions.updateSelection(newSelection);
                         }
-                        parentFunctions.updateSelection(newSelection, 'arrows.shift');
-                    } else {
-                        newSelection = [nextElement];
-                        parentFunctions.updateSelection(newSelection);
-                    }
 
-                    centerScroll(nextElement);
-                    return true;
+                        centerScroll(nextElement);
+                        return true;
+                    }
                 }
             }
         }
