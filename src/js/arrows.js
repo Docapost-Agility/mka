@@ -23,7 +23,7 @@ export let onSelectionUpdate = (params) => {
 
 export let windowEvents = {
     onmousedown: (e, parentFunctions) => {
-        parentFunctions.setProperty('arrows.isContainerFocused', parentFunctions.isMkaContainerFocused(e.target));
+        parentFunctions.setProperty('arrows.isContainerFocused', !!parentFunctions.getSelectableElement(e.target));
         return false;
     },
     onkeydown: (event, parentFunctions, config) => {
