@@ -170,16 +170,13 @@ export let windowEvents = {
                         let index = lastSelection.indexOf(selectableElt);
                         let newSelection = [selectableElt];
 
-                            console.log("lastSelection",lastSelection);
                         if (event.ctrlKey || event.metaKey || (conf.isMobileDevice && index !== -1)) {
                             newSelection = lastSelection;
                             if (index !== -1) {
-                            console.log("splice");
                                 newSelection.splice(index, 1);
                             } else {
                                 newSelection.push(selectableElt);
                             }
-                            console.log("newSelection",newSelection);
                         }
 
                         let selecting = [];
