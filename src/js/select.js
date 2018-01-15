@@ -264,17 +264,19 @@ let endLasso = (parentFunctions, conf) => {
 }
 
 let pushSelectingElements = (parentFunctions, conf) => {
-    if (parentFunctions.getProperty('selecting').length) {
+    if (parentFunctions.getProperty('selecting')) {
         parentFunctions.updateSelection(parentFunctions.getProperty('selecting'));
         clearSelecting(parentFunctions, conf);
     }
 }
 
 let clearSelecting = (parentFunctions, conf) => {
-    parentFunctions.getProperty('selecting').forEach(elt => {
-        elt.classList.remove(conf.eltSelectingClass);
-    });
-    parentFunctions.setProperty('selecting', []);
+    if(parentFunctions.getProperty('selecting')) {
+        parentFunctions.getProperty('selecting').forEach(elt => {
+            elt.classList.remove(conf.eltSelectingClass);
+        });
+        parentFunctions.setProperty('selecting');
+    }
 }
 
 let orderCoordinate = (square) => {
