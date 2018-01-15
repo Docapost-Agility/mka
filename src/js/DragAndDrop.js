@@ -47,7 +47,7 @@ export let documentEvents = {
 
 export let windowEvents = {
     onmousedown: (event, parentFunctions) => {
-        return parentFunctions.getProperty('draggableTarget');
+        return !event.ctrlKey && !event.metaKey && parentFunctions.getProperty('draggableTarget');
     },
     onmouseup: (event, parentFunctions) => {
         parentFunctions.setProperty('isDragging', false);
