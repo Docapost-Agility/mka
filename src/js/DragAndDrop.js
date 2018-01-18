@@ -61,6 +61,8 @@ let bindDragEvents = (element, parentFunctions, conf) => {
     element.addEventListener('dragstart', function (e) {
         // On recupere les élts sélectionnés
         let selection = parentFunctions.getSelection();
+        
+        e.dataTransfer.setData('text/plain', '');
 
         // on ajoute une class pour modifier le style de la selection
         selection.forEach((elt) => elt.classList.add("on-drag"));
