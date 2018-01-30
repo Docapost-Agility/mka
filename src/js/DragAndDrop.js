@@ -7,13 +7,21 @@ export let init = (conf, parentFunctions) => {
 
     //Application du drag event pour chaque element ayant la classe mka-elt
     elements.forEach(elt => {
-        bindDragEvents(elt, parentFunctions, conf);
+        if(!elt.dragBinded){
+            elt.dragBinded = true;
+            bindDragEvents(elt, parentFunctions, conf);
+        }
     });
 
     if (conf.droppableElements) {
         let droppers = [].slice.call(document.querySelectorAll(conf.droppableElements));
         //Application du drop event pour chaque element ayant la classe mka-dropzone
-        droppers.forEach(elt => bindDropEvents(elt, parentFunctions, conf));
+        droppers.forEach(elt => {
+            if(!elt.dropBinded){
+                elt.dropBinded = true;
+                bindDropEvents(elt, parentFunctions, conf)
+            }
+        });
     }
 }
 
@@ -58,6 +66,7 @@ export let windowEvents = {
 
 let bindDragEvents = (element, parentFunctions, conf) => {
 
+    
     element.addEventListener('dragstart', function (e) {
         // On recupere les élts sélectionnés
         let selection = parentFunctions.getSelection();
