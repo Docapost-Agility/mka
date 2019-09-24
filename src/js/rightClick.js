@@ -1,10 +1,4 @@
 const mkarcmenuId = 'mkarcmenu';
-const menuContainerClass = "menu-container";
-
-let customStyle = document.createElement("style");
-customStyle.setAttribute('type', "text/css");
-customStyle.innerHTML = "." + menuContainerClass + "{position:relative;}";
-document.head.insertBefore(customStyle, document.head.firstChild);
 
 export let init = (conf, parentFunctions) => {
     bindContextMenu(conf, parentFunctions);
@@ -50,40 +44,26 @@ let getMkaRcMenu = () => {
     if (!menu) {
         menu = document.createElement('div');
         menu.setAttribute('id', mkarcmenuId);
+        menu.style.position = 'fixed';
+        menu.style.zIndex = '20000';
+        document.body.appendChild(menu);
     }
     return menu;
 }
 
-let setMenuPosition = (menu, event, parentFunctions) => {
+let setMenuPosition = (menu, event) => {
     
-    menu.style.position = 'absolute';
-    menu.style.display = 'block';
-    menu.style.zIndex = '20000';
     menu.style.opacity = '0';
-    
-    let scrollableContainer = parentFunctions.getScrollableContainer(event.target) || parentFunctions.getContainer();
-    
-    if (!scrollableContainer.classList.contains(menuContainerClass)) {
-        scrollableContainer.classList.add(menuContainerClass);
-    }
-    
-    scrollableContainer.appendChild(menu);
+    menu.style.display = 'block';
     
     const menuHeight = menu.scrollHeight;
     const menuWidth = menu.scrollWidth;
     
-    let left = event.pageX;
-    let top = event.pageY;
-    
-    let displayAbove = event.pageY - document.body.scrollTopTotal() + menuHeight > window.innerHeight;
-    let displayLeft = event.pageX - document.body.scrollLeftTotal() + menuWidth > window.innerWidth;
-    
-    if(scrollableContainer !== document.body) {
-        left -= scrollableContainer.offsetBodyLeft() - scrollableContainer.scrollLeftTotal() + document.body.scrollLeftTotal();
-        top -= scrollableContainer.offsetBodyTop() - scrollableContainer.scrollTopTotal() + document.body.scrollTopTotal();
-        displayAbove = displayAbove || top + menuHeight > scrollableContainer.offsetHeight;
-        displayLeft = displayLeft || left + menuWidth > scrollableContainer.offsetWidth;
-    }
+    let left = event.pageX - document.body.scrollLeftTotal();
+    let top = event.pageY - document.body.scrollTopTotal();
+
+    let displayLeft = left + menuWidth > window.innerWidth;
+    let displayAbove = top + menuHeight > window.innerHeight;
     
     menu.style.left = (left - (displayLeft?menuWidth:0)) + 'px';
     menu.style.right = "auto";
@@ -130,7 +110,7 @@ let bindContextMenu = (conf, parentFunctions) => {
             menu.innerHTML = htmlMenu;
         }
 
-        setMenuPosition(menu, event, parentFunctions);
+        setMenuPosition(menu, event);
     });
 
 }
