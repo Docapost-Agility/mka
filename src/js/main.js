@@ -244,7 +244,10 @@ let bindEvents = (container) => {
         target.value[eventName] = (event) => {
             let stop = false;
             if (saveIfAlreadyExists && typeof saveIfAlreadyExists === 'function') {
-                stop = saveIfAlreadyExists(event).forceStop;
+                const eventReturn = saveIfAlreadyExists(event);
+                if(eventReturn) {
+                    stop = saveIfAlreadyExists(event).forceStop;
+                }
             }
             components.forEach(component => {
                 if (!stop) {
