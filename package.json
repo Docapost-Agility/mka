@@ -1,6 +1,6 @@
 {
   "name": "@docapost-agility/mka",
-  "version": "2.0.5",
+  "version": "2.0.7",
   "description": "Mouse keyboard action",
   "main": "index.html",
   "scripts": {
