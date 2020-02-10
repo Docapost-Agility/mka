@@ -26,6 +26,15 @@ export let windowEvents = {
     }
 }
 
+export let documentEvents = {
+    onclick: (event) => {
+        if (event.which === 1) {
+            return removeMkaRcMenu();
+        }
+        return false;
+    }
+}
+
 let menuIsOpen = () => {
     return !!document.getElementById(mkarcmenuId) && document.getElementById(mkarcmenuId).style.display !== 'none';
 }
